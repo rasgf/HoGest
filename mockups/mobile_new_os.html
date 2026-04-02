@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotGest | Nova O.S</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }</script>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    </script>
+    <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
+</head>
+<body class="text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors">
+    <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
+        <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0 z-10 w-full transition-colors">
+            <a href="mobile_app.html" class="p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:hover:text-white"><i data-lucide="arrow-left" class="w-6 h-6"></i></a>
+            <h1 class="text-lg font-semibold ml-2 text-slate-900 dark:text-white">Abertura Rápida</h1>
+        </header>
+
+        <main class="flex-1 p-6 pb-12 flex flex-col justify-between">
+            <div class="space-y-6">
+                <!-- 1. Categoria da Anomalia Expandida (Interativo) -->
+                <div>
+                    <label class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-3">1. Tipo de Relato</label>
+                    <div class="grid grid-cols-3 gap-2" id="categoryGrid">
+                        <button type="button" class="cat-btn active bg-gray-50 dark:bg-slate-800 border-2 border-teal-600 rounded-xl p-3 text-center shadow-[0_0_10px_rgba(13,148,136,0.1)] flex flex-col items-center transition" data-lucide-name="wrench" data-title="Manutenção">
+                            <i data-lucide="wrench" class="w-5 h-5 text-teal-600 dark:text-teal-500 mb-1 pointer-events-none"></i>
+                            <span class="font-bold text-[10px] text-teal-700 dark:text-teal-400 pointer-events-none">Manutenção</span>
+                        </button>
+                        <button type="button" class="cat-btn bg-white dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-center flex flex-col items-center transition" data-lucide-name="package-search" data-title="Achados / Perdidos">
+                            <i data-lucide="package-search" class="w-5 h-5 text-slate-400 mb-1 pointer-events-none"></i>
+                            <span class="font-medium text-[10px] text-slate-600 dark:text-slate-300 pointer-events-none">Achados / Perdidos</span>
+                        </button>
+                        <button type="button" class="cat-btn bg-white dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-center flex flex-col items-center transition" data-lucide-name="spray-can" data-title="Limpeza Extra">
+                            <i data-lucide="spray-can" class="w-5 h-5 text-slate-400 mb-1 pointer-events-none"></i>
+                            <span class="font-medium text-[10px] text-slate-600 dark:text-slate-300 pointer-events-none">Limpeza Extra</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Nível de Urgência (Interativo) -->
+                <div>
+                    <label class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-3">2. Nível de Urgência</label>
+                    <div class="flex bg-gray-100 dark:bg-slate-800 p-1 rounded-xl" id="urgencyGrid">
+                        <button type="button" class="urg-btn flex-1 text-center py-2 text-xs font-medium text-slate-500 rounded-lg outline-none transition">Baixo</button>
+                        <button type="button" class="urg-btn active flex-1 text-center py-2 text-xs font-medium bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white rounded-lg border border-gray-200 dark:border-slate-600 outline-none transition">Comum</button>
+                        <button type="button" class="urg-btn flex-1 text-center py-2 text-xs font-bold text-red-500 dark:text-rose-400 rounded-lg outline-none transition">Crítico</button>
+                    </div>
+                </div>
+
+                <!-- 3. Localização -->
+                <div>
+                    <label class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">3. Onde você está?</label>
+                    <select class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl py-4 px-4 text-slate-800 dark:text-white outline-none focus:border-teal-600 shadow-sm appearance-none cursor-pointer">
+                        <option>Buscando GPS... Master Suite 05</option>
+                        <option>Recepção Central</option>
+                        <option>Ala Leste (Lobby)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="pt-8">
+                <a href="mobile_app.html" onclick="alert('Sucesso! Inteligência alocou Fernando (AVAC) no Dashboard Instantaneamente para esta O.S.')" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl text-center active:scale-95 transition-transform shadow-lg">
+                    Lançar no Sistema
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <!-- JS Logic For UI Mockup Simulation -->
+    <script>
+        lucide.createIcons();
+
+        // Categoria Selection Logic
+        const catBtns = document.querySelectorAll('.cat-btn');
+        catBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                catBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-gray-50', 'dark:bg-slate-800', 'border-2', 'border-teal-600', 'shadow-[0_0_10px_rgba(13,148,136,0.1)]');
+                    b.classList.add('bg-white', 'dark:bg-slate-800/50', 'border', 'border-gray-200', 'dark:border-slate-700');
+                    const icon = b.querySelector('i');
+                    const span = b.querySelector('span');
+                    icon.className = `w-5 h-5 text-slate-400 mb-1 pointer-events-none lucide lucide-${b.dataset.lucideName}`;
+                    span.className = "font-medium text-[10px] text-slate-600 dark:text-slate-300 pointer-events-none";
+                });
+                
+                btn.classList.remove('bg-white', 'dark:bg-slate-800/50', 'border', 'border-gray-200', 'dark:border-slate-700');
+                btn.classList.add('active', 'bg-gray-50', 'dark:bg-slate-800', 'border-2', 'border-teal-600', 'shadow-[0_0_10px_rgba(13,148,136,0.1)]');
+                const i = btn.querySelector('i');
+                const s = btn.querySelector('span');
+                i.className = `w-5 h-5 text-teal-600 dark:text-teal-500 mb-1 pointer-events-none lucide lucide-${btn.dataset.lucideName}`;
+                s.className = "font-bold text-[10px] text-teal-700 dark:text-teal-400 pointer-events-none";
+            });
+        });
+
+        // Urgency Selection Logic
+        const urgBtns = document.querySelectorAll('.urg-btn');
+        urgBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                urgBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'shadow', 'border', 'border-gray-200', 'dark:border-slate-600', 'text-slate-800', 'dark:text-white', 'text-red-500', 'dark:text-rose-400');
+                    if(b.textContent === 'Crítico') b.classList.add('text-red-500', 'dark:text-rose-400', 'font-bold');
+                    else b.classList.add('text-slate-500', 'font-medium');
+                });
+                btn.classList.add('active', 'bg-white', 'dark:bg-slate-700', 'shadow', 'border', 'border-gray-200', 'dark:border-slate-600');
+                if(index === 2) {
+                    btn.classList.replace('text-slate-500', 'text-red-500'); 
+                    btn.classList.add('font-bold');
+                } else {
+                    btn.classList.remove('text-slate-500');
+                    btn.classList.add('text-slate-800', 'dark:text-white', 'font-bold');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

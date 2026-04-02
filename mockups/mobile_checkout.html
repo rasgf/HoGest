@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout de Estoque | HotGest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
+    </script>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    </script>
+    <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
+</head>
+<body class="text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors">
+    <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
+        <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0">
+            <a href="mobile_os_detail.html" class="p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></a>
+            <h1 class="text-lg font-semibold ml-2 text-slate-900 dark:text-white">Baixa de Material</h1>
+        </header>
+
+        <main class="flex-1 p-6 flex flex-col justify-between">
+            <div>
+                <div class="bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/30 p-4 rounded-xl mb-6 flex gap-3">
+                    <i data-lucide="info" class="w-5 h-5 text-orange-500 dark:text-orange-400 shrink-0 mt-0.5"></i>
+                    <p class="text-sm text-orange-800 dark:text-orange-200 font-medium dark:font-normal">Declare os materiais retirados do almoxarifado para encerrar.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-white">Materiais Utilizados:</h3>
+                    
+                    <div class="relative mb-4">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                        <input type="text" placeholder="Buscar material (ex: Lençol)..." class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-lg py-3 pl-10 pr-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:border-teal-600">
+                    </div>
+
+                    <!-- Material Row 1 -->
+                    <div class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-teal-500 dark:border-teal-600 shadow-[0_0_10px_rgba(13,148,136,0.1)]">
+                        <div>
+                            <p class="font-medium text-sm text-teal-700 dark:text-slate-200">Lâmpada Dicroica LED Quente</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Almoxarifado Eletrônica</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button class="w-8 h-8 rounded bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-300 font-bold">-</button>
+                            <span class="font-mono text-base font-bold text-teal-600 dark:text-white">1</span>
+                            <button class="w-8 h-8 rounded bg-teal-50 dark:bg-teal-600/20 border border-teal-200 dark:border-teal-500/50 flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8">
+                <a href="dashboard.html" onclick="alert('Estoque auditado com sucesso! Os dados foram enviados para o Dashboard da Diretoria.')" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl text-center active:scale-95 transition-transform shadow-lg">
+                    Concluir e Auditar Estoque
+                </a>
+            </div>
+        </main>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotGest - Mobile App | Início</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' }, gold: '#D4B872' } } } }
+    </script>
+    <script>
+        function toggleTheme() {
+            const doc = document.documentElement;
+            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; } 
+            else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
+        }
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+    </script>
+    <style>
+        body { background-color: #0f172a; } /* Dark Fallback */
+        :root:not(.dark) body { background-color: #f9fafb; } /* Light Fallback */
+        .app-container { width: 100%; max-width: 430px; height: 100vh; margin: 0 auto; position: relative; overflow-y: auto; overflow-x: hidden;}
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-800 dark:text-slate-200 transition-colors duration-200">
+    <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl pb-20">
+        <header class="px-6 pt-12 pb-4 flex justify-between items-center bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 sticky top-0 z-10 w-full transition-colors">
+            <span class="text-teal-600 dark:text-teal-500 font-bold tracking-widest text-lg">HOTGEST</span>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()" class="p-2"><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i></button>
+                <i data-lucide="bell" class="w-5 h-5 text-slate-400"></i>
+                <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 flex items-center justify-center font-semibold text-sm">FF</div>
+            </div>
+        </header>
+
+        <main class="flex-1 px-6 pt-6 overflow-y-auto">
+            <div class="pb-6">
+                <h1 class="text-2xl font-bold mb-1 text-slate-900 dark:text-white">Olá, Flávio</h1>
+                <p class="text-slate-500 text-sm">Escala Atual: Térreo ao 3º Andar</p>
+            </div>
+
+            <!-- Big Action Button -->
+            <a href="mobile_new_os.html" class="block w-full bg-teal-600 hover:bg-teal-700 text-white rounded-2xl p-6 text-center shadow-lg shadow-teal-500/20 mb-8 transform active:scale-95 transition">
+                <i data-lucide="plus-circle" class="w-8 h-8 mx-auto mb-2 opacity-80"></i>
+                <h2 class="font-bold text-lg">Reportar Anomalia</h2>
+                <p class="text-xs text-teal-100 opacity-80">O.S, Hóspede ou Limpeza</p>
+            </a>
+
+            <div class="flex justify-between items-end mb-4">
+                <h2 class="font-semibold text-lg text-slate-800 dark:text-white">Fila de Prioridade</h2>
+            </div>
+
+            <a href="mobile_os_detail.html" class="block bg-gray-50 dark:bg-slate-800 border-l-4 border-l-red-500 border-t border-t-gray-200 dark:border-t-slate-700 border-r border-r-gray-200 dark:border-r-slate-700 border-b border-b-gray-200 dark:border-b-slate-700 rounded-xl p-4 active:scale-95 transition-transform shadow-sm mb-4">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <span class="text-[10px] font-bold text-red-600 dark:text-rose-400 uppercase tracking-wide bg-red-100 dark:bg-rose-500/10 px-2 py-0.5 rounded mr-2">Crítico</span>
+                        <span class="text-xs text-slate-500">#OS-1095</span>
+                    </div>
+                    <span class="text-xs font-semibold text-gold font-mono flex items-center gap-1"><i data-lucide="timer" class="w-3 h-3"></i> T-Minus 4h</span>
+                </div>
+                <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Vazamento Chiller AC Central</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-3"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> Master Suite 05</p>
+                <div class="flex items-center text-teal-600 dark:text-teal-500 text-xs font-semibold uppercase tracking-wide">
+                    Iniciar O.S <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                </div>
+            </a>
+            
+             <a href="mobile_os_detail.html" class="block bg-white dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700/50 rounded-xl p-4 active:scale-95 transition-transform shadow-sm opacity-60">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wide bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded mr-2">Normal</span>
+                        <span class="text-xs text-slate-500">Limpeza Agendada</span>
+                    </div>
+                </div>
+                <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Passagem em Filtros C-2</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Restaurante Principal</p>
+            </a>
+
+        </main>
+
+        <!-- Bottom Navigation Bar Restored -->
+        <nav class="fixed bottom-0 w-full max-w-[430px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-gray-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-50">
+            <a href="mobile_app.html" class="flex flex-col items-center gap-1">
+                <i data-lucide="home" class="w-5 h-5 text-teal-600 dark:text-teal-500"></i>
+                <span class="text-[10px] font-medium text-teal-600 dark:text-teal-500">Início</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Preventiva</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                <i data-lucide="folder-check" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Histórico</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                <i data-lucide="user" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Perfil</span>
+            </a>
+        </nav>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
