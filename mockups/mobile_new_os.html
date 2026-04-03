@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HotGest | Nova O.S</title>
+    <title>Insolito | Nova O.S</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/mock_database.js"></script>
     <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }</script>
     <script>
+        const user = MockDB.requireLogin(['trabalhador', 'controlador']);
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
     <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
@@ -17,18 +19,17 @@
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
         <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0 z-10 w-full transition-colors">
             <a href="mobile_app.html" class="p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:hover:text-white"><i data-lucide="arrow-left" class="w-6 h-6"></i></a>
-            <h1 class="text-lg font-semibold ml-2 text-slate-900 dark:text-white">Abertura Rápida</h1>
+            <h1 class="text-lg font-semibold ml-2 text-slate-900 dark:text-white">Abertura Rapida</h1>
         </header>
 
         <main class="flex-1 p-6 pb-12 flex flex-col justify-between">
-            <div class="space-y-6">
-                <!-- 1. Categoria da Anomalia Expandida (Interativo) -->
+            <form id="newOsForm" class="space-y-6">
                 <div>
                     <label class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-3">1. Tipo de Relato</label>
                     <div class="grid grid-cols-3 gap-2" id="categoryGrid">
-                        <button type="button" class="cat-btn active bg-gray-50 dark:bg-slate-800 border-2 border-teal-600 rounded-xl p-3 text-center shadow-[0_0_10px_rgba(13,148,136,0.1)] flex flex-col items-center transition" data-lucide-name="wrench" data-title="Manutenção">
+                        <button type="button" class="cat-btn active bg-gray-50 dark:bg-slate-800 border-2 border-teal-600 rounded-xl p-3 text-center shadow-[0_0_10px_rgba(13,148,136,0.1)] flex flex-col items-center transition" data-lucide-name="wrench" data-title="Manutencao">
                             <i data-lucide="wrench" class="w-5 h-5 text-teal-600 dark:text-teal-500 mb-1 pointer-events-none"></i>
-                            <span class="font-bold text-[10px] text-teal-700 dark:text-teal-400 pointer-events-none">Manutenção</span>
+                            <span class="font-bold text-[10px] text-teal-700 dark:text-teal-400 pointer-events-none">Manutencao</span>
                         </button>
                         <button type="button" class="cat-btn bg-white dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-center flex flex-col items-center transition" data-lucide-name="package-search" data-title="Achados / Perdidos">
                             <i data-lucide="package-search" class="w-5 h-5 text-slate-400 mb-1 pointer-events-none"></i>
@@ -41,79 +42,125 @@
                     </div>
                 </div>
 
-                <!-- 2. Nível de Urgência (Interativo) -->
                 <div>
-                    <label class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-3">2. Nível de Urgência</label>
+                    <label class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-3">2. Nivel de Urgencia</label>
                     <div class="flex bg-gray-100 dark:bg-slate-800 p-1 rounded-xl" id="urgencyGrid">
-                        <button type="button" class="urg-btn flex-1 text-center py-2 text-xs font-medium text-slate-500 rounded-lg outline-none transition">Baixo</button>
-                        <button type="button" class="urg-btn active flex-1 text-center py-2 text-xs font-medium bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white rounded-lg border border-gray-200 dark:border-slate-600 outline-none transition">Comum</button>
-                        <button type="button" class="urg-btn flex-1 text-center py-2 text-xs font-bold text-red-500 dark:text-rose-400 rounded-lg outline-none transition">Crítico</button>
+                        <button type="button" class="urg-btn flex-1 text-center py-2 text-xs font-medium text-slate-500 rounded-lg outline-none transition" data-priority="low">Baixo</button>
+                        <button type="button" class="urg-btn active flex-1 text-center py-2 text-xs font-medium bg-white dark:bg-slate-700 shadow text-slate-800 dark:text-white rounded-lg border border-gray-200 dark:border-slate-600 outline-none transition" data-priority="normal">Comum</button>
+                        <button type="button" class="urg-btn flex-1 text-center py-2 text-xs font-bold text-red-500 dark:text-rose-400 rounded-lg outline-none transition" data-priority="critical">Critico</button>
                     </div>
                 </div>
 
-                <!-- 3. Localização -->
                 <div>
-                    <label class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">3. Onde você está?</label>
-                    <select class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl py-4 px-4 text-slate-800 dark:text-white outline-none focus:border-teal-600 shadow-sm appearance-none cursor-pointer">
-                        <option>Buscando GPS... Master Suite 05</option>
-                        <option>Recepção Central</option>
-                        <option>Ala Leste (Lobby)</option>
+                    <label for="titleInput" class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">3. O que aconteceu?</label>
+                    <input id="titleInput" maxlength="70" required class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl py-4 px-4 text-slate-800 dark:text-white outline-none focus:border-teal-600 shadow-sm" placeholder="Ex: Vazamento no teto do quarto 204">
+                </div>
+
+                <div>
+                    <label for="locationInput" class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">4. Onde voce esta?</label>
+                    <select id="locationInput" class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl py-4 px-4 text-slate-800 dark:text-white outline-none focus:border-teal-600 shadow-sm appearance-none cursor-pointer">
+                        <option>Master Suite 05</option>
+                        <option>Recepcao Central</option>
+                        <option>Ala Leste - Quarto 102</option>
+                        <option>Lobby Principal</option>
+                        <option>Restaurante Principal</option>
                     </select>
                 </div>
-            </div>
+
+                <div>
+                    <label for="descriptionInput" class="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">5. Observacoes</label>
+                    <textarea id="descriptionInput" rows="4" class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl py-4 px-4 text-slate-800 dark:text-white outline-none focus:border-teal-600 shadow-sm resize-none" placeholder="Descreva rapido o problema. O suficiente para alguem agir."></textarea>
+                </div>
+
+                <p id="formFeedback" class="hidden text-sm rounded-xl px-4 py-3 border"></p>
+            </form>
 
             <div class="pt-8">
-                <a href="mobile_app.html" onclick="alert('Sucesso! Inteligência alocou Fernando (AVAC) no Dashboard Instantaneamente para esta O.S.')" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl text-center active:scale-95 transition-transform shadow-lg">
-                    Lançar no Sistema
-                </a>
+                <button id="submitBtn" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl text-center active:scale-95 transition-transform shadow-lg">
+                    Lancar no Sistema
+                </button>
             </div>
         </main>
     </div>
 
-    <!-- JS Logic For UI Mockup Simulation -->
     <script>
         lucide.createIcons();
 
-        // Categoria Selection Logic
-        const catBtns = document.querySelectorAll('.cat-btn');
-        catBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                catBtns.forEach(b => {
-                    b.classList.remove('active', 'bg-gray-50', 'dark:bg-slate-800', 'border-2', 'border-teal-600', 'shadow-[0_0_10px_rgba(13,148,136,0.1)]');
-                    b.classList.add('bg-white', 'dark:bg-slate-800/50', 'border', 'border-gray-200', 'dark:border-slate-700');
-                    const icon = b.querySelector('i');
-                    const span = b.querySelector('span');
-                    icon.className = `w-5 h-5 text-slate-400 mb-1 pointer-events-none lucide lucide-${b.dataset.lucideName}`;
-                    span.className = "font-medium text-[10px] text-slate-600 dark:text-slate-300 pointer-events-none";
+        let selectedCategory = 'Manutencao';
+        let selectedPriority = 'normal';
+
+        const feedback = document.getElementById('formFeedback');
+        const categoryButtons = document.querySelectorAll('.cat-btn');
+        const urgencyButtons = document.querySelectorAll('.urg-btn');
+
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectedCategory = btn.dataset.title;
+                categoryButtons.forEach(button => {
+                    button.classList.remove('active', 'bg-gray-50', 'dark:bg-slate-800', 'border-2', 'border-teal-600', 'shadow-[0_0_10px_rgba(13,148,136,0.1)]');
+                    button.classList.add('bg-white', 'dark:bg-slate-800/50', 'border', 'border-gray-200', 'dark:border-slate-700');
+                    const icon = button.querySelector('i');
+                    const span = button.querySelector('span');
+                    icon.className = `w-5 h-5 text-slate-400 mb-1 pointer-events-none lucide lucide-${button.dataset.lucideName}`;
+                    span.className = 'font-medium text-[10px] text-slate-600 dark:text-slate-300 pointer-events-none';
                 });
-                
+
                 btn.classList.remove('bg-white', 'dark:bg-slate-800/50', 'border', 'border-gray-200', 'dark:border-slate-700');
                 btn.classList.add('active', 'bg-gray-50', 'dark:bg-slate-800', 'border-2', 'border-teal-600', 'shadow-[0_0_10px_rgba(13,148,136,0.1)]');
-                const i = btn.querySelector('i');
-                const s = btn.querySelector('span');
-                i.className = `w-5 h-5 text-teal-600 dark:text-teal-500 mb-1 pointer-events-none lucide lucide-${btn.dataset.lucideName}`;
-                s.className = "font-bold text-[10px] text-teal-700 dark:text-teal-400 pointer-events-none";
+                btn.querySelector('i').className = `w-5 h-5 text-teal-600 dark:text-teal-500 mb-1 pointer-events-none lucide lucide-${btn.dataset.lucideName}`;
+                btn.querySelector('span').className = 'font-bold text-[10px] text-teal-700 dark:text-teal-400 pointer-events-none';
             });
         });
 
-        // Urgency Selection Logic
-        const urgBtns = document.querySelectorAll('.urg-btn');
-        urgBtns.forEach((btn, index) => {
+        urgencyButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                urgBtns.forEach(b => {
-                    b.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'shadow', 'border', 'border-gray-200', 'dark:border-slate-600', 'text-slate-800', 'dark:text-white', 'text-red-500', 'dark:text-rose-400');
-                    if(b.textContent === 'Crítico') b.classList.add('text-red-500', 'dark:text-rose-400', 'font-bold');
-                    else b.classList.add('text-slate-500', 'font-medium');
+                selectedPriority = btn.dataset.priority;
+                urgencyButtons.forEach(button => {
+                    button.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'shadow', 'border', 'border-gray-200', 'dark:border-slate-600', 'text-slate-800', 'dark:text-white');
+                    if (button.dataset.priority === 'critical') {
+                        button.classList.add('text-red-500', 'dark:text-rose-400', 'font-bold');
+                    } else {
+                        button.classList.add('text-slate-500', 'font-medium');
+                    }
                 });
+
                 btn.classList.add('active', 'bg-white', 'dark:bg-slate-700', 'shadow', 'border', 'border-gray-200', 'dark:border-slate-600');
-                if(index === 2) {
-                    btn.classList.replace('text-slate-500', 'text-red-500'); 
-                    btn.classList.add('font-bold');
+                if (btn.dataset.priority === 'critical') {
+                    btn.classList.add('text-red-500', 'dark:text-rose-400');
                 } else {
                     btn.classList.remove('text-slate-500');
-                    btn.classList.add('text-slate-800', 'dark:text-white', 'font-bold');
+                    btn.classList.add('text-slate-800', 'dark:text-white');
                 }
             });
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const title = document.getElementById('titleInput').value.trim();
+            const location = document.getElementById('locationInput').value;
+            const description = document.getElementById('descriptionInput').value.trim();
+
+            if (!title) {
+                feedback.className = 'text-sm rounded-xl px-4 py-3 border border-red-200 bg-red-50 text-red-700';
+                feedback.textContent = 'Descreva o problema em uma frase curta para abrir a O.S.';
+                feedback.classList.remove('hidden');
+                return;
+            }
+
+            const ticket = MockDB.createTicket({
+                title,
+                location,
+                description,
+                category: selectedCategory,
+                priority: selectedPriority
+            });
+
+            feedback.className = 'text-sm rounded-xl px-4 py-3 border border-teal-200 bg-teal-50 text-teal-700';
+            feedback.textContent = `O.S #${ticket.id} criada com sucesso. O quadro operacional ja recebeu o chamado.`;
+            feedback.classList.remove('hidden');
+
+            setTimeout(() => {
+                window.location.href = `mobile_os_detail.html?ticketId=${ticket.id}`;
+            }, 700);
         });
     </script>
 </body>

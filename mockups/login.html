@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insolito | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' }, gold: '#D4B872' } } } }
+    </script>
+    <script src="js/mock_database.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex items-center justify-center p-4">
+    
+    <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="p-8 pb-6 border-b border-gray-100 dark:border-slate-700 text-center">
+            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-12 mx-auto mb-2">
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Sistema Integrado de Estancamento Operacional</p>
+        </div>
+        
+        <div class="p-8">
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Usuário de Acesso</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="user" class="w-5 h-5 text-slate-400 text-slate-400"></i>
+                        </div>
+                        <input type="text" id="username" class="bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 text-slate-900 dark:text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-3" placeholder="Ex: admin, controlador, executor_avac..." required>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Senha</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="lock" class="w-5 h-5 text-slate-400 text-slate-400"></i>
+                        </div>
+                        <input type="password" id="password" class="bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 text-slate-900 dark:text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-3" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="text-red-500 text-xs hidden font-medium text-center" id="errorMsg">
+                    Usuário ou senha incorretos.
+                </div>
+
+                <button type="submit" class="w-full text-white bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-3.5 text-center shadow-lg shadow-teal-500/30 transition-all active:scale-95">
+                    Acessar Sistema
+                </button>
+            </form>
+
+            <div class="mt-8 bg-slate-100 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                <h4 class="text-xs font-bold text-slate-500 uppercase mb-3 text-center">Credenciais para Apresentação</h4>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <button type="button" onclick="fillAndSubmit('admin', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-teal-50 text-left border border-transparent hover:border-teal-200 dark:hover:border-slate-600"><strong>Admn Geral:</strong><br>admin / 123</button>
+                    <button type="button" onclick="fillAndSubmit('manutencao', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-teal-50 text-left border border-transparent hover:border-teal-200 dark:hover:border-slate-600"><strong>Manutenção:</strong><br>manutencao / 123</button>
+                    <button type="button" onclick="fillAndSubmit('controlador', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 dark:hover:border-slate-600"><strong>Controlador:</strong><br>controlador / 123</button>
+                    <button type="button" onclick="fillAndSubmit('executor_avac', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor AVAC:</strong><br>executor_avac / 123</button>
+                    <button type="button" onclick="fillAndSubmit('executor_hidraulica', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Hidraulica:</strong><br>executor_hidraulica / 123</button>
+                    <button type="button" onclick="fillAndSubmit('executor_eletrica', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Eletrica:</strong><br>executor_eletrica / 123</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function fillAndSubmit(user, pass) {
+            document.getElementById('username').value = user;
+            document.getElementById('password').value = pass;
+            document.getElementById('loginForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const errorElement = document.getElementById('errorMsg');
+            
+            const user = MockDB.login(u, p);
+            
+            if (user) {
+                errorElement.classList.add('hidden');
+                MockDB.routeUser(user);
+            } else {
+                errorElement.classList.remove('hidden');
+            }
+        });
+        
+        // Auto redirect if already logged in
+        var existingUser = MockDB.getCurrentUser();
+        if(existingUser) {
+           MockDB.routeUser(existingUser);
+        }
+    </script>
+</body>
+</html>

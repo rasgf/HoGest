@@ -3,146 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Sangria | HotGest MVP</title>
+    <title>Inventario / Sangria | Insolito</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/mock_database.js"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' }, orange: { 500: '#f97316' } } } } }
     </script>
     <script>
-        function toggleTheme() {
-            const doc = document.documentElement;
-            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; } 
-            else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
-            updateChartColors();
-        }
+        const user = MockDB.requireLogin(['admin_geral', 'controlador']);
+        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex transition-colors duration-200">
-    
-    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 hidden md:flex flex-col transition-colors duration-200">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
-            <span class="text-teal-600 dark:text-teal-500 font-bold tracking-widest text-xl">HOTGEST</span>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
+    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
+            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9">
         </div>
-        <nav class="flex-1 py-6 px-4 space-y-2">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Visão Geral</a>
-            <a href="os_list.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="list-todo" class="w-5 h-5"></i> Gestão de O.S</a>
-            <a href="dashboard_create_os.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="bot" class="w-5 h-5"></i> Delegador AI</a>
-            <a href="preventive_schedule.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="calendar-check-2" class="w-5 h-5"></i> Preventivas</a>
-            <a href="inventory_leak.html" class="flex items-center gap-3 px-4 py-3 bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-500 font-medium border border-teal-200 dark:border-teal-500/30 rounded-lg"><i data-lucide="shield-alert" class="w-5 h-5"></i> Sangria</a>
-        </nav>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
+        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="userInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="userNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="userRoleLabel">Role</p>
+                    </div>
+                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex justify-between items-center px-8 transition-colors duration-200">
-            <h1 class="text-xl font-semibold flex items-center gap-2"><i data-lucide="activity" class="w-5 h-5 text-red-500"></i> Auditoria Financeira de Manutenção</h1>
-            <button onclick="toggleTheme()" class="p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
+        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8 text-sm md:text-base">
+            <h1 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i data-lucide="package" class="w-5 h-5"></i> Gestão de Almoxarifado</h1>
+            <div class="flex gap-4 items-center">
+                 <button onclick="mockExport('pdf')" class="text-xs bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-slate-300 dark:hover:bg-slate-600 transition flex items-center gap-1"><i data-lucide="download" class="w-3 h-3"></i> Exportar Inventário (PDF)</button>
+                 <button onclick="toggleTheme()" class="p-2 border rounded border-gray-200 dark:border-slate-600 hidden md:block"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
+            </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8 space-y-6">
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8">
             
-            <div class="bg-red-50 dark:bg-rose-900/20 border border-red-200 dark:border-rose-500/50 rounded-xl p-6 transition-colors duration-200">
-                <h2 class="text-red-700 dark:text-rose-400 font-bold mb-2 uppercase tracking-wide text-xs">Desvio de DRE Identificado (Falta no Almoxarifado)</h2>
-                <div class="flex items-end gap-4">
-                    <span class="text-5xl font-bold text-red-600 dark:text-white tracking-tight">R$ 108.000<span class="text-xl text-red-300">,00</span></span>
-                    <span class="text-sm font-semibold text-red-500/70 pb-2">Registrado como "baixa natural" indevida via TOTVS</span>
-                </div>
+            <div id="actionAlert" class="hidden p-3 bg-teal-100 border border-teal-200 text-teal-800 rounded dark:bg-teal-900/30 dark:border-teal-800 dark:text-teal-400 text-sm flex items-center justify-between">
+                <span id="actionAlertMsg">Baixa manual registrada com sucesso!</span>
+                <button onclick="document.getElementById('actionAlert').classList.add('hidden')"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
 
-            <!-- Deep BI Card Injetado -->
-            <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-slate-800 dark:to-slate-800/80 border border-orange-200 dark:border-slate-600 rounded-xl p-6 shadow-sm flex gap-4 items-start">
-                <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-slate-700 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0 border border-orange-200 dark:border-slate-600">
-                    <i data-lucide="radar" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-sm text-orange-900 dark:text-orange-400 uppercase tracking-wide mb-1">Córtex Analítico — Correlação de Evasão</h3>
-                    <p class="text-sm text-slate-700 dark:text-slate-300">O desaparecimento de <strong class="text-slate-900 dark:text-white">Toalhas Premium</strong> e <strong class="text-slate-900 dark:text-white">Lençóis 600 Fios</strong> apresenta uma correlação de <strong>82%</strong> com escalas de camareiras terceirizadas nos finais de semana na área da Piscina Aquecida.<br/><span class="font-semibold text-orange-600 dark:text-orange-400 mt-2 inline-block">Plano de Ação Sugerido:</span> Implementar Check-out Digital de enxoval exclusivo por O.S no App durante os turnos de Sábado e Domingo.</p>
-                </div>
-            </div>
-
+            <!-- Dashboard de Inventário Local -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Modificação: Adicionado plugin customizado para legend color responsive -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm flex flex-col h-[400px] transition-colors duration-200">
-                    <h3 class="text-sm font-bold text-slate-800 dark:text-slate-300 mb-6 shrink-0 uppercase tracking-wide">Centro de Custo Evadido</h3>
-                    <div class="relative flex-1 w-full"><canvas id="leakChart"></canvas></div>
-                </div>
                 
-                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm flex flex-col h-[400px] transition-colors duration-200">
-                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/30">
-                        <h3 class="text-sm font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wide">Recuperação Diária "Check-Out Forçado"</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-semibold">Os itens abaixo não somem mais, estão obrigatoriamente vinculados a O.S via App HotGest.</p>
-                    </div>
-                    <div class="p-6 space-y-3 overflow-y-auto max-h-[300px]">
-                        <!-- Item 1 -->
-                        <div class="flex justify-between items-center p-3 border border-teal-200 dark:border-teal-500/30 rounded bg-teal-50 dark:bg-teal-500/5">
-                            <div><p class="text-xs font-bold text-teal-700 dark:text-slate-200">Lençol King Fio Egípcio (600 Fios)</p><p class="text-[10px] uppercase font-bold text-slate-500 mt-1">Vinculado a: Limpeza / Suja O.S #1094</p></div>
-                            <span class="bg-teal-100 dark:bg-teal-500/20 text-teal-700 dark:text-teal-400 px-2 py-1 rounded text-[10px] font-bold border border-teal-200 dark:border-teal-500/50 block">-4 unid.</span>
-                        </div>
-                        <!-- Item 2 -->
-                        <div class="flex justify-between items-center p-3 border border-gray-200 dark:border-slate-700 rounded bg-gray-50 dark:bg-slate-900/50">
-                            <div><p class="text-xs font-bold text-slate-700 dark:text-slate-200">Kit Amenities Shampoo/Cond L'Occitane</p><p class="text-[10px] uppercase font-bold text-slate-500 mt-1">Vinculado a: Checklist Diário O.S #1105</p></div>
-                            <span class="bg-gray-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 px-2 py-1 rounded text-[10px] font-bold border border-gray-300 dark:border-slate-600 block">-12 unid.</span>
-                        </div>
-                        <!-- Item 3 -->
-                        <div class="flex justify-between items-center p-3 border border-gray-200 dark:border-slate-700 rounded bg-gray-50 dark:bg-slate-900/50">
-                            <div><p class="text-xs font-bold text-slate-700 dark:text-slate-200">Refil Lâmpada Dicroica LED Quente</p><p class="text-[10px] uppercase font-bold text-slate-500 mt-1">Vinculado a: Reposição O.S #1103</p></div>
-                            <span class="bg-gray-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 px-2 py-1 rounded text-[10px] font-bold border border-gray-300 dark:border-slate-600 block">-2 unid.</span>
+                <!-- Lista de SKUs (Itens em Estoque) -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm flex flex-col overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-900/50">
+                        <h3 class="font-semibold">Saldo de Materiais</h3>
+                        <div class="flex gap-2">
+                            <button onclick="openImportModal()" class="text-xs bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 px-2 py-1 rounded">Importar CSV</button>
+                            <button onclick="openNewMaterialModal()" class="text-xs bg-teal-600 hover:bg-teal-700 text-white px-2 py-1 rounded">+ Novo Material</button>
                         </div>
                     </div>
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-gray-100 dark:bg-slate-700/50 text-slate-500 text-xs uppercase">
+                            <tr><th class="px-4 py-2">Item</th><th class="px-4 py-2 text-right">Estoque</th><th class="px-4 py-2 text-right">Ação</th></tr>
+                        </thead>
+                        <tbody id="inventoryList" class="divide-y divide-gray-100 dark:divide-slate-700/50">
+                             <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
                 </div>
-            </div>
 
+                <!-- Painel de Baixas Pendentes (Fuga de SLA de Material) -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl border border-orange-200 dark:border-orange-500/30 shadow-sm flex flex-col overflow-hidden">
+                    <div class="px-6 py-4 border-b border-orange-100 dark:border-orange-500/20 flex justify-between items-center bg-orange-50 dark:bg-orange-500/10">
+                        <h3 class="font-semibold text-orange-600 dark:text-orange-400 flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Pendências de Baixa (O.S Fechadas)</h3>
+                    </div>
+                    <div id="pendingInventoryList" class="p-4 space-y-4"></div>
+                </div>
+
+            </div>
         </div>
     </main>
 
-    <script>
-        lucide.createIcons();
-        let myChart;
+    <div id="newMaterialModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[460px] shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-4">Novo Material</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <input id="materialName" placeholder="Nome do item" class="col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialStock" placeholder="Estoque atual" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialUnit" placeholder="Unidade" value="un" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialMinStock" placeholder="Estoque minimo" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialCost" placeholder="Custo unitario" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialArea" placeholder="Area" value="Geral" class="col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+            </div>
+            <div class="flex gap-3 justify-end mt-5">
+                <button onclick="closeNewMaterialModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded text-sm">Cancelar</button>
+                <button onclick="saveNewMaterial()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded text-sm">Salvar item</button>
+            </div>
+        </div>
+    </div>
 
-        function updateChartColors() {
-            const isDark = document.documentElement.classList.contains('dark');
-            const textColor = isDark ? '#94a3b8' : '#334155';
-            const gridColor = isDark ? '#334155' : '#e2e8f0';
-            
-            if(myChart) {
-                myChart.options.plugins.legend.labels.color = textColor;
-                myChart.options.scales.r.grid.color = gridColor;
-                myChart.options.scales.r.ticks.color = textColor;
-                myChart.options.scales.r.ticks.backdropColor = isDark ? '#1e293b' : '#ffffff';
-                myChart.update();
-            }
+    <div id="importModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[540px] shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-2">Importar Estoque via CSV</h3>
+            <p class="text-xs text-slate-500 mb-4">Formato esperado: <code>name,stock,unit,minStock,unitCost,area</code></p>
+            <textarea id="csvInput" rows="10" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">name,stock,unit,minStock,unitCost,area
+Pilha AAA,80,un,20,3.5,Eletrica
+Detergente Industrial,40,lt,12,22,Geral</textarea>
+            <div class="flex gap-3 justify-end mt-5">
+                <button onclick="closeImportModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded text-sm">Cancelar</button>
+                <button onclick="importCSV()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded text-sm">Importar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (user) {
+            MockDB.populateUserProfile(user);
+
+            // Build Nav
+            document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'inventory_leak.html');
+
+            renderInventory();
+            renderPendingApprovals();
         }
 
-        const ctx = document.getElementById('leakChart').getContext('2d');
-        myChart = new Chart(ctx, { 
-            type: 'polarArea', 
-            data: { 
-                labels: ['Enxovais/Linhas (R$ 74k)', 'Amenities Frigobar/Banho (R$ 22k)', 'Peças Específicas / LEDs (R$ 12k)'], 
-                datasets: [{ data: [74000, 22000, 12000], backgroundColor: ['#ef4444', '#f59e0b', '#0d9488'], borderWidth: 2, borderColor: '#1e293b' }] 
-            }, 
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        grid: { color: '#e2e8f0' },
-                        ticks: { backdropColor: '#ffffff' }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { color: '#334155' }
-                    }
-                }
-            } 
-        });
+        function renderInventory() {
+            const currentDb = MockDB.get();
+            const list = document.getElementById('inventoryList');
+            let html = '';
+            currentDb.inventory.forEach(item => {
+                const critical = item.stock <= item.minStock;
+                html += `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
+                        <td class="px-4 py-3 font-medium">${item.name} <div class="text-[10px] text-slate-400">Min: ${item.minStock} ${item.unit}</div></td>
+                        <td class="px-4 py-3 text-right">
+                             <span class="${critical ? 'text-red-600 dark:text-rose-400 font-bold bg-red-100 dark:bg-red-500/20 px-2 py-0.5 rounded' : 'text-slate-800 dark:text-slate-200 font-mono'} text-sm">${item.stock}</span>
+                             <span class="text-[10px] text-slate-500">${item.unit}</span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                             <button class="text-teal-600 hover:text-teal-700"><i data-lucide="edit-3" class="w-4 h-4 ml-auto"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            list.innerHTML = html;
+            lucide.createIcons();
+        }
 
-        // Initialize Dark mode chart colors on load
-        updateChartColors();
+        function renderPendingApprovals() {
+            const container = document.getElementById('pendingInventoryList');
+            const currentDb = MockDB.get();
+            const cards = currentDb.tickets
+                .filter(ticket => ticket.status === 'awaiting_inventory')
+                .map(ticket => {
+                    const materials = ticket.materialsUsed.map(material => {
+                        const item = currentDb.inventory.find(entry => entry.id === material.inventoryId);
+                        return `<span class="text-xs font-bold px-2 py-1 bg-gray-200 dark:bg-slate-700 rounded">-${material.quantity}x ${item ? item.name : 'Item'}</span>`;
+                    }).join('');
+
+                    return `
+                        <div class="p-4 border border-orange-200 dark:border-orange-500/30 rounded-lg bg-orange-50/50 dark:bg-slate-800">
+                            <div class="flex justify-between items-start mb-2">
+                                <div><span class="text-xs font-bold font-mono bg-orange-100 dark:bg-slate-700 text-orange-600 px-1 py-0.5 rounded">#OS-${ticket.id}</span> <span class="text-sm font-semibold ml-1">${ticket.title}</span></div>
+                                <span class="text-xs text-slate-500">Aguardando auditoria</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mb-3">${ticket.location}. O operador reportou consumo via app e a baixa precisa ser conciliada.</p>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                ${materials}
+                                <button onclick="approveTicketInventory(${ticket.id})" class="text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded ml-auto flex items-center gap-1"><i data-lucide="check-square" class="w-3 h-3"></i> Realizar Baixa</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            container.innerHTML = cards || `<div class="text-sm text-slate-500">Nenhuma pendencia de baixa neste momento.</div>`;
+            lucide.createIcons();
+        }
+
+        function approveTicketInventory(ticketId) {
+            const approved = MockDB.approveInventoryForTicket(ticketId);
+            if (!approved) {
+                return;
+            }
+
+            renderInventory();
+            renderPendingApprovals();
+            const alert = document.getElementById('actionAlert');
+            document.getElementById('actionAlertMsg').innerText = `Baixa da O.S #${ticketId} registrada com sucesso!`;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 4000);
+        }
+
+        function openNewMaterialModal() {
+            document.getElementById('newMaterialModal').classList.remove('hidden');
+        }
+
+        function closeNewMaterialModal() {
+            document.getElementById('newMaterialModal').classList.add('hidden');
+        }
+
+        function saveNewMaterial() {
+            const name = document.getElementById('materialName').value.trim();
+            if (!name) {
+                return;
+            }
+
+            const item = MockDB.addInventoryItem({
+                name,
+                stock: document.getElementById('materialStock').value,
+                unit: document.getElementById('materialUnit').value.trim(),
+                minStock: document.getElementById('materialMinStock').value,
+                unitCost: document.getElementById('materialCost').value,
+                area: document.getElementById('materialArea').value.trim()
+            });
+            closeNewMaterialModal();
+            renderInventory();
+            const alert = document.getElementById('actionAlert');
+            document.getElementById('actionAlertMsg').innerText = `${item.name} adicionado ao estoque com sucesso!`;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 4000);
+        }
+
+        function openImportModal() {
+            document.getElementById('importModal').classList.remove('hidden');
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').classList.add('hidden');
+        }
+
+        function importCSV() {
+            const result = MockDB.importInventoryCSV(document.getElementById('csvInput').value);
+            closeImportModal();
+            renderInventory();
+            const alert = document.getElementById('actionAlert');
+            document.getElementById('actionAlertMsg').innerText = `${result.imported} itens importados para o estoque.`;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 4000);
+        }
+
+        lucide.createIcons();
     </script>
 </body>
 </html>

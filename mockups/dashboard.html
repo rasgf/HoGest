@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Diretoria | HotGest MVP</title>
+    <title>Dashboard Diretoria | Insolito</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -11,7 +11,11 @@
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 500: '#14b8a6', 600: '#0d9488' }, gold: '#D4B872' } } } }
     </script>
+    <script src="js/mock_database.js"></script>
     <script>
+        // Restrict Access
+        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao', 'controlador']);
+        
         function toggleTheme() {
             const doc = document.documentElement;
             if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; } 
@@ -25,115 +29,176 @@
     
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col hidden md:flex">
         <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
-            <span class="text-teal-600 dark:text-teal-500 font-bold tracking-widest text-xl">HOTGEST</span>
+            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9 cursor-pointer" onclick="window.location.href='dashboard.html'">
         </div>
-        <nav class="flex-1 py-6 px-4 space-y-2">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-500 font-medium border border-teal-200 dark:border-teal-500/30">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> <span>Visão Geral</span>
-            </a>
-            <a href="os_list.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition">
-                <i data-lucide="list-todo" class="w-5 h-5"></i> <span>Gestão de O.S</span>
-            </a>
-            <a href="dashboard_create_os.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="bot" class="w-5 h-5"></i> <span>Delegador AI</span></a>
-            <a href="preventive_schedule.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="calendar-check-2" class="w-5 h-5"></i> <span>Preventivas</span></a>
-            <a href="inventory_leak.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition">
-                <i data-lucide="shield-alert" class="w-5 h-5"></i> <span>Controle de Sangria</span>
-            </a>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav">
+            <!-- Nav Injetada via JS baseada na role -->
         </nav>
         <div class="p-4 border-t border-gray-200 dark:border-slate-700">
-            <div class="flex items-center gap-3 px-4 py-2">
-                <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
-                    <span class="text-xs font-bold text-slate-600 dark:text-slate-300">DIR</span>
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="userInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="userNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="userRoleLabel">Role</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">André S.</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Diretoria Executiva</p>
-                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
             </div>
         </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8 transition-colors duration-200">
-            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100">Visão Geral de Operações</h1>
-            <div class="flex gap-4">
+            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100" id="dashboardTitle">Visão Geral</h1>
+            <div class="flex gap-4 items-center">
+                
+                <div class="hidden md:flex gap-2 mr-4" id="exportControls">
+                    <button onclick="mockExport('pdf')" class="text-xs flex items-center gap-1 border border-slate-300 dark:border-slate-600 px-3 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                        <i data-lucide="file-text" class="w-3 h-3"></i> Exportar PDF
+                    </button>
+                    <button onclick="mockExport('csv')" class="text-xs flex items-center gap-1 border border-slate-300 dark:border-slate-600 px-3 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                        <i data-lucide="table" class="w-3 h-3"></i> CSV
+                    </button>
+                </div>
+
                 <button onclick="toggleTheme()" class="p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8 space-y-6">
+        <div class="flex-1 overflow-y-auto p-8 space-y-6" id="mainContent">
             
-            <!-- KPIs -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- KPI 1 -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm transition-colors duration-200">
-                    <div class="text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider font-semibold mb-2">Média SLA (O.S Críticas)</div>
-                    <div class="text-3xl font-bold text-slate-900 dark:text-slate-100 flex items-end gap-2">
-                        <span class="text-teal-600 dark:text-teal-400">2.1h</span>
-                    </div>
-                </div>
-                <!-- KPI 2 -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-red-200 dark:border-rose-900/50 shadow-sm transition-colors duration-200">
-                    <div class="text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider font-semibold mb-2">Vazamento Identificado</div>
-                    <div class="text-3xl font-bold text-slate-900 dark:text-slate-100 flex items-end gap-2">
-                        <span class="text-red-500 dark:text-rose-400">R$ 4.250</span>
-                    </div>
-                </div>
-                <!-- KPI 3 -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm transition-colors duration-200">
-                    <div class="text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider font-semibold mb-2">Check-Out Forçado</div>
-                    <div class="text-3xl font-bold text-slate-900 dark:text-slate-100">92%</div>
-                </div>
-                <!-- KPI 4 -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gold/30 shadow-sm transition-colors duration-200">
-                    <div class="text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider font-semibold mb-2">Preventiva (Mês/HVAC)</div>
-                    <div class="text-3xl font-bold text-slate-900 dark:text-slate-100">140/150</div>
-                </div>
+            <!-- KPIs Dinâmicas -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="kpiGrid">
+                <!-- Preenchido via JS -->
             </div>
 
-            <!-- Deep BI Card Injetado no Dashboard -->
-            <div class="bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800/80 border border-teal-200 dark:border-slate-600 rounded-xl p-6 shadow-sm flex gap-4 items-start mt-2">
+            <!-- Deep BI Card - Admin Only -->
+            <div id="aiInsightCard" class="bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800/80 border border-teal-200 dark:border-slate-600 rounded-xl p-6 shadow-sm flex gap-4 items-start mt-2">
                 <div class="w-10 h-10 rounded-full bg-teal-100 dark:bg-slate-700 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 border border-teal-200 dark:border-slate-600">
                     <i data-lucide="line-chart" class="w-5 h-5"></i>
                 </div>
                 <div>
                     <h3 class="font-bold text-sm text-teal-900 dark:text-teal-400 uppercase tracking-wide mb-1">Córtex Analítico — Predição de Crises</h3>
-                    <p class="text-sm text-slate-700 dark:text-slate-300">As métricas de SLA indicam que <strong>45% das reclamações severas envolvendo Ar-Condicionado</strong> (Chillers parando no verão) ocorrem entre as <strong>14:00 e 16:00</strong> (Pico de Check-In). <br/><span class="font-semibold text-teal-600 dark:text-teal-400 mt-2 inline-block">Plano Operacional Sistemizado:</span> Alocamos via escala inteligente 1 Técnico de HVAC e 1 Eletricista volante dedicados exlusivamente à Ala Frontal durante este expediente.</p>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">As métricas de SLA indicam que <strong>45% das reclamações severas envolvendo Ar-Condicionado</strong> ocorrem entre as <strong>14:00 e 16:00</strong>. <span class="font-semibold text-teal-600 dark:text-teal-400">Sugestão:</span> Alocar 1 Técnico de HVAC dedicados exlusivamente à Ala Frontal durante este expediente.</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
-                <!-- Tabela de Chamados Críticos -->
-                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-sm transition-colors duration-200 col-span-1">
-                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-                        <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">Ocorrências Atuais de Fuga de SLA</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
+                <!-- Tabela de Fuga SLA Dinâmica -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-sm transition-colors col-span-1">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
+                        <h3 class="text-sm font-semibold">Ocorrências: Fuga de SLA</h3>
+                        <a href="os_list.html" class="text-xs text-teal-600 hover:underline">Ver Kanban</a>
                     </div>
                     <table class="w-full text-left border-collapse">
-                        <thead class="bg-gray-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider border-b border-gray-200 dark:border-slate-700">
-                            <tr><th class="px-4 py-3">Prioridade/Local</th><th class="px-4 py-3">Ocorrência</th><th class="px-4 py-3">T-SLA</th></tr>
+                        <thead class="bg-gray-50 dark:bg-slate-900/50 text-slate-500 text-xs uppercase border-b border-gray-200 dark:border-slate-700">
+                            <tr><th class="px-4 py-3">O.S / Status</th><th class="px-4 py-3">Responsável</th><th class="px-4 py-3">Espera</th></tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-slate-700/50 text-xs">
-                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition border-l-4 border-red-500">
-                                <td class="px-4 py-3"><span class="bg-red-100 dark:bg-rose-500/10 text-red-600 dark:text-rose-400 px-2 py-0.5 rounded font-bold uppercase mr-2">CRI</span> Master 05</td>
-                                <td class="px-4 py-3 font-medium text-slate-800 dark:text-slate-300">Vazamento Severo Chiller AC</td>
-                                <td class="px-4 py-3 text-red-500 dark:text-rose-400 font-bold">1h 45m</td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition border-l-4 border-gold">
-                                <td class="px-4 py-3"><span class="bg-yellow-100 dark:bg-gold/10 text-yellow-700 dark:text-gold px-2 py-0.5 rounded font-bold uppercase mr-2">NOR</span> Lobby</td>
-                                <td class="px-4 py-3 font-medium text-slate-800 dark:text-slate-300">Fechadura Eletrônica (RFID falha)</td>
-                                <td class="px-4 py-3 text-slate-500">4h 20m</td>
-                            </tr>
+                        <tbody id="slaTableBody" class="divide-y divide-gray-100 dark:divide-slate-700/50 text-xs text-slate-800 dark:text-slate-300">
+                            <!-- Preenchido via JS -->
                         </tbody>
                     </table>
                 </div>
 
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors duration-200 min-h-[250px]"><h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">SLA Histórico (Comparativo TOTVS x HotGest)</h3><div class="relative flex-1 w-full"><canvas id="slaChart"></canvas></div></div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm flex flex-col min-h-[250px]">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold">Eficiência do Estancamento Insolito</h3>
+                        <button id="compareToggleBtn" class="text-xs px-3 py-1.5 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition">Ver comparativo estimado TOTVS</button>
+                    </div>
+                    <div class="relative flex-1 w-full"><canvas id="slaChart"></canvas></div>
+                </div>
             </div>
 
         </div>
     </main>
 
     <script>
+        // Init UI based on User Role
+        const db = MockDB.get();
+        const metrics = MockDB.getDashboardMetrics();
+        if(user) {
+            MockDB.populateUserProfile(user);
+
+            // Configurar Navigation
+            const nav = document.getElementById('sidebarNav');
+            nav.innerHTML = MockDB.buildDesktopNav(user, 'dashboard.html');
+
+            // Conditional rendering of widgets
+            if(user.role === 'controlador') {
+                document.getElementById('aiInsightCard').style.display = 'none';
+                document.getElementById('dashboardTitle').innerText = "Visão Tática de Controle";
+            } else if(user.role === 'admin_manutencao') {
+                document.getElementById('dashboardTitle').innerText = "Painel da Manutenção";
+            }
+
+            // Render KPIs
+            const kpiGrid = document.getElementById('kpiGrid');
+            kpiGrid.innerHTML = `
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Média SLA (O.S Críticas)</div>
+                    <div class="text-3xl font-bold text-teal-600 dark:text-teal-400">${metrics.sla_media_critica}</div>
+                </div>
+            `;
+            if(user.role === 'admin_geral' || user.role === 'controlador') {
+                kpiGrid.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-red-200 dark:border-rose-900/50 shadow-sm">
+                        <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Sangria Evitada</div>
+                        <div class="text-3xl font-bold text-red-500 dark:text-rose-400">${metrics.leakage_identified}</div>
+                    </div>
+                `;
+            } else {
+                 kpiGrid.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-600 shadow-sm">
+                        <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Reparos Fechados</div>
+                        <div class="text-3xl font-bold">129</div>
+                    </div>
+                `;
+            }
+            
+            kpiGrid.innerHTML += `
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Check-Out Forçado (Evitado)</div>
+                    <div class="text-3xl font-bold">${metrics.co_forced}</div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gold/40 shadow-sm">
+                    <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Preventivas (HVAC)</div>
+                    <div class="text-3xl font-bold text-yellow-600 dark:text-gold">${metrics.preventive_month}</div>
+                </div>
+            `;
+
+            // Render Tabela de Fuga
+            const tbody = document.getElementById('slaTableBody');
+            let tableHTML = '';
+            db.tickets
+                .filter(ticket => ticket.status === 'new' || ticket.status === 'in_progress' || ticket.status === 'awaiting_inventory')
+                .forEach(ticket => {
+                let badge = ticket.priority === 'critical' ? '<span class="text-[10px] bg-red-100 dark:bg-rose-500/20 text-red-600 dark:text-rose-400 px-1.5 py-0.5 rounded font-bold uppercase mr-1">CRI</span>' : '<span class="text-[10px] bg-yellow-100 dark:bg-gold/20 text-yellow-700 dark:text-gold px-1.5 py-0.5 rounded font-bold uppercase mr-1">NOR</span>';
+                
+                let assignedMsg = ticket.assignedTo ? `<i class="w-3 h-3 block inline" data-lucide="user"></i> ` + db.users.find(u=>u.id===ticket.assignedTo).name : `<span class="text-orange-500 italic">Pendente Escala</span>`;
+                
+                let timeWait = ticket.status === 'awaiting_inventory'
+                    ? 'Aguardando baixa'
+                    : ticket.startTime
+                        ? Math.floor((new Date().getTime() - ticket.startTime)/60000) + ' min ativo'
+                        : Math.floor((new Date().getTime() - ticket.notifiedTime)/60000) + ' min pendente';
+
+                let borderClass = ticket.status === 'awaiting_inventory'
+                    ? 'border-l-4 border-orange-500'
+                    : ticket.priority === 'critical' ? 'border-l-4 border-red-500' : 'border-l-4 border-amber-500';
+
+                tableHTML += `
+                <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition ${borderClass}">
+                    <td class="px-4 py-3"><div class="font-medium">${badge} #${ticket.id}</div><div class="text-[10px] text-slate-400 mt-1">${ticket.location} - ${ticket.title}</div></td>
+                    <td class="px-4 py-3">${assignedMsg}</td>
+                    <td class="px-4 py-3 font-mono text-xs font-bold ${ticket.status === 'awaiting_inventory' ? 'text-orange-500' : 'text-red-500'}">${timeWait}</td>
+                </tr>`;
+            });
+            tbody.innerHTML = tableHTML;
+        }
+
         lucide.createIcons();
         let mySlaChart;
         function updateChartColors() {
@@ -147,8 +212,48 @@
                 mySlaChart.update();
             }
         }
+        const efficiencySeries = MockDB.getEstancamentoSeries();
+        let showTotvsComparison = false;
+        const compareButton = document.getElementById('compareToggleBtn');
+        function buildChartData() {
+            const labels = efficiencySeries.map(item => item.label);
+            const datasets = [{
+                label: 'Insolito',
+                data: efficiencySeries.map(item => item.hotgest),
+                backgroundColor: '#14b8a6',
+                borderRadius: 4
+            }];
+
+            if (showTotvsComparison) {
+                datasets.push({
+                    label: 'TOTVS Estimado',
+                    data: efficiencySeries.map(item => item.totvs),
+                    backgroundColor: '#ef4444',
+                    borderRadius: 4
+                });
+            }
+
+            return { labels, datasets };
+        }
+
         const ctxSla = document.getElementById('slaChart').getContext('2d');
-        mySlaChart = new Chart(ctxSla, { type: 'bar', data: { labels: ['Atraso Médio TOTVS (Dias)', 'Agilidade HotGest (Horas)'], datasets: [{ data: [5.79, 0.4], backgroundColor: ['#ef4444', '#14b8a6'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+        mySlaChart = new Chart(ctxSla, {
+            type: 'bar',
+            data: buildChartData(),
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: showTotvsComparison } },
+                scales: { y: { title: { display: true, text: 'Horas por atendimento' } } }
+            }
+        });
+        compareButton.addEventListener('click', () => {
+            showTotvsComparison = !showTotvsComparison;
+            mySlaChart.data = buildChartData();
+            mySlaChart.options.plugins.legend.display = showTotvsComparison;
+            compareButton.innerText = showTotvsComparison ? 'Ocultar comparativo TOTVS' : 'Ver comparativo estimado TOTVS';
+            updateChartColors();
+        });
         updateChartColors();
     </script>
 </body>

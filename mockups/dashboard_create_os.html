@@ -3,167 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Dispatcher | HotGest MVP</title>
+    <title>Designar Executor | Insolito</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/mock_database.js"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' }, gold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' } } } } }
-    </script>
-    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
+        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao', 'controlador']);
         function toggleTheme() {
             const doc = document.documentElement;
-            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; } 
+            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; }
             else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
         }
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex transition-colors duration-200">
-    
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col hidden md:flex transition-colors duration-200">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
-            <span class="text-teal-600 dark:text-teal-500 font-bold tracking-widest text-xl">HOTGEST</span>
+        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
+            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9">
         </div>
-        <nav class="flex-1 py-6 px-4 space-y-2">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Visão Geral</a>
-            <a href="os_list.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition"><i data-lucide="list-todo" class="w-5 h-5"></i> Gestão de O.S</a>
-            <a href="dashboard_create_os.html" class="flex items-center gap-3 px-4 py-3 bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-500 border border-teal-200 dark:border-teal-500/30 rounded-lg"><i data-lucide="bot" class="w-5 h-5"></i> Delegador AI</a>
-            <a href="preventive_schedule.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition"><i data-lucide="calendar-check-2" class="w-5 h-5"></i> Preventivas</a>
-            <a href="inventory_leak.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition"><i data-lucide="shield-alert" class="w-5 h-5"></i> Controle de Sangria</a>
-        </nav>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
+        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="userInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="userNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="userRoleLabel">Role</p>
+                    </div>
+                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8 transition-colors duration-200">
-            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i data-lucide="zap" class="w-5 h-5 text-gold-500"></i> HotGest Supervisor AI</h1>
+            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-teal-600"></i> Designacao Operacional</h1>
             <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400"><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i></button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8 flex gap-8">
-            
-            <!-- Left Panel: Manual Creation Form -->
-            <div class="w-1/2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-sm">
-                <h2 class="font-bold text-lg mb-6 text-slate-900 dark:text-white">Imputar Ocorrência Manual</h2>
-                
-                <form class="space-y-5" onsubmit="event.preventDefault();">
+        <div class="flex-1 overflow-y-auto p-8 grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-8">
+            <section class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-sm">
+                <h2 class="font-bold text-lg mb-1 text-slate-900 dark:text-white">Abrir e designar O.S</h2>
+                <p class="text-sm text-slate-500 mb-6">O responsavel escolhe o executor manualmente com base em carga, localizacao e especialidade.</p>
+
+                <form id="dispatcherForm" class="space-y-5">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Descrição do Problema Hóspede</label>
-                        <input type="text" value="Vazamento Severo Chiller AC Central (Hóspede Reclamando)" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-slate-800 dark:text-slate-200 focus:border-teal-500 outline-none">
+                        <label for="titleInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Descricao do problema</label>
+                        <input id="titleInput" type="text" value="Vazamento Severo Chiller AC Central" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-slate-800 dark:text-slate-200 focus:border-teal-500 outline-none">
                     </div>
-                    
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Localização Exata</label>
-                            <input type="text" value="Master Suite 05" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-slate-800 dark:text-slate-200 focus:border-teal-500 outline-none">
+                            <label for="locationInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Localizacao</label>
+                            <input id="locationInput" type="text" value="Master Suite 05" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-slate-800 dark:text-slate-200 focus:border-teal-500 outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Urgência Prescrita</label>
-                            <select class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 outline-none focus:border-teal-500 text-slate-800 dark:text-slate-200">
-                                <option>Crítico (Cliente Aguardando)</option>
-                                <option>Normal</option>
+                            <label for="priorityInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Urgencia</label>
+                            <select id="priorityInput" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 outline-none focus:border-teal-500 text-slate-800 dark:text-slate-200">
+                                <option value="critical">Critico</option>
+                                <option value="normal">Normal</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="pt-4 border-t border-gray-200 dark:border-slate-700">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Atribuição de Funcionário</label>
-                        <div class="flex gap-2">
-                            <select class="flex-1 bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 outline-none focus:border-teal-500 text-slate-800 dark:text-slate-200">
-                                <option>Aguardando recomendação neural...</option>
-                                <option>João Silva</option>
-                                <option>Flávio Fernandes</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label for="descriptionInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Orientacao para o executor</label>
+                        <textarea id="descriptionInput" rows="4" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-slate-800 dark:text-slate-200 focus:border-teal-500 outline-none resize-none">Hospede aguardando no corredor. Conter impacto imediato e validar AVAC.</textarea>
                     </div>
 
-                    <button class="w-full mt-4 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold py-3 rounded-lg border-2 border-dashed border-gray-300 dark:border-slate-600">
-                        Delegar Ordem
-                    </button>
+                    <div>
+                        <label for="executorSelect" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Executor responsavel</label>
+                        <select id="executorSelect" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 outline-none focus:border-teal-500 text-slate-800 dark:text-slate-200"></select>
+                    </div>
+
+                    <p id="dispatcherFeedback" class="hidden text-sm rounded-lg px-4 py-3 border"></p>
+
+                    <div class="flex gap-3">
+                        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-lg shadow-lg active:scale-95 transition-transform">
+                            Criar e designar
+                        </button>
+                        <a href="os_list.html" class="w-full text-center bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-3 rounded-lg">Abrir Kanban</a>
+                    </div>
                 </form>
-            </div>
+            </section>
 
-            <!-- Right Panel: AI Dispatcher (The Killer Feature) -->
-            <div class="w-1/2 flex flex-col">
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-8 shadow-xl flex-1 relative overflow-hidden">
-                    <!-- Deco rings -->
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-gold-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div class="absolute -left-10 bottom-0 w-60 h-60 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                    <div class="flex items-center gap-3 mb-8">
-                        <div class="w-10 h-10 rounded-lg bg-gold-500/20 border border-gold-500/50 flex items-center justify-center">
-                            <i data-lucide="cpu" class="w-5 h-5 text-gold-500"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold text-lg">Brain Dispatch™</h3>
-                            <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold">Análise de Campo em Tempo Real</p>
-                        </div>
-                    </div>
-
-                    <div id="aiStateIdle" class="text-center py-10">
-                        <p class="text-slate-300 mb-6">Pressione para cruzar a localização da O.S com a geolocalização e as pautas da sua equipe operacional instantaneamente.</p>
-                        <button onclick="simulateAI()" class="bg-gradient-to-r from-gold-600 to-gold-400 hover:from-gold-500 hover:to-gold-300 text-slate-900 font-bold px-8 py-3 rounded-full shadow-lg shadow-gold-500/30 transition transform hover:scale-105 active:scale-95 flex items-center gap-2 mx-auto">
-                            <i data-lucide="sparkles" class="w-5 h-5"></i> Acionar Automação Neural
-                        </button>
-                    </div>
-
-                    <div id="aiStateLoading" class="hidden text-center py-12">
-                        <i data-lucide="loader-2" class="w-10 h-10 text-gold-500 animate-spin mx-auto mb-4"></i>
-                        <p class="text-slate-400 text-sm font-mono typewriter">Extraindo coordenadas de GPS...<br>Verificando filas de manutenção...</p>
-                    </div>
-
-                    <!-- AI Result (Hidden by default) -->
-                    <div id="aiStateResult" class="hidden">
-                        <div class="bg-white/5 border border-white/10 rounded-lg p-5 mb-4 backdrop-blur-sm">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="bg-teal-500/20 text-teal-400 px-2 py-0.5 rounded text-xs font-bold border border-teal-500/30 uppercase tracking-wide">Match Ideal Encontrado</span>
-                                <span class="text-gold-400 font-mono text-xs">96% Confiança</span>
-                            </div>
-                            
-                            <div class="flex items-center gap-4 border-b border-white/10 pb-4 mb-4">
-                                <div class="w-12 h-12 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center font-bold text-white text-lg shadow-inner shadow-black/50">
-                                    FA
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="text-white font-bold text-lg">Fernando Alves (Hidráulica / AVAC)</h4>
-                                    <p class="text-teal-400 text-xs font-semibold"><i data-lucide="wifi" class="w-3 h-3 inline"></i> Online agora via App (3G)</p>
-                                </div>
-                            </div>
-
-                            <ul class="space-y-3 text-sm">
-                                <li class="flex items-start gap-2 text-slate-300">
-                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-teal-500 mt-0.5 shrink-0"></i>
-                                    <span><strong>Localização:</strong> Acabou de fechar uma O.S no 4º Andar (prédio adjacente à Master Suite).</span>
-                                </li>
-                                <li class="flex items-start gap-2 text-slate-300">
-                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-teal-500 mt-0.5 shrink-0"></i>
-                                    <span><strong>Especialidade:</strong> Skill "Manutenção Chiller / HVAC" na matrícula.</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <button onclick="alert('O.S #1098 delegada e enviada como PUSH NOTIFICATION para o celular do Fernando Alves instantaneamente.')" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-lg shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
-                            <i data-lucide="send" class="w-4 h-4"></i> Atribuir à Fernando & Disparar O.S Aberta
-                        </button>
-                    </div>
-
+            <section class="space-y-4">
+                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-sm">
+                    <h3 class="font-bold text-base mb-3">Executores disponiveis</h3>
+                    <div id="executorCards" class="space-y-3"></div>
                 </div>
-            </div>
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl border border-slate-700 p-6 shadow-xl text-slate-200">
+                    <h3 class="font-bold text-base mb-2">Como esta tela funciona</h3>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li>1. Abrimos a O.S com urgencia e contexto.</li>
+                        <li>2. Escolhemos manualmente o executor.</li>
+                        <li>3. A tarefa vai para o kanban operacional e aparece ao trocar para o perfil do executor.</li>
+                    </ul>
+                </div>
+            </section>
         </div>
     </main>
 
     <script>
-        lucide.createIcons();
-        
-        function simulateAI() {
-            document.getElementById('aiStateIdle').classList.add('hidden');
-            document.getElementById('aiStateLoading').classList.remove('hidden');
-            
-            setTimeout(() => {
-                document.getElementById('aiStateLoading').classList.add('hidden');
-                document.getElementById('aiStateResult').classList.remove('hidden');
-            }, 1800);
+        const executors = MockDB.getExecutors();
+
+        if (user) {
+            document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'dashboard_create_os.html');
+            MockDB.populateUserProfile(user);
         }
+
+        function renderExecutors() {
+            const select = document.getElementById('executorSelect');
+            const cards = document.getElementById('executorCards');
+
+            select.innerHTML = executors.map(executor => `<option value="${executor.id}">${executor.name}</option>`).join('');
+            cards.innerHTML = executors.map(executor => `
+                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="font-semibold text-slate-900 dark:text-white">${executor.name}</p>
+                            <p class="text-xs text-slate-500">${executor.username} / 123</p>
+                        </div>
+                        <span class="text-[10px] uppercase tracking-wide bg-teal-100 text-teal-700 dark:bg-teal-600/20 dark:text-teal-300 px-2 py-1 rounded-full">Executor</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function createAssignedTicket() {
+            const ticket = MockDB.createTicket({
+                title: document.getElementById('titleInput').value.trim(),
+                location: document.getElementById('locationInput').value.trim(),
+                priority: document.getElementById('priorityInput').value,
+                category: 'Manutencao',
+                description: document.getElementById('descriptionInput').value.trim()
+            });
+            const executorId = Number(document.getElementById('executorSelect').value);
+            const executor = executors.find(item => item.id === executorId);
+            MockDB.assignTicket(ticket.id, executorId, user.id, `Nova O.S #${ticket.id} designada para ${executor.name}.`);
+            return { ticket, executor };
+        }
+
+        document.getElementById('dispatcherForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const { ticket, executor } = createAssignedTicket();
+            const feedback = document.getElementById('dispatcherFeedback');
+            feedback.className = 'text-sm rounded-lg px-4 py-3 border border-teal-200 bg-teal-50 text-teal-700';
+            feedback.textContent = `O.S #${ticket.id} enviada para ${executor.name}. Ao entrar com esse perfil, a tarefa aparecera no app dele.`;
+            feedback.classList.remove('hidden');
+            setTimeout(() => {
+                window.location.href = 'os_list.html';
+            }, 900);
+        });
+
+        renderExecutors();
+        lucide.createIcons();
     </script>
 </body>
 </html>

@@ -3,77 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de O.S | HotGest MVP</title>
+    <title>Quadro Kanban O.S | Insolito</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
+    </script>
+    <script src="js/mock_database.js"></script>
+    <script>
+        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao', 'controlador']);
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 hidden md:flex flex-col">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
-            <span class="text-teal-600 dark:text-teal-500 font-bold tracking-widest text-xl">HOTGEST</span>
+        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
+            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9">
         </div>
-        <nav class="flex-1 py-6 px-4 space-y-2">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Visão Geral</a>
-            <a href="os_list.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-500 font-medium border border-teal-200 dark:border-teal-500/30"><i data-lucide="list-todo" class="w-5 h-5"></i> Gestão de O.S</a>
-            <a href="dashboard_create_os.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="bot" class="w-5 h-5"></i> Delegador AI</a>
-            <a href="preventive_schedule.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="calendar-check-2" class="w-5 h-5"></i> Preventivas</a>
-            <a href="inventory_leak.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="shield-alert" class="w-5 h-5"></i> Sangria</a>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav">
+            <!-- Nav Injetada via JS dinâmico para não poluir -->
         </nav>
+        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="userInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="userNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="userRoleLabel">Role</p>
+                    </div>
+                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
     </aside>
+    
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex justify-between items-center px-8">
-            <h1 class="text-xl font-semibold">Quadro Operacional (Kanban)</h1>
-            <button onclick="toggleTheme()" class="p-2"><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i></button>
+        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8">
+            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100">Quadro Operacional (Kanban)</h1>
+            <div class="flex gap-4 items-center">
+                 <button onclick="window.location.href='dashboard.html'" class="text-xs bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-slate-300 transition">Voltar ao Dash</button>
+                 <button onclick="toggleTheme()" class="p-2 border rounded border-gray-200 dark:border-slate-600"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
+            </div>
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 flex flex-col">
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Col 1: Novas -->
-                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col">
-                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold">O.S Novas</h3></div>
-                    <div class="p-4 space-y-4 overflow-y-auto">
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border-l-4 border-red-500">
-                            <span class="text-[10px] uppercase font-bold text-red-500 mb-1 block">CRÍTICO • Há 10 min</span>
-                            <h4 class="font-semibold text-sm mb-1">Vazamento Chiller AC Central</h4>
-                            <p class="text-xs text-slate-500 mb-3">Master Suite 05</p>
-                            <button class="w-full py-1.5 bg-gray-200 dark:bg-slate-700 hover:bg-teal-600 text-xs font-bold rounded">Injetar AI Dispatch <i data-lucide="sparkles" class="w-3 h-3 inline mb-0.5"></i></button>
-                        </div>
-                    </div>
-                </div>
+            <!-- Alert bar if actions are taken (e.g. notification sent) -->
+            <div id="actionAlert" class="hidden mb-4 p-3 bg-teal-100 border border-teal-200 text-teal-800 rounded dark:bg-teal-900/30 dark:border-teal-800 dark:text-teal-400 text-sm flex items-center justify-between">
+                <span id="actionAlertMsg">Mensagem enviada com sucesso!</span>
+                <button onclick="document.getElementById('actionAlert').classList.add('hidden')"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
 
-                <!-- Col 2: Em Execução -->
-                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col">
-                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold text-teal-600 dark:text-teal-400">Em Execução</h3></div>
-                    <div class="p-4 space-y-4 overflow-y-auto">
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-teal-500/30">
-                            <span class="text-[10px] uppercase font-bold text-yellow-600 dark:text-yellow-500 mb-1 block">Normal • Relógio Correndo</span>
-                            <h4 class="font-semibold text-sm mb-1">Fechadura RFID Offline</h4>
-                            <p class="text-xs text-slate-500 mb-3">Ala Leste - Quarto 102</p>
-                            <div class="flex items-center gap-2 border-t border-gray-100 dark:border-slate-700 pt-2"><span class="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold">FF</span><span class="text-[11px] font-semibold text-teal-600 dark:text-teal-400">Flávio (Via App)</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Col 3: Pendendo Baixa Controle -->
-                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col">
-                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold text-orange-500">Pendendo Baixa de Material</h3></div>
-                    <div class="p-4 space-y-4 overflow-y-auto">
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-orange-500/40">
-                            <span class="text-[10px] uppercase font-bold text-slate-500 mb-1 block">Preventiva Concluída</span>
-                            <h4 class="font-semibold text-sm mb-1 line-through">Limpeza de Filtros Cassete</h4>
-                            <p class="text-xs text-slate-500 mb-3">Restaurante Principal</p>
-                            <p class="text-[10px] text-orange-600 font-bold bg-orange-100 dark:bg-orange-500/20 px-2 py-1 rounded inline-block"><i data-lucide="shield-alert" class="w-3 h-3 inline"></i> Estoque pendente</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6" id="kanbanBoard">
+                <!-- Colunas Geradas via JS -->
             </div>
         </div>
     </main>
-    <script>lucide.createIcons();</script>
+
+    <!-- Modal Enviar Mensagem -->
+    <div id="messageModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[400px] shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-4">Notificar Trabalhador</h3>
+            <p class="text-xs text-slate-500 mb-4" id="modalOSLabel"></p>
+            <select id="modalExecutorSelect" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
+            <textarea id="modalMsgContent" rows="3" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Adicione instruções extras..."></textarea>
+            <div class="flex gap-3 justify-end">
+                <button onclick="closeMsgModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 text-sm rounded hover:bg-slate-100 dark:hover:bg-slate-700">Cancelar</button>
+                <button onclick="sendMsg()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded text-sm shadow-md">Envia Via In-App Pinger</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentOSContext = null;
+        if(user) {
+            MockDB.populateUserProfile(user);
+            
+            // Build Nav
+            document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'os_list.html');
+
+            renderKanban();
+        }
+
+        function formatTimeAgo(timestamp) {
+            if(!timestamp) return 'N/A';
+            const diffMin = Math.floor((new Date().getTime() - timestamp) / 60000);
+            return diffMin + ' min atrás';
+        }
+
+        function renderKanban() {
+            const currentDb = MockDB.get();
+            const kb = document.getElementById('kanbanBoard');
+            const newTicketsHTML = currentDb.tickets.filter(t => t.status === 'new').map(ticket => `
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm ${ticket.priority === 'critical' ? 'border-l-4 border-red-500' : 'border border-slate-200 dark:border-slate-700'}">
+                    <span class="text-[10px] uppercase font-bold text-red-500 mb-1 block flex justify-between">
+                        <span>${ticket.priority === 'critical'?'CRÍTICO':'NORMAL'}</span>
+                        <span class="text-slate-400">Criado: ${formatTimeAgo(ticket.notifiedTime)}</span>
+                    </span>
+                    <h4 class="font-semibold text-sm mb-1">${ticket.title}</h4>
+                    <p class="text-xs text-slate-500 mb-3">${ticket.location}</p>
+                    <div class="border-t border-slate-100 dark:border-slate-700 pt-2 flex justify-between items-center mt-2">
+                        <span class="text-[10px] font-mono text-slate-400 p-1 bg-slate-100 dark:bg-slate-800 rounded">#OS-${ticket.id}</span>
+                        <button onclick="openMsgModal(${ticket.id})" class="text-xs text-teal-600 hover:underline flex items-center gap-1 font-bold"><i data-lucide="bell-ring" class="w-3 h-3"></i> Designar / Notificar</button>
+                    </div>
+                </div>
+            `).join('') || `<div class="text-sm text-slate-500 p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">Nenhuma O.S nova no momento.</div>`;
+
+            const inProgressTicketsHTML = currentDb.tickets.filter(t => t.status === 'in_progress').map(ticket => `
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-teal-500/30">
+                    <span class="text-[10px] uppercase font-bold text-yellow-600 dark:text-yellow-500 mb-1 block flex justify-between">
+                        <span>EM ANDAMENTO</span>
+                        <span class="text-slate-400">Iniciado: ${formatTimeAgo(ticket.startTime)}</span>
+                    </span>
+                    <h4 class="font-semibold text-sm mb-1">${ticket.title}</h4>
+                    <p class="text-xs text-slate-500 mb-3">${ticket.location}</p>
+                    <div class="flex items-center gap-2 border-t border-gray-100 dark:border-slate-700 pt-2 mt-2">
+                        <div class="bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-400 text-[10px] p-1 rounded font-semibold w-full block break-words">
+                            Operador Ocupado: <i data-lucide="user" class="w-3 h-3 inline"></i> ${currentDb.users.find(u=>u.id===ticket.assignedTo)?.name}
+                        </div>
+                    </div>
+                </div>
+            `).join('') || `<div class="text-sm text-slate-500 p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">Nenhuma O.S em execucao no app.</div>`;
+
+            const pendingClearHTML = currentDb.tickets
+                .filter(t => t.status === 'awaiting_inventory')
+                .map(ticket => `
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-orange-500/40">
+                        <span class="text-[10px] uppercase font-bold text-slate-500 mb-1 block flex justify-between">
+                            <span>CONCLUIDO (SISTEMA)</span>
+                            <span class="text-slate-400">Pendente Baixa Material</span>
+                        </span>
+                        <h4 class="font-semibold text-sm mb-1 line-through">${ticket.title}</h4>
+                        <p class="text-xs text-slate-500 mb-3">${ticket.location}</p>
+                        <button onclick="window.location.href='inventory_leak.html'" class="text-[10px] text-orange-600 hover:text-orange-700 font-bold bg-orange-100 dark:bg-orange-500/20 px-2 py-1 rounded inline-block w-full text-center border border-orange-200 dark:border-none shadow-sm"><i data-lucide="check-square" class="w-3 h-3 inline"></i> Autorizar Baixa no Almoxarifado</button>
+                    </div>
+                `).join('') || `<div class="text-sm text-slate-500 p-4">Nenhuma baixa pendente agora.</div>`;
+
+            kb.innerHTML = `
+                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col h-[calc(100vh-180px)]">
+                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold">O.S Novas</h3></div>
+                    <div class="p-4 space-y-4 overflow-y-auto flex-1">${newTicketsHTML}</div>
+                </div>
+                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col h-[calc(100vh-180px)]">
+                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold text-teal-600 dark:text-teal-400">Em Execução Pelo APP</h3></div>
+                    <div class="p-4 space-y-4 overflow-y-auto flex-1">${inProgressTicketsHTML}</div>
+                </div>
+                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col h-[calc(100vh-180px)]">
+                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold text-orange-500">Pendendo Baixa de Material</h3></div>
+                    <div class="p-4 space-y-4 overflow-y-auto flex-1">${pendingClearHTML}</div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function openMsgModal(ticketId) {
+            currentOSContext = MockDB.get().tickets.find(t=>t.id === ticketId);
+            const executors = MockDB.getExecutors();
+            document.getElementById('modalExecutorSelect').innerHTML = executors.map(executor => `<option value="${executor.id}">${executor.name}</option>`).join('');
+            document.getElementById('modalOSLabel').innerText = `Notificando Trabalhador sobre O.S #${currentOSContext.id} - ${currentOSContext.title}`;
+            document.getElementById('modalMsgContent').value = `Urgente: Assumir atendimento na ${currentOSContext.location}. O.S ${currentOSContext.id}`;
+            document.getElementById('messageModal').classList.remove('hidden');
+        }
+
+        function closeMsgModal() {
+            document.getElementById('messageModal').classList.add('hidden');
+            currentOSContext = null;
+        }
+
+        function sendMsg() {
+            const content = document.getElementById('modalMsgContent').value;
+            const executorId = Number(document.getElementById('modalExecutorSelect').value);
+            if(currentOSContext) {
+                MockDB.assignTicket(currentOSContext.id, executorId, user.id, content);
+            }
+            closeMsgModal();
+            renderKanban();
+
+            // Exibir Alerta
+            const alert = document.getElementById('actionAlert');
+            document.getElementById('actionAlertMsg').innerText = `O.S e Notificação enviadas com sucesso para o App do Trabalhador!`;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 4000);
+        }
+
+        lucide.createIcons();
+    </script>
 </body>
 </html>

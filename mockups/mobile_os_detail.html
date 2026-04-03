@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes da O.S | HotGest</title>
+    <title>Detalhes da O.S | Insolito</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/mock_database.js"></script>
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
-    </script>
-    <script>
+        const user = MockDB.requireLogin(['trabalhador', 'controlador']);
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
     <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
@@ -19,24 +19,28 @@
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
         <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0">
             <a href="mobile_app.html" class="p-2 -ml-2 text-slate-500 dark:text-slate-400 hover:text-slate-900"><i data-lucide="chevron-left" class="w-6 h-6"></i></a>
-            <h1 class="text-lg font-semibold ml-2">OS #1095</h1>
+            <h1 class="text-lg font-semibold ml-2" id="headerTitle">OS #0000</h1>
         </header>
 
         <main class="flex-1 p-6">
             <div class="mb-6">
-                <span class="inline-block bg-red-100 dark:bg-rose-500/20 text-red-600 dark:text-rose-400 border border-red-200 dark:border-rose-500/40 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider mb-3">SLA CRÍTICO</span>
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white leading-tight mb-2">Vazamento Chiller AC Central</h2>
-                <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
-                    <i data-lucide="map-pin" class="w-4 h-4"></i> Master Suite 05
+                <span id="priorityBadge" class="inline-block bg-red-100 dark:bg-rose-500/20 text-red-600 dark:text-rose-400 border border-red-200 dark:border-rose-500/40 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider mb-3">SLA CRITICO</span>
+                <h2 id="ticketTitle" class="text-2xl font-bold text-slate-900 dark:text-white leading-tight mb-2">Carregando chamado...</h2>
+                <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm mb-2">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i> <span id="ticketLocation"></span>
                 </div>
+                <p id="ticketDescription" class="text-sm text-slate-500 dark:text-slate-400"></p>
             </div>
 
-            <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-5 mb-8 border border-gray-200 dark:border-slate-700 shadow-sm">
-                <h3 class="text-xs font-semibold text-slate-500 uppercase mb-3">Cronômetro de Execução</h3>
+            <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-5 mb-5 border border-gray-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase">Cronometro de Execucao</h3>
+                    <span id="statusPill" class="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">Pausado</span>
+                </div>
                 <div class="flex items-center justify-between">
                     <div>
                         <p id="timerDisplay" class="text-4xl font-mono font-light text-slate-900 dark:text-slate-200 tracking-widest">00:00</p>
-                        <p id="statusMsg" class="text-xs text-slate-500 mt-1 font-semibold text-red-500">Pausado</p>
+                        <p id="statusMsg" class="text-xs text-slate-500 mt-1 font-semibold text-red-500">Pronto para iniciar</p>
                     </div>
                     <button id="toggleTimerBtn" class="bg-teal-600 p-4 rounded-full text-white shadow-lg shadow-teal-500/30">
                         <i id="timerIcon" data-lucide="play" class="w-6 h-6 ml-1"></i>
@@ -44,49 +48,122 @@
                 </div>
             </div>
 
+            <div id="materialsPreview" class="hidden bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-xl p-4 mb-5">
+                <p class="text-xs font-semibold uppercase tracking-wide text-orange-700 dark:text-orange-300 mb-2">Materiais pendentes de baixa</p>
+                <div id="materialsList" class="text-sm text-orange-900 dark:text-orange-100 space-y-1"></div>
+            </div>
+
             <div class="pt-2">
-                <a href="mobile_checkout.html" class="block w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-bold py-4 rounded-xl text-center shadow-lg active:scale-95 transition-transform">
+                <a id="resolveLink" href="#" class="block w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-bold py-4 rounded-xl text-center shadow-lg active:scale-95 transition-transform">
                     Marcar como Resolvido
                 </a>
             </div>
         </main>
     </div>
 
-    <!-- Timer Script Logic -->
     <script>
-        lucide.createIcons();
+        const params = new URLSearchParams(window.location.search);
+        const ticketId = Number(params.get('ticketId'));
+        let currentTicket = MockDB.getTicketById(ticketId);
         let timerInterval;
-        let seconds = 0;
-        let isRunning = false;
-        
+
+        if (!currentTicket) {
+            alert('O.S nao encontrada.');
+            window.location.href = 'mobile_app.html';
+        }
+
+        const db = MockDB.get();
+        const inventoryMap = new Map(db.inventory.map(item => [item.id, item]));
         const display = document.getElementById('timerDisplay');
         const btn = document.getElementById('toggleTimerBtn');
         const icon = document.getElementById('timerIcon');
         const statusMsg = document.getElementById('statusMsg');
+        const statusPill = document.getElementById('statusPill');
+        const resolveLink = document.getElementById('resolveLink');
 
-        function updateDisplay() {
-            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const s = (seconds % 60).toString().padStart(2, '0');
-            display.textContent = `${m}:${s}`;
+        function formatDuration(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        }
+
+        function refreshState() {
+            currentTicket = MockDB.getTicketById(ticketId);
+            const clock = MockDB.getTicketClock(ticketId);
+            document.getElementById('headerTitle').textContent = `OS #${currentTicket.id}`;
+            document.getElementById('ticketTitle').textContent = currentTicket.title;
+            document.getElementById('ticketLocation').textContent = currentTicket.location;
+            document.getElementById('ticketDescription').textContent = currentTicket.description || 'Sem observacoes adicionais.';
+            document.getElementById('priorityBadge').className = `inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider mb-3 border ${currentTicket.priority === 'critical' ? 'bg-red-100 dark:bg-rose-500/20 text-red-600 dark:text-rose-400 border-red-200 dark:border-rose-500/40' : 'bg-teal-100 dark:bg-teal-600/20 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-500/30'}`;
+            document.getElementById('priorityBadge').textContent = currentTicket.priority === 'critical' ? 'SLA CRITICO' : 'SLA NORMAL';
+            display.textContent = formatDuration(clock.elapsedMs);
+
+            const isRunning = clock.isRunning;
+            icon.setAttribute('data-lucide', isRunning ? 'square' : 'play');
+            btn.classList.toggle('bg-rose-500', isRunning);
+            btn.classList.toggle('bg-teal-600', !isRunning);
+
+            if (currentTicket.status === 'awaiting_inventory') {
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-300';
+                statusPill.textContent = 'Aguardando baixa';
+                statusMsg.className = 'text-xs mt-1 font-semibold text-orange-500';
+                statusMsg.textContent = 'Servico finalizado. Falta auditar material.';
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                resolveLink.textContent = 'Baixa de Material';
+                resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
+            } else if (currentTicket.status === 'completed') {
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300';
+                statusPill.textContent = 'Concluido';
+                statusMsg.className = 'text-xs mt-1 font-semibold text-emerald-500';
+                statusMsg.textContent = 'Chamado encerrado com estoque conciliado.';
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                resolveLink.textContent = 'Voltar para fila';
+                resolveLink.href = 'mobile_app.html';
+            } else if (isRunning) {
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-teal-100 dark:bg-teal-600/20 text-teal-700 dark:text-teal-300';
+                statusPill.textContent = 'Em execucao';
+                statusMsg.className = 'text-xs mt-1 font-semibold text-teal-500';
+                statusMsg.textContent = 'SLA rodando.';
+                resolveLink.textContent = 'Marcar como Resolvido';
+                resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
+            } else {
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+                statusPill.textContent = 'Pausado';
+                statusMsg.className = 'text-xs mt-1 font-semibold text-red-500';
+                statusMsg.textContent = currentTicket.startTime ? 'Execucao pausada.' : 'Pronto para iniciar';
+                resolveLink.textContent = 'Marcar como Resolvido';
+                resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
+            }
+
+            const materialsPreview = document.getElementById('materialsPreview');
+            const materialsList = document.getElementById('materialsList');
+            if (currentTicket.materialsUsed?.length) {
+                materialsPreview.classList.remove('hidden');
+                materialsList.innerHTML = currentTicket.materialsUsed.map(material => {
+                    const item = inventoryMap.get(material.inventoryId);
+                    return `<p>${material.quantity}x ${item ? item.name : 'Item removido'}</p>`;
+                }).join('');
+            } else {
+                materialsPreview.classList.add('hidden');
+            }
+
+            lucide.createIcons();
         }
 
         btn.addEventListener('click', () => {
-            if (isRunning) {
-                clearInterval(timerInterval);
-                icon.setAttribute('data-lucide', 'play');
-                btn.classList.replace('bg-rose-500', 'bg-teal-600');
-                statusMsg.textContent = 'Pausado (SLA Parado)';
-                statusMsg.className = 'text-xs mt-1 font-semibold text-red-500';
-            } else {
-                timerInterval = setInterval(() => { seconds++; updateDisplay(); }, 1000);
-                icon.setAttribute('data-lucide', 'square');
-                btn.classList.replace('bg-teal-600', 'bg-rose-500');
-                statusMsg.textContent = 'Trabalhando... (SLA Rodando)';
-                statusMsg.className = 'text-xs mt-1 font-semibold text-teal-500';
+            if (btn.disabled) {
+                return;
             }
-            isRunning = !isRunning;
-            lucide.createIcons();
+
+            MockDB.toggleTicketTimer(ticketId);
+            refreshState();
         });
+
+        refreshState();
+        timerInterval = setInterval(refreshState, 1000);
     </script>
 </body>
 </html>

@@ -3,49 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cronograma Preventivo | HotGest MVP</title>
+    <title>Cronograma Preventivo | Insolito</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/mock_database.js"></script>
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
-        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
+        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao', 'controlador']);
+        function toggleTheme() {
+            const doc = document.documentElement;
+            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; }
+            else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
+        }
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
-    
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 hidden md:flex flex-col">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
-            <span class="text-teal-600 dark:text-teal-500 font-bold tracking-widest text-xl">HOTGEST</span>
+        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
+            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9">
         </div>
-        <nav class="flex-1 py-6 px-4 space-y-2">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Visão Geral</a>
-            <a href="os_list.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="list-todo" class="w-5 h-5"></i> Gestão de O.S</a>
-            <a href="dashboard_create_os.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="bot" class="w-5 h-5"></i> Delegador AI</a>
-            <a href="preventive_schedule.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-500 font-medium border border-teal-200 dark:border-teal-500/30 transition"><i data-lucide="calendar-check-2" class="w-5 h-5"></i> Preventivas</a>
-            <a href="inventory_leak.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition"><i data-lucide="shield-alert" class="w-5 h-5"></i> Controle de Sangria</a>
-        </nav>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
+        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="userInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="userNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="userRoleLabel">Role</p>
+                    </div>
+                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex justify-between items-center px-8">
-            <h1 class="text-xl font-semibold flex items-center gap-2">Cronograma de Prevenção & Segurança</h1>
+            <h1 class="text-xl font-semibold flex items-center gap-2">Cronograma de Prevencao e Seguranca</h1>
             <div class="flex gap-4 items-center">
-                <span class="text-sm font-semibold text-slate-500">Próximos 30 dias</span>
+                <span class="text-sm font-semibold text-slate-500">Proximos 30 dias</span>
                 <button onclick="toggleTheme()" class="p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
             </div>
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 space-y-6">
-            
-            <!-- Insight do BI Card Preventiva -->
             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/80 border border-blue-200 dark:border-slate-600 rounded-xl p-6 shadow-sm flex gap-4 items-start">
                 <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-slate-700 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-200 dark:border-slate-600">
                     <i data-lucide="brain" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-sm text-blue-900 dark:text-blue-300 uppercase tracking-wide mb-1">HotGest AI Insight — Risco Latente Evitado</h3>
-                    <p class="text-sm text-slate-700 dark:text-slate-300">A higienização química das Caixas D'água do Bloco Leste (Cap: 200.000L) vence em <strong>7 dias</strong>. Historicamente esse bloco repassa queixas de odor se atrasar 3 dias da margem. <br/><span class="font-semibold text-blue-600 dark:text-blue-400 mt-2 inline-block">Recomendação engatilhada:</span> Já pré-alocamos a O.S via Delegador AI para a Empresa Terceirizada (Piscina/Hidráulica) nesta quinta-feira em horário comercial.</p>
+                    <h3 class="font-bold text-sm text-blue-900 dark:text-blue-300 uppercase tracking-wide mb-1">Insight Operacional</h3>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">A higienizacao das caixas d'agua do bloco leste vence em <strong>7 dias</strong>. O sistema recomenda antecipar a agenda para evitar reclamacoes operacionais.</p>
                 </div>
             </div>
 
@@ -53,45 +65,50 @@
                 <table class="w-full text-left">
                     <thead class="bg-gray-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider border-b border-gray-200 dark:border-slate-700">
                         <tr>
-                            <th class="px-6 py-4 font-semibold">T-Dataroot</th>
+                            <th class="px-6 py-4 font-semibold">Janela</th>
                             <th class="px-6 py-4 font-semibold">Categoria</th>
-                            <th class="px-6 py-4 font-semibold">Ativo/Instalação</th>
+                            <th class="px-6 py-4 font-semibold">Ativo / Instalacao</th>
                             <th class="px-6 py-4 font-semibold">Custo Previsto</th>
-                            <th class="px-6 py-4 font-semibold text-right">Ação</th>
+                            <th class="px-6 py-4 font-semibold text-right">Acao</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-slate-700/50 text-sm">
-                        <!-- Item 1 -->
                         <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
                             <td class="px-6 py-4"><span class="bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 px-2 py-1 rounded text-xs font-bold font-mono">HOJE</span></td>
                             <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">AVAC (Trimestral)</td>
                             <td class="px-6 py-4">Limpeza Cassetes e Filtros C-2 (Restaurante Principal)</td>
                             <td class="px-6 py-4 font-mono text-xs">Interno</td>
-                            <td class="px-6 py-4 text-right"><span class="text-xs text-teal-600 dark:text-teal-400 font-bold">Delegado p/ Celular <i data-lucide="check" class="w-3 h-3 inline"></i></span></td>
+                            <td class="px-6 py-4 text-right"><a href="mobile_os_detail.html?ticketId=1090" class="text-xs text-teal-600 dark:text-teal-400 font-bold hover:underline">Ver O.S no app</a></td>
                         </tr>
-                        <!-- Item 2 -->
                         <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
                             <td class="px-6 py-4"><span class="bg-gray-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded text-xs font-bold font-mono">T-4 Dias</span></td>
-                            <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">Segurança Elevadores</td>
-                            <td class="px-6 py-4">Aferição de Freios 1º e 2º Módulo (Ala Oeste)</td>
+                            <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">Seguranca Elevadores</td>
+                            <td class="px-6 py-4">Afericao de freios 1o e 2o modulo (Ala Oeste)</td>
                             <td class="px-6 py-4 font-mono text-xs">Contrato Otis</td>
-                            <td class="px-6 py-4 text-right"><button class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-bold">Verificar Contrato</button></td>
+                            <td class="px-6 py-4 text-right"><a href="messages.html" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-bold">Notificar equipe</a></td>
                         </tr>
-                        <!-- Item 3 -->
                         <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
                             <td class="px-6 py-4"><span class="bg-gray-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded text-xs font-bold font-mono">T-7 Dias</span></td>
-                            <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">Tratamento Físico-Químico</td>
-                            <td class="px-6 py-4">Higienização de 2 Caixas D'água (Bloco Leste)</td>
+                            <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">Tratamento Fisico-Quimico</td>
+                            <td class="px-6 py-4">Higienizacao de 2 caixas d'agua (Bloco Leste)</td>
                             <td class="px-6 py-4 font-mono text-xs text-red-500">R$ 4.500 (Terceiro)</td>
-                            <td class="px-6 py-4 text-right"><button class="bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-400 px-3 py-1 rounded text-xs font-bold border border-teal-200 dark:border-teal-600/30">Agendar Terceiro via App</button></td>
+                            <td class="px-6 py-4 text-right"><a href="dashboard_create_os.html" class="bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-400 px-3 py-1 rounded text-xs font-bold border border-teal-200 dark:border-teal-600/30">Designar responsavel</a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
         </div>
     </main>
 
-    <script>lucide.createIcons();</script>
+    <script>
+        if (user) {
+            document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'preventive_schedule.html');
+            document.getElementById('userNameLabel').innerText = user.name;
+            document.getElementById('userRoleLabel').innerText = user.role.toUpperCase().replace('_', ' ');
+            document.getElementById('userInitials').innerText = user.name.substring(0, 2).toUpperCase();
+        }
+
+        lucide.createIcons();
+    </script>
 </body>
 </html>
