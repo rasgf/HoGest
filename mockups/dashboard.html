@@ -3,37 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Diretoria | Insolito</title>
+    <title>Dashboard | HotGest</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 500: '#14b8a6', 600: '#0d9488' }, gold: '#D4B872' } } } }
-    </script>
     <script src="js/mock_database.js"></script>
     <script>
-        // Restrict Access
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 900: '#0f172a', 800: '#1e293b' },
+                        teal: { 500: '#14b8a6', 600: '#0d9488' },
+                        gold: '#D4B872'
+                    }
+                }
+            }
+        };
+
         const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao', 'controlador']);
-        
+
         function toggleTheme() {
             const doc = document.documentElement;
-            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; } 
-            else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
-            if(window.updateChartColors) window.updateChartColors();
+            if (doc.classList.contains('dark')) {
+                doc.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                doc.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+            if (window.updateChartColors) window.updateChartColors();
         }
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex transition-colors duration-200">
-    
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col hidden md:flex">
         <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
-            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9 cursor-pointer" onclick="window.location.href='dashboard.html'">
+            <img src="assets/insolito-logo.svg" alt="HotGest" class="h-9 cursor-pointer" onclick="window.location.href='dashboard.html'">
         </div>
-        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav">
-            <!-- Nav Injetada via JS baseada na role -->
-        </nav>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
         <div class="p-4 border-t border-gray-200 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
@@ -51,209 +67,250 @@
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8 transition-colors duration-200">
-            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100" id="dashboardTitle">Visão Geral</h1>
-            <div class="flex gap-4 items-center">
-                
-                <div class="hidden md:flex gap-2 mr-4" id="exportControls">
-                    <button onclick="mockExport('pdf')" class="text-xs flex items-center gap-1 border border-slate-300 dark:border-slate-600 px-3 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                        <i data-lucide="file-text" class="w-3 h-3"></i> Exportar PDF
-                    </button>
-                    <button onclick="mockExport('csv')" class="text-xs flex items-center gap-1 border border-slate-300 dark:border-slate-600 px-3 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                        <i data-lucide="table" class="w-3 h-3"></i> CSV
-                    </button>
-                </div>
-
-                <button onclick="toggleTheme()" class="p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
-            </div>
+        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8">
+            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100" id="dashboardTitle">Visão Geral Operacional</h1>
+            <button onclick="toggleTheme()" class="p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500">
+                <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+            </button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8 space-y-6" id="mainContent">
-            
-            <!-- KPIs Dinâmicas -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="kpiGrid">
-                <!-- Preenchido via JS -->
-            </div>
+        <div class="flex-1 overflow-y-auto p-8 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="kpiGrid"></div>
 
-            <!-- Deep BI Card - Admin Only -->
-            <div id="aiInsightCard" class="bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800/80 border border-teal-200 dark:border-slate-600 rounded-xl p-6 shadow-sm flex gap-4 items-start mt-2">
+            <div id="insightCard" class="bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800/80 border border-teal-200 dark:border-slate-600 rounded-xl p-6 shadow-sm flex gap-4 items-start">
                 <div class="w-10 h-10 rounded-full bg-teal-100 dark:bg-slate-700 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 border border-teal-200 dark:border-slate-600">
-                    <i data-lucide="line-chart" class="w-5 h-5"></i>
+                    <i data-lucide="activity" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-sm text-teal-900 dark:text-teal-400 uppercase tracking-wide mb-1">Córtex Analítico — Predição de Crises</h3>
-                    <p class="text-sm text-slate-700 dark:text-slate-300">As métricas de SLA indicam que <strong>45% das reclamações severas envolvendo Ar-Condicionado</strong> ocorrem entre as <strong>14:00 e 16:00</strong>. <span class="font-semibold text-teal-600 dark:text-teal-400">Sugestão:</span> Alocar 1 Técnico de HVAC dedicados exlusivamente à Ala Frontal durante este expediente.</p>
+                    <h3 class="font-bold text-sm text-teal-900 dark:text-teal-400 uppercase tracking-wide mb-1">Leitura do fluxo</h3>
+                    <p id="insightText" class="text-sm text-slate-700 dark:text-slate-300"></p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
-                <!-- Tabela de Fuga SLA Dinâmica -->
-                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-sm transition-colors col-span-1">
+                <section class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-sm">
                     <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
-                        <h3 class="text-sm font-semibold">Ocorrências: Fuga de SLA</h3>
-                        <a href="os_list.html" class="text-xs text-teal-600 hover:underline">Ver Kanban</a>
+                        <h3 class="text-sm font-semibold">Fila Operacional</h3>
+                        <a href="os_list.html" class="text-xs text-teal-600 hover:underline">Abrir Kanban</a>
                     </div>
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-gray-50 dark:bg-slate-900/50 text-slate-500 text-xs uppercase border-b border-gray-200 dark:border-slate-700">
-                            <tr><th class="px-4 py-3">O.S / Status</th><th class="px-4 py-3">Responsável</th><th class="px-4 py-3">Espera</th></tr>
+                            <tr>
+                                <th class="px-4 py-3">O.S.</th>
+                                <th class="px-4 py-3">Responsáveis</th>
+                                <th class="px-4 py-3">Tempo</th>
+                            </tr>
                         </thead>
-                        <tbody id="slaTableBody" class="divide-y divide-gray-100 dark:divide-slate-700/50 text-xs text-slate-800 dark:text-slate-300">
-                            <!-- Preenchido via JS -->
-                        </tbody>
+                        <tbody id="slaTableBody" class="divide-y divide-gray-100 dark:divide-slate-700/50 text-xs text-slate-800 dark:text-slate-300"></tbody>
                     </table>
-                </div>
+                </section>
 
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm flex flex-col min-h-[250px]">
+                <section class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm flex flex-col min-h-[320px]">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-semibold">Eficiência do Estancamento Insolito</h3>
-                        <button id="compareToggleBtn" class="text-xs px-3 py-1.5 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition">Ver comparativo estimado TOTVS</button>
+                        <h3 class="text-sm font-semibold">Distribuição por Status</h3>
                     </div>
-                    <div class="relative flex-1 w-full"><canvas id="slaChart"></canvas></div>
-                </div>
+                    <div class="relative flex-1 w-full">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </section>
             </div>
-
         </div>
     </main>
 
     <script>
-        // Init UI based on User Role
         const db = MockDB.get();
         const metrics = MockDB.getDashboardMetrics();
-        if(user) {
+
+        if (user) {
             MockDB.populateUserProfile(user);
+            document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'dashboard.html');
 
-            // Configurar Navigation
-            const nav = document.getElementById('sidebarNav');
-            nav.innerHTML = MockDB.buildDesktopNav(user, 'dashboard.html');
-
-            // Conditional rendering of widgets
-            if(user.role === 'controlador') {
-                document.getElementById('aiInsightCard').style.display = 'none';
-                document.getElementById('dashboardTitle').innerText = "Visão Tática de Controle";
-            } else if(user.role === 'admin_manutencao') {
-                document.getElementById('dashboardTitle').innerText = "Painel da Manutenção";
+            if (user.role === 'controlador') {
+                document.getElementById('dashboardTitle').innerText = 'Visão de Controle e Estoque';
+            } else if (user.role === 'admin_manutencao') {
+                document.getElementById('dashboardTitle').innerText = 'Painel da Manutenção';
             }
 
-            // Render KPIs
-            const kpiGrid = document.getElementById('kpiGrid');
-            kpiGrid.innerHTML = `
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
-                    <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Média SLA (O.S Críticas)</div>
-                    <div class="text-3xl font-bold text-teal-600 dark:text-teal-400">${metrics.sla_media_critica}</div>
-                </div>
-            `;
-            if(user.role === 'admin_geral' || user.role === 'controlador') {
-                kpiGrid.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-red-200 dark:border-rose-900/50 shadow-sm">
-                        <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Sangria Evitada</div>
-                        <div class="text-3xl font-bold text-red-500 dark:text-rose-400">${metrics.leakage_identified}</div>
-                    </div>
-                `;
-            } else {
-                 kpiGrid.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-600 shadow-sm">
-                        <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Reparos Fechados</div>
-                        <div class="text-3xl font-bold">129</div>
-                    </div>
-                `;
-            }
-            
-            kpiGrid.innerHTML += `
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
-                    <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Check-Out Forçado (Evitado)</div>
-                    <div class="text-3xl font-bold">${metrics.co_forced}</div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gold/40 shadow-sm">
-                    <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">Preventivas (HVAC)</div>
-                    <div class="text-3xl font-bold text-yellow-600 dark:text-gold">${metrics.preventive_month}</div>
-                </div>
-            `;
+            renderKpis();
+            renderFlowTable();
+            renderInsight();
+        }
 
-            // Render Tabela de Fuga
+        function renderKpis() {
+            const allTickets = db.tickets;
+            const designated = allTickets.filter(ticket => ticket.status === 'designated').length;
+            const inProgress = allTickets.filter(ticket => ticket.status === 'in_progress').length;
+            const awaitingReview = allTickets.filter(ticket => ticket.status === 'awaiting_review').length;
+            const refacoes = allTickets.filter(ticket => ticket.refacaoNumero > 0).length;
+
+            const cards = [
+                { label: 'Média SLA críticas', value: metrics.sla_media_critica, tone: 'teal' },
+                { label: 'O.S. designadas', value: designated, tone: 'default' },
+                { label: 'Aguardando revisão', value: awaitingReview, tone: 'gold' },
+                { label: 'Refações registradas', value: refacoes, tone: 'rose' }
+            ];
+
+            if (user.role === 'controlador') {
+                cards[1] = { label: 'Pendências de baixa', value: MockDB.getPendingInventoryTickets().length, tone: 'amber' };
+            } else if (user.role === 'admin_manutencao') {
+                cards[1] = { label: 'Em execução', value: inProgress, tone: 'default' };
+            }
+
+            document.getElementById('kpiGrid').innerHTML = cards.map(card => `
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border ${getCardBorder(card.tone)} shadow-sm">
+                    <div class="text-slate-500 text-[11px] uppercase tracking-wider font-semibold mb-2">${card.label}</div>
+                    <div class="text-3xl font-bold ${getCardText(card.tone)}">${card.value}</div>
+                </div>
+            `).join('');
+        }
+
+        function getCardBorder(tone) {
+            if (tone === 'teal') return 'border-teal-200 dark:border-teal-500/20';
+            if (tone === 'gold') return 'border-yellow-200 dark:border-yellow-500/20';
+            if (tone === 'rose') return 'border-rose-200 dark:border-rose-500/20';
+            if (tone === 'amber') return 'border-amber-200 dark:border-amber-500/20';
+            return 'border-gray-200 dark:border-slate-700';
+        }
+
+        function getCardText(tone) {
+            if (tone === 'teal') return 'text-teal-600 dark:text-teal-400';
+            if (tone === 'gold') return 'text-yellow-600 dark:text-gold';
+            if (tone === 'rose') return 'text-rose-600 dark:text-rose-400';
+            if (tone === 'amber') return 'text-amber-600 dark:text-amber-400';
+            return 'text-slate-900 dark:text-white';
+        }
+
+        function getResponsibleLabel(ticket) {
+            const assigned = ticket.assignedTo ? db.users.find(entry => entry.id === ticket.assignedTo) : null;
+            const reviewer = ticket.reviewerId ? db.users.find(entry => entry.id === ticket.reviewerId) : null;
+            const parts = [];
+            if (assigned) parts.push(`Exec.: ${assigned.name}`);
+            if (reviewer) parts.push(`Rev.: ${reviewer.name}`);
+            return parts.length ? parts.join(' · ') : 'Aguardando designação';
+        }
+
+        function getStatusInfo(ticket) {
+            if (ticket.status === 'new') {
+                return { label: 'Nova', badgeClass: 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200', border: 'border-l-4 border-slate-400', timeClass: 'text-slate-600 dark:text-slate-300' };
+            }
+            if (ticket.status === 'designated') {
+                return { label: 'Designada', badgeClass: 'bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300', border: 'border-l-4 border-sky-500', timeClass: 'text-sky-600 dark:text-sky-300' };
+            }
+            if (ticket.status === 'in_progress') {
+                return { label: 'Execução', badgeClass: 'bg-teal-100 dark:bg-teal-500/20 text-teal-700 dark:text-teal-300', border: 'border-l-4 border-teal-500', timeClass: 'text-teal-600 dark:text-teal-300' };
+            }
+            return { label: 'Revisão', badgeClass: 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-300', border: 'border-l-4 border-yellow-500', timeClass: 'text-yellow-700 dark:text-yellow-300' };
+        }
+
+        function getTimeLabel(ticket, durations) {
+            if (ticket.status === 'new') return 'Aguardando triagem';
+            if (ticket.status === 'designated') return durations.timeToStartMs ? formatDuration(durations.timeToStartMs) : 'Aguardando início';
+            if (ticket.status === 'in_progress') return durations.executionMs ? formatDuration(durations.executionMs) : 'Em execução';
+            if (ticket.status === 'awaiting_review') return durations.reviewMs ? formatDuration(durations.reviewMs) : 'Aguardando revisão';
+            return '-';
+        }
+
+        function formatDuration(ms) {
+            const totalMinutes = Math.max(0, Math.floor((ms || 0) / 60000));
+            if (totalMinutes < 60) return `${totalMinutes} min`;
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            return minutes ? `${hours}h ${minutes}min` : `${hours}h`;
+        }
+
+        function renderFlowTable() {
             const tbody = document.getElementById('slaTableBody');
-            let tableHTML = '';
-            db.tickets
-                .filter(ticket => ticket.status === 'new' || ticket.status === 'in_progress' || ticket.status === 'awaiting_inventory')
-                .forEach(ticket => {
-                let badge = ticket.priority === 'critical' ? '<span class="text-[10px] bg-red-100 dark:bg-rose-500/20 text-red-600 dark:text-rose-400 px-1.5 py-0.5 rounded font-bold uppercase mr-1">CRI</span>' : '<span class="text-[10px] bg-yellow-100 dark:bg-gold/20 text-yellow-700 dark:text-gold px-1.5 py-0.5 rounded font-bold uppercase mr-1">NOR</span>';
-                
-                let assignedMsg = ticket.assignedTo ? `<i class="w-3 h-3 block inline" data-lucide="user"></i> ` + db.users.find(u=>u.id===ticket.assignedTo).name : `<span class="text-orange-500 italic">Pendente Escala</span>`;
-                
-                let timeWait = ticket.status === 'awaiting_inventory'
-                    ? 'Aguardando baixa'
-                    : ticket.startTime
-                        ? Math.floor((new Date().getTime() - ticket.startTime)/60000) + ' min ativo'
-                        : Math.floor((new Date().getTime() - ticket.notifiedTime)/60000) + ' min pendente';
+            const trackedTickets = db.tickets.filter(ticket => ticket.status !== 'completed').slice().sort((a, b) => b.id - a.id);
 
-                let borderClass = ticket.status === 'awaiting_inventory'
-                    ? 'border-l-4 border-orange-500'
-                    : ticket.priority === 'critical' ? 'border-l-4 border-red-500' : 'border-l-4 border-amber-500';
+            tbody.innerHTML = trackedTickets.map(ticket => {
+                const durations = MockDB.getTicketDurations(ticket.id);
+                const statusInfo = getStatusInfo(ticket);
+                const refacao = ticket.refacaoNumero ? `<span class="text-[10px] bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-300 px-1.5 py-0.5 rounded font-bold uppercase">Refação #${ticket.refacaoNumero}</span>` : '';
+                return `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition ${statusInfo.border}">
+                        <td class="px-4 py-3">
+                            <div class="font-medium flex items-center gap-2 flex-wrap">
+                                <span class="text-[10px] ${statusInfo.badgeClass} px-1.5 py-0.5 rounded font-bold uppercase">${statusInfo.label}</span>
+                                <span>#${ticket.id}</span>
+                                ${refacao}
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-1">${ticket.location} · ${ticket.title}</div>
+                        </td>
+                        <td class="px-4 py-3">${getResponsibleLabel(ticket)}</td>
+                        <td class="px-4 py-3 font-mono text-xs font-bold ${statusInfo.timeClass}">${getTimeLabel(ticket, durations)}</td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="3" class="px-4 py-6 text-center text-slate-500">Nenhuma O.S. ativa neste momento.</td></tr>';
+        }
 
-                tableHTML += `
-                <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition ${borderClass}">
-                    <td class="px-4 py-3"><div class="font-medium">${badge} #${ticket.id}</div><div class="text-[10px] text-slate-400 mt-1">${ticket.location} - ${ticket.title}</div></td>
-                    <td class="px-4 py-3">${assignedMsg}</td>
-                    <td class="px-4 py-3 font-mono text-xs font-bold ${ticket.status === 'awaiting_inventory' ? 'text-orange-500' : 'text-red-500'}">${timeWait}</td>
-                </tr>`;
-            });
-            tbody.innerHTML = tableHTML;
+        function renderInsight() {
+            const designated = db.tickets.filter(ticket => ticket.status === 'designated').length;
+            const awaitingReview = db.tickets.filter(ticket => ticket.status === 'awaiting_review').length;
+            const refacoes = db.tickets.filter(ticket => ticket.refacaoNumero > 0).length;
+
+            let message = `Há ${designated} O.S. aguardando início formal após designação e ${awaitingReview} aguardando validação do revisor.`;
+            if (refacoes) {
+                message += ` O fluxo já registra ${refacoes} ocorrência(s) de refação na mesma O.S., preservando histórico e rastreabilidade.`;
+            } else {
+                message += ' Até o momento, nenhuma refação foi marcada na base mockada.';
+            }
+            document.getElementById('insightText').textContent = message;
         }
 
         lucide.createIcons();
-        let mySlaChart;
+
+        const statusCounts = {
+            new: db.tickets.filter(ticket => ticket.status === 'new').length,
+            designated: db.tickets.filter(ticket => ticket.status === 'designated').length,
+            in_progress: db.tickets.filter(ticket => ticket.status === 'in_progress').length,
+            awaiting_review: db.tickets.filter(ticket => ticket.status === 'awaiting_review').length,
+            completed: db.tickets.filter(ticket => ticket.status === 'completed').length
+        };
+
+        let statusChart;
         function updateChartColors() {
             const isDark = document.documentElement.classList.contains('dark');
-            const tc = isDark ? '#94a3b8' : '#334155';
-            const gc = isDark ? '#334155' : '#e2e8f0';
-            if(mySlaChart){
-                mySlaChart.options.scales.x.ticks.color = tc;
-                mySlaChart.options.scales.y.ticks.color = tc;
-                mySlaChart.options.scales.y.grid.color = gc;
-                mySlaChart.update();
+            const tickColor = isDark ? '#94a3b8' : '#334155';
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+            if (statusChart) {
+                statusChart.options.scales.x.ticks.color = tickColor;
+                statusChart.options.scales.y.ticks.color = tickColor;
+                statusChart.options.scales.y.grid.color = gridColor;
+                statusChart.update();
             }
         }
-        const efficiencySeries = MockDB.getEstancamentoSeries();
-        let showTotvsComparison = false;
-        const compareButton = document.getElementById('compareToggleBtn');
-        function buildChartData() {
-            const labels = efficiencySeries.map(item => item.label);
-            const datasets = [{
-                label: 'Insolito',
-                data: efficiencySeries.map(item => item.hotgest),
-                backgroundColor: '#14b8a6',
-                borderRadius: 4
-            }];
 
-            if (showTotvsComparison) {
-                datasets.push({
-                    label: 'TOTVS Estimado',
-                    data: efficiencySeries.map(item => item.totvs),
-                    backgroundColor: '#ef4444',
-                    borderRadius: 4
-                });
-            }
-
-            return { labels, datasets };
-        }
-
-        const ctxSla = document.getElementById('slaChart').getContext('2d');
-        mySlaChart = new Chart(ctxSla, {
+        statusChart = new Chart(document.getElementById('statusChart').getContext('2d'), {
             type: 'bar',
-            data: buildChartData(),
+            data: {
+                labels: ['Novas', 'Designadas', 'Em execução', 'Aguardando revisão', 'Concluídas'],
+                datasets: [{
+                    label: 'Quantidade de O.S.',
+                    data: [
+                        statusCounts.new,
+                        statusCounts.designated,
+                        statusCounts.in_progress,
+                        statusCounts.awaiting_review,
+                        statusCounts.completed
+                    ],
+                    backgroundColor: ['#94a3b8', '#38bdf8', '#14b8a6', '#facc15', '#22c55e'],
+                    borderRadius: 8
+                }]
+            },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: showTotvsComparison } },
-                scales: { y: { title: { display: true, text: 'Horas por atendimento' } } }
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                }
             }
         });
-        compareButton.addEventListener('click', () => {
-            showTotvsComparison = !showTotvsComparison;
-            mySlaChart.data = buildChartData();
-            mySlaChart.options.plugins.legend.display = showTotvsComparison;
-            compareButton.innerText = showTotvsComparison ? 'Ocultar comparativo TOTVS' : 'Ver comparativo estimado TOTVS';
-            updateChartColors();
-        });
+
         updateChartColors();
     </script>
 </body>

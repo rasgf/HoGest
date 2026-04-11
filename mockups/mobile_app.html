@@ -3,140 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insolito - Mobile App | Inicio</title>
+    <title>HotGest Mobile | Inicio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' }, gold: '#D4B872' } } } }
-    </script>
-    <script>
-        const user = MockDB.requireLogin(['trabalhador', 'controlador']);
-
-        function toggleTheme() {
-            const doc = document.documentElement;
-            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; } 
-            else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' }, gold: '#D4B872' } } } };
+        const user = MockDB.requireLogin(['trabalhador']);
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
     <style>
-        body { background-color: #0f172a; } 
+        body { background-color: #0f172a; }
         :root:not(.dark) body { background-color: #f9fafb; }
-        .app-container { width: 100%; max-width: 430px; height: 100vh; margin: 0 auto; position: relative; overflow-y: auto; overflow-x: hidden;}
+        .app-container { width: 100%; max-width: 430px; height: 100vh; margin: 0 auto; position: relative; overflow-y: auto; overflow-x: hidden; }
     </style>
 </head>
 <body class="font-sans antialiased text-slate-800 dark:text-slate-200 transition-colors duration-200">
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl pb-20">
-        <header class="px-6 pt-12 pb-4 flex justify-between items-center bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 sticky top-0 z-10 w-full transition-colors relative">
+        <header class="px-6 pt-12 pb-4 flex justify-between items-center bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 sticky top-0 z-10">
             <img src="assets/insolito-logo.svg" alt="Insolito" class="h-8 cursor-pointer" onclick="MockDB.logout()">
             <div class="flex items-center gap-3">
-                <button onclick="toggleTheme()" class="p-2"><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i></button>
                 <a href="messages.html" class="relative">
                     <i data-lucide="bell" class="w-5 h-5 text-slate-400"></i>
                     <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">!</span>
                 </a>
                 <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 flex items-center justify-center font-semibold text-sm cursor-pointer" onclick="MockDB.logout()" id="userInitials">XX</div>
             </div>
-            <!-- Logout popover overlay mock -->
-            <div id="logoutTip" class="hidden absolute top-24 right-4 bg-slate-800 text-white text-xs p-2 rounded shadow">Toque nas iniciais para Deslogar</div>
         </header>
 
         <main class="flex-1 px-6 pt-6 overflow-y-auto">
             <div class="pb-6">
-                <h1 class="text-2xl font-bold mb-1 text-slate-900 dark:text-white" id="greetingName">Olá, Trabalhador</h1>
-                <p class="text-slate-500 text-sm">Escala Atual: Livre Movimentação</p>
+                <h1 class="text-2xl font-bold mb-1 text-slate-900 dark:text-white" id="greetingName">Ola, Executor</h1>
+                <p class="text-slate-500 text-sm">Fila operacional do dia</p>
             </div>
 
-            <!-- Big Action Button -->
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                    <div class="text-[10px] uppercase text-slate-500 mb-1">Designadas</div>
+                    <div class="text-2xl font-bold" id="countDesignated">0</div>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                    <div class="text-[10px] uppercase text-slate-500 mb-1">Execucao</div>
+                    <div class="text-2xl font-bold" id="countInProgress">0</div>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                    <div class="text-[10px] uppercase text-slate-500 mb-1">Revisoes</div>
+                    <div class="text-2xl font-bold" id="countReviews">0</div>
+                </div>
+            </div>
+
             <a href="mobile_new_os.html" class="block w-full bg-teal-600 hover:bg-teal-700 text-white rounded-2xl p-6 text-center shadow-lg shadow-teal-500/20 mb-8 transform active:scale-95 transition">
                 <i data-lucide="plus-circle" class="w-8 h-8 mx-auto mb-2 opacity-80"></i>
                 <h2 class="font-bold text-lg">Reportar Anomalia</h2>
-                <p class="text-xs text-teal-100 opacity-80">O.S Simples sem formulários chatos</p>
+                <p class="text-xs text-teal-100 opacity-80">Abrir um novo chamado em poucos toques</p>
             </a>
 
             <div class="flex justify-between items-end mb-4">
-                <h2 class="font-semibold text-lg text-slate-800 dark:text-white">Seus Chamados (Fila de Prioridade)</h2>
-            </div>
-            
-            <div id="taskList">
-                <!-- Preenchido via JS baseado nas O.S designadas para este operador no DB -->
+                <h2 class="font-semibold text-lg text-slate-800 dark:text-white">Sua fila operacional</h2>
             </div>
 
-            <!-- Preventiva -->
-            <a href="mobile_os_detail.html?ticketId=1090" class="block mt-4 bg-white dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700/50 rounded-xl p-4 active:scale-95 transition-transform shadow-sm opacity-60">
-                <div class="flex justify-between items-start mb-2">
-                    <div>
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wide bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded mr-2">Normal</span>
-                        <span class="text-xs text-slate-500">Preventiva Simples</span>
-                    </div>
-                </div>
-                <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Passagem em Filtros C-2</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Restaurante Principal</p>
-            </a>
-
+            <div id="taskList"></div>
         </main>
 
-        <!-- Bottom Navigation Bar Restored -->
         <nav class="fixed bottom-0 w-full max-w-[430px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-gray-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-50">
             <a href="mobile_app.html" class="flex flex-col items-center gap-1">
                 <i data-lucide="home" class="w-5 h-5 text-teal-600 dark:text-teal-500"></i>
-                <span class="text-[10px] font-medium text-teal-600 dark:text-teal-500">Início</span>
-            </a>
-            <a id="scheduleNavLink" href="#" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-                <i data-lucide="calendar-check" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium">Cronograma</span>
+                <span class="text-[10px] font-medium text-teal-600 dark:text-teal-500">Inicio</span>
             </a>
             <a href="messages.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 relative">
                 <i data-lucide="message-square" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium">Mensagens</span>
+                <span class="text-[10px] font-medium">Avisos</span>
                 <span id="navMsgBadge" class="hidden absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </a>
+            <a id="scheduleNavLink" href="mobile_new_os.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Ativa</span>
             </a>
         </nav>
     </div>
-    <script>
-        const db = MockDB.get();
-        if(user) {
-            document.getElementById('greetingName').innerText = `Olá, ${user.name.split(' ')[0]}`;
-            document.getElementById('userInitials').innerText = user.name.substring(0, 2).toUpperCase();
-            document.getElementById('scheduleNavLink').href = MockDB.getMobileScheduleLink(user);
 
-            // Load Assigned Tickets
-            const myTickets = db.tickets
-                .filter(t => t.assignedTo === user.id && (t.status === 'in_progress' || t.status === 'awaiting_inventory'))
-                .sort((a, b) => (b.startTime || b.createdTime) - (a.startTime || a.createdTime));
-            const tkList = document.getElementById('taskList');
-            
-            if(myTickets.length > 0) {
-                tkList.innerHTML = myTickets.map(ticket => `
-                    <a href="mobile_os_detail.html?ticketId=${ticket.id}" class="block bg-gray-50 dark:bg-slate-800 border-l-4 ${ticket.priority === 'critical' ? 'border-l-red-500' : 'border-l-teal-600'} border-t border-t-gray-200 dark:border-t-slate-700 border-r border-r-gray-200 dark:border-r-slate-700 border-b border-b-gray-200 dark:border-b-slate-700 rounded-xl p-4 active:scale-95 transition-transform shadow-sm mb-4">
+    <script>
+        function badgeForStatus(ticket, role) {
+            if (role === 'reviewer') return 'Revisao designada';
+            if (ticket.status === 'designated') return 'Designada';
+            if (ticket.status === 'in_progress') return 'Em execucao';
+            if (ticket.status === 'awaiting_review') return 'Aguardando revisao';
+            return 'Concluida';
+        }
+
+        if (user) {
+            const db = MockDB.get();
+            document.getElementById('greetingName').innerText = `Ola, ${user.name.split(' ')[0]}`;
+            document.getElementById('userInitials').innerText = user.name.substring(0, 2).toUpperCase();
+
+            const executorTickets = db.tickets.filter(ticket => ticket.assignedTo === user.id && ['designated', 'in_progress', 'awaiting_review'].includes(ticket.status));
+            const reviewTickets = db.tickets.filter(ticket => ticket.reviewerId === user.id && ticket.status === 'awaiting_review');
+            const merged = [
+                ...executorTickets.map(ticket => ({ ticket, role: 'executor' })),
+                ...reviewTickets.filter(entry => !executorTickets.some(ticket => ticket.id === entry.id)).map(ticket => ({ ticket, role: 'reviewer' }))
+            ].sort((a, b) => (b.ticket.createdTime || 0) - (a.ticket.createdTime || 0));
+
+            document.getElementById('countDesignated').innerText = executorTickets.filter(ticket => ticket.status === 'designated').length;
+            document.getElementById('countInProgress').innerText = executorTickets.filter(ticket => ticket.status === 'in_progress').length;
+            document.getElementById('countReviews').innerText = reviewTickets.length;
+
+            const taskList = document.getElementById('taskList');
+            if (!merged.length) {
+                taskList.innerHTML = `<div class="p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded text-center text-sm text-slate-500">Nenhum chamado ativo no momento.</div>`;
+            } else {
+                taskList.innerHTML = merged.map(({ ticket, role }) => `
+                    <a href="mobile_os_detail.html?ticketId=${ticket.id}" class="block bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 active:scale-95 transition-transform shadow-sm mb-4">
                         <div class="flex justify-between items-start mb-2">
                             <div>
-                                <span class="text-[10px] font-bold ${ticket.priority === 'critical' ? 'text-red-600 dark:text-rose-400 bg-red-100 dark:bg-rose-500/10' : 'text-teal-600 bg-teal-100 dark:bg-teal-900/50'} uppercase tracking-wide px-2 py-0.5 rounded mr-2">${ticket.priority === 'critical' ? 'Crítico' : 'Normal'}</span>
+                                <span class="text-[10px] font-bold ${ticket.priority === 'critical' ? 'text-red-600 bg-red-100' : 'text-teal-600 bg-teal-100'} uppercase tracking-wide px-2 py-0.5 rounded mr-2">${ticket.priority === 'critical' ? 'Critico' : 'Normal'}</span>
                                 <span class="text-xs text-slate-500">#OS-${ticket.id}</span>
                             </div>
-                            <span class="text-xs font-semibold text-gold font-mono flex items-center gap-1"><i data-lucide="timer" class="w-3 h-3"></i> ${ticket.status === 'awaiting_inventory' ? 'Aguardando baixa' : 'Em execucao'}</span>
+                            <span class="text-xs font-semibold text-gold font-mono">${badgeForStatus(ticket, role)}</span>
                         </div>
                         <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">${ticket.title}</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-3"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> ${ticket.location}</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-2"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> ${ticket.location}</p>
+                        <p class="text-[11px] text-slate-500 mb-3">${role === 'reviewer' ? 'Sua acao: revisar entrega e materiais' : 'Sua acao: executar a tarefa'}</p>
                         <div class="flex items-center text-teal-600 dark:text-teal-500 text-xs font-semibold uppercase tracking-wide">
-                            Continuar Resolução <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                            Abrir O.S. <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
                         </div>
                     </a>
                 `).join('');
-            } else {
-                 tkList.innerHTML = `<div class="p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded text-center text-sm text-slate-500">Nenhum chamado ativo no momento. Vá descansar um pouco!</div>`;
             }
 
-            // Check Notifications/Messages
-            const unread = db.messages.filter(m => m.to === user.id && !m.read);
-            if(unread.length > 0) {
+            const unread = MockDB.getUnreadCount(user.id);
+            if (unread > 0) {
                 document.getElementById('notifBadge').classList.remove('hidden');
-                document.getElementById('notifBadge').innerText = unread.length;
+                document.getElementById('notifBadge').innerText = unread;
                 document.getElementById('navMsgBadge').classList.remove('hidden');
             }
+
+            const nextTicket = merged[0]?.ticket;
+            if (nextTicket) {
+                document.getElementById('scheduleNavLink').href = `mobile_os_detail.html?ticketId=${nextTicket.id}`;
+            }
         }
+
         lucide.createIcons();
     </script>
 </body>

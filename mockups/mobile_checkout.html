@@ -3,66 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout de Estoque | Insolito</title>
+    <title>Fechamento da O.S. | HotGest</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
-        const user = MockDB.requireLogin(['trabalhador', 'controlador']);
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 900: '#0f172a', 800: '#1e293b' },
+                        teal: { 600: '#0d9488' }
+                    }
+                }
+            }
+        };
+        const user = MockDB.requireLogin(['trabalhador']);
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     </script>
-    <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
+    <style>
+        body { background-color: #0f172a; }
+        :root:not(.dark) body { background-color: #f8fafc; }
+        .app-container { width: 100%; max-width: 430px; height: 100vh; margin: 0 auto; overflow-y: auto; }
+    </style>
 </head>
-<body class="text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors">
+<body class="text-slate-800 dark:text-slate-200 font-sans antialiased">
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
         <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0">
-            <a id="backLink" href="mobile_app.html" class="p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></a>
-            <h1 class="text-lg font-semibold ml-2 text-slate-900 dark:text-white">Baixa de Material</h1>
+            <a id="backLink" href="mobile_app.html" class="p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+            </a>
+            <div class="ml-2">
+                <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Fechamento</p>
+                <h1 class="text-lg font-semibold text-slate-900 dark:text-white">Concluir Execução</h1>
+            </div>
         </header>
 
-        <main class="flex-1 p-6 flex flex-col justify-between">
+        <main class="flex-1 p-6 flex flex-col justify-between gap-6">
             <div>
-                <div class="bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/30 p-4 rounded-xl mb-4 flex gap-3">
-                    <i data-lucide="info" class="w-5 h-5 text-orange-500 dark:text-orange-400 shrink-0 mt-0.5"></i>
-                    <p class="text-sm text-orange-800 dark:text-orange-200 font-medium dark:font-normal">Declare os materiais retirados do almoxarifado para encerrar a O.S sem gerar fuga de estoque.</p>
+                <div class="bg-teal-50 dark:bg-teal-500/10 border border-teal-200 dark:border-teal-500/20 p-4 rounded-2xl mb-5">
+                    <p class="text-sm text-teal-800 dark:text-teal-200">
+                        Ao concluir, a O.S. segue para <strong>aguardando revisão</strong>. Se houver material utilizado, a auditoria de estoque ficará pendente para controlador ou administração.
+                    </p>
                 </div>
 
-                <div class="mb-5">
-                    <p class="text-xs uppercase tracking-wide text-slate-500 mb-1">Chamado</p>
+                <div class="mb-6">
+                    <p class="text-xs uppercase tracking-wide text-slate-500 mb-1">O.S.</p>
                     <h2 id="ticketTitle" class="text-xl font-bold text-slate-900 dark:text-white"></h2>
                     <p id="ticketLocation" class="text-sm text-slate-500 dark:text-slate-400"></p>
                 </div>
 
                 <div class="space-y-4">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-white">Materiais Utilizados</h3>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-semibold text-slate-900 dark:text-white">Materiais Utilizados</h3>
+                        <span class="text-xs text-slate-500">Opcional</span>
+                    </div>
 
-                    <div class="relative mb-4">
+                    <div class="relative">
                         <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-                        <input id="searchInput" type="text" placeholder="Buscar material..." class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-lg py-3 pl-10 pr-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:border-teal-600">
+                        <input id="searchInput" type="text" placeholder="Buscar material..." class="w-full bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:border-teal-600">
                     </div>
 
                     <div id="inventoryOptions" class="space-y-3"></div>
                 </div>
             </div>
 
-            <div class="pt-8">
+            <div class="pt-4">
                 <p id="checkoutFeedback" class="hidden text-sm rounded-xl px-4 py-3 border mb-4"></p>
-                <button id="completeBtn" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl text-center active:scale-95 transition-transform shadow-lg">
-                    Concluir e Enviar para Auditoria
+                <button id="completeBtn" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-2xl text-center active:scale-95 transition-transform shadow-lg">
+                    Finalizar Execução
                 </button>
             </div>
         </main>
     </div>
+
     <script>
         const params = new URLSearchParams(window.location.search);
         const ticketId = Number(params.get('ticketId'));
         const ticket = MockDB.getTicketById(ticketId);
 
         if (!ticket) {
-            alert('O.S nao encontrada.');
+            alert('O.S. não encontrada.');
             window.location.href = 'mobile_app.html';
+        }
+
+        if (ticket.assignedTo !== user.id) {
+            alert('Somente o executor designado pode concluir esta O.S.');
+            window.location.href = `mobile_os_detail.html?ticketId=${ticketId}`;
         }
 
         document.getElementById('backLink').href = `mobile_os_detail.html?ticketId=${ticketId}`;
@@ -80,26 +113,24 @@
             const visibleItems = suggestions.filter(item => item.name.toLowerCase().includes(normalizedFilter));
 
             optionsContainer.innerHTML = visibleItems.map(item => `
-                <div class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border ${selected[item.id] ? 'border-teal-500 dark:border-teal-600 shadow-[0_0_10px_rgba(13,148,136,0.1)]' : 'border-gray-200 dark:border-slate-700'}">
+                <div class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border ${selected[item.id] ? 'border-teal-500 dark:border-teal-600 shadow-[0_0_10px_rgba(13,148,136,0.12)]' : 'border-gray-200 dark:border-slate-700'}">
                     <div>
                         <p class="font-medium text-sm ${selected[item.id] ? 'text-teal-700 dark:text-slate-100' : 'text-slate-800 dark:text-slate-100'}">${item.name}</p>
                         <p class="text-xs text-slate-500 mt-0.5">${item.area} · Estoque atual ${item.stock} ${item.unit}</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button type="button" data-action="decrease" data-id="${item.id}" class="w-8 h-8 rounded bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-300 font-bold">-</button>
+                        <button type="button" data-action="decrease" data-id="${item.id}" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-300 font-bold">-</button>
                         <span class="font-mono text-base font-bold text-teal-600 dark:text-white min-w-4 text-center">${selected[item.id] || 0}</span>
-                        <button type="button" data-action="increase" data-id="${item.id}" class="w-8 h-8 rounded bg-teal-50 dark:bg-teal-600/20 border border-teal-200 dark:border-teal-500/50 flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">+</button>
+                        <button type="button" data-action="increase" data-id="${item.id}" class="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-600/20 border border-teal-200 dark:border-teal-500/50 flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">+</button>
                     </div>
                 </div>
-            `).join('') || `<div class="p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded text-center text-sm text-slate-500">Nenhum material encontrado para esse filtro.</div>`;
+            `).join('') || '<div class="p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-center text-sm text-slate-500">Nenhum material encontrado para esse filtro.</div>';
             lucide.createIcons();
         }
 
         optionsContainer.addEventListener('click', event => {
             const button = event.target.closest('button[data-action]');
-            if (!button) {
-                return;
-            }
+            if (!button) return;
 
             const itemId = Number(button.dataset.id);
             const currentQty = selected[itemId] || 0;
@@ -110,20 +141,23 @@
         searchInput.addEventListener('input', event => renderOptions(event.target.value));
 
         document.getElementById('completeBtn').addEventListener('click', () => {
-            const materialsUsed = Object.entries(selected).map(([inventoryId, quantity]) => ({
-                inventoryId: Number(inventoryId),
-                quantity: Number(quantity)
-            }));
+            const materialsUsed = Object.entries(selected)
+                .map(([inventoryId, quantity]) => ({
+                    inventoryId: Number(inventoryId),
+                    quantity: Number(quantity)
+                }))
+                .filter(item => item.quantity > 0);
 
             MockDB.completeTicket(ticketId, materialsUsed);
+
             feedback.className = 'text-sm rounded-xl px-4 py-3 border mb-4 border-teal-200 bg-teal-50 text-teal-700';
-            feedback.textContent = materialsUsed.some(item => item.quantity > 0)
-                ? 'Chamado finalizado. O almoxarifado recebeu uma pendencia de baixa para auditoria.'
-                : 'Chamado finalizado sem consumo de material.';
+            feedback.textContent = materialsUsed.length
+                ? 'Execução concluída. A O.S. está aguardando revisão e a baixa de material ficou pendente para auditoria.'
+                : 'Execução concluída. A O.S. está aguardando revisão.';
             feedback.classList.remove('hidden');
 
             setTimeout(() => {
-                window.location.href = 'mobile_app.html';
+                window.location.href = `mobile_os_detail.html?ticketId=${ticketId}`;
             }, 900);
         });
 

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxograma Corrigido de O.S.</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                background: '#f5f7f8',
+                primaryColor: '#d8efe9',
+                primaryTextColor: '#0f172a',
+                primaryBorderColor: '#0d9488',
+                lineColor: '#0f766e',
+                secondaryColor: '#fff5db',
+                tertiaryColor: '#ffe5e5',
+                clusterBkg: '#ffffff',
+                clusterBorder: '#cbd5e1',
+                fontFamily: 'Segoe UI, Arial, sans-serif'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef4f3 100%);
+            color: #0f172a;
+        }
+        .page {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px 48px;
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+        p {
+            margin: 0 0 20px;
+            color: #334155;
+            font-size: 15px;
+        }
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin: 0 0 24px;
+        }
+        .legend-card {
+            background: rgba(255,255,255,0.85);
+            border: 1px solid #dbe4e8;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+        .legend-card strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .legend-card span {
+            color: #475569;
+            font-size: 13px;
+        }
+        .diagram-wrap {
+            background: #ffffff;
+            border: 1px solid #dbe4e8;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            overflow: auto;
+        }
+        .mermaid {
+            min-width: 1100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <h1>Fluxograma Corrigido de O.S.</h1>
+        <p>Fluxo final aprovado para abertura, designação, execução, revisão, refação e medição de tempos operacionais no HotGest.</p>
+
+        <div class="legend">
+            <div class="legend-card">
+                <strong>Usuário comum</strong>
+                <span>Somente abre o report. Não participa do histórico operacional.</span>
+            </div>
+            <div class="legend-card">
+                <strong>Gestão</strong>
+                <span>Classifica, designa executor e revisor e redesigna a mesma O.S. quando houver refação.</span>
+            </div>
+            <div class="legend-card">
+                <strong>Tempos obrigatórios</strong>
+                <span>Tempo até início da execução, tempo de execução e tempo de revisão.</span>
+            </div>
+            <div class="legend-card">
+                <strong>Refação</strong>
+                <span>Não cria nova O.S. principal. A mesma O.S. volta com marcador <code>Refação #N</code>.</span>
+            </div>
+        </div>
+
+        <div class="diagram-wrap">
+            <pre class="mermaid">
+flowchart LR
+    A[Usuario comum abre report] --> B[OS criada<br/>status: nova]
+    B --> C[Admin Geral e Gerente de Manutencao<br/>recebem em Novas OS]
+    C --> D[Gestao classifica<br/>prioridade e dificuldade]
+    D --> E[Gestao designa executor]
+    E --> F[OS vira<br/>designada]
+    F --> G[Registrar designado_em]
+    F --> H[Gestao designa revisor<br/>diferente do executor]
+    H --> I[Revisor recebe a mesma OS<br/>na coluna designada]
+    F --> J[Executor inicia manualmente]
+    J --> K[OS vira<br/>em_execucao]
+    K --> L[Calcular tempo ate inicio<br/>da execucao]
+    K --> M[Contagem do tempo<br/>de execucao]
+    K --> N[Chat operacional da OS<br/>executor, revisor e gestao]
+    N --> O[Gestao pode reavaliar<br/>prioridade ou dificuldade]
+    M --> P[Executor finaliza]
+    P --> Q[OS vira<br/>aguardando_revisao]
+    Q --> R[Revisor analisa execucao<br/>e materiais]
+    R --> S[Contagem do tempo<br/>de revisao]
+    S --> T{Revisao aprovada?}
+    T -- Sim --> U[OS concluida]
+    T -- Nao --> V[Mesma OS recebe marcador<br/>Refacao #N]
+    V --> W[Motivo da refacao registrado]
+    W --> X[OS volta para a gestao<br/>como novo card para redesignacao]
+    X --> E
+
+    classDef normal fill:#d8efe9,stroke:#0d9488,color:#0f172a,stroke-width:1.5px;
+    classDef decisao fill:#fff5db,stroke:#c58b00,color:#0f172a,stroke-width:1.5px;
+    classDef alerta fill:#ffe5e5,stroke:#dc2626,color:#7f1d1d,stroke-width:1.5px;
+    classDef metrica fill:#e8f0fe,stroke:#2563eb,color:#0f172a,stroke-width:1.5px;
+
+    class A,B,C,D,E,F,H,I,J,K,N,O,P,Q,R,U,X normal;
+    class T decisao;
+    class V,W alerta;
+    class G,L,M,S metrica;
+            </pre>
+        </div>
+    </div>
+</body>
+</html>

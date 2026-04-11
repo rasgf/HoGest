@@ -43,9 +43,12 @@
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex justify-between items-center px-8">
-            <h1 class="text-xl font-semibold flex items-center gap-2">Cronograma de Prevencao e Seguranca</h1>
-            <div class="flex gap-4 items-center">
+            <h1 class="text-xl font-semibold flex items-center gap-2"><i data-lucide="calendar-check-2" class="w-5 h-5 text-teal-500"></i> Cronograma de Prevencao e Seguranca</h1>
+            <div class="flex gap-3 items-center">
                 <span class="text-sm font-semibold text-slate-500">Proximos 30 dias</span>
+                <button onclick="openCreateModal()" class="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-lg shadow-sm transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Criar Preventiva
+                </button>
                 <button onclick="toggleTheme()" class="p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
             </div>
         </header>
@@ -100,6 +103,53 @@
         </div>
     </main>
 
+    <!-- Modal Criar Preventiva -->
+    <div id="createPreventiveModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl w-full max-w-lg shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-white">Criar Preventiva</h3>
+            <p class="text-sm text-slate-500 mb-6">Cadastre um novo item no cronograma de manutencao preventiva.</p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Descricao da Atividade</label>
+                    <input id="prevTitle" type="text" placeholder="Ex: Limpeza de filtros HVAC bloco A" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Categoria</label>
+                        <select id="prevCategory" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                            <option value="AVAC">AVAC (Climatizacao)</option>
+                            <option value="Hidraulica">Hidraulica</option>
+                            <option value="Eletrica">Eletrica</option>
+                            <option value="Seguranca">Seguranca e Elevadores</option>
+                            <option value="Tratamento">Tratamento Fisico-Quimico</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Janela (Dias a partir de hoje)</label>
+                        <input id="prevDays" type="number" min="0" max="365" value="30" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Custo Previsto</label>
+                    <input id="prevCost" type="text" placeholder="Ex: R$ 2.500 (Interno) ou Contrato Terceiro" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Local / Instalacao</label>
+                    <input id="prevLocation" type="text" placeholder="Ex: Torre Norte - Piso 5" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                </div>
+            </div>
+
+            <p id="prevFeedback" class="hidden mt-4 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-3"></p>
+
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="closeCreateModal()" class="px-5 py-2 border border-slate-300 dark:border-slate-600 text-sm rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition">Cancelar</button>
+                <button onclick="submitPreventive()" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-lg shadow-sm transition">Cadastrar no Cronograma</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         if (user) {
             document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'preventive_schedule.html');
@@ -109,6 +159,60 @@
         }
 
         lucide.createIcons();
+
+        function openCreateModal() {
+            document.getElementById('createPreventiveModal').classList.remove('hidden');
+            document.getElementById('prevFeedback').classList.add('hidden');
+            document.getElementById('prevTitle').value = '';
+            document.getElementById('prevDays').value = '30';
+            document.getElementById('prevCost').value = '';
+            document.getElementById('prevLocation').value = '';
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createPreventiveModal').classList.add('hidden');
+        }
+
+        function submitPreventive() {
+            const title = document.getElementById('prevTitle').value.trim();
+            const location = document.getElementById('prevLocation').value.trim();
+            const category = document.getElementById('prevCategory').value;
+            const days = parseInt(document.getElementById('prevDays').value) || 30;
+            const cost = document.getElementById('prevCost').value.trim() || 'A definir';
+
+            if (!title || !location) {
+                alert('Preencha ao menos a Descrição e o Local.');
+                return;
+            }
+
+            // Calcular janela textual
+            let janela;
+            if (days === 0) janela = 'HOJE';
+            else if (days <= 7) janela = `T-${days} Dias`;
+            else janela = `T-${days} Dias`;
+
+            // Inserir nova linha na tabela
+            const tbody = document.querySelector('tbody');
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-50 dark:hover:bg-slate-700/30 transition';
+            tr.innerHTML = `
+                <td class="px-6 py-4"><span class="bg-teal-100 dark:bg-teal-600/30 text-teal-700 dark:text-teal-400 px-2 py-1 rounded text-xs font-bold font-mono">${janela}</span></td>
+                <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">${category}</td>
+                <td class="px-6 py-4">${title} <span class="text-slate-400 text-xs">(${location})</span></td>
+                <td class="px-6 py-4 font-mono text-xs">${cost}</td>
+                <td class="px-6 py-4 text-right"><a href="dashboard_create_os.html" class="bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-400 px-3 py-1 rounded text-xs font-bold border border-teal-200 dark:border-teal-600/30">Designar responsavel</a></td>
+            `;
+            tbody.prepend(tr);
+            lucide.createIcons();
+
+            const feedback = document.getElementById('prevFeedback');
+            feedback.textContent = `✓ Preventiva "${title}" cadastrada com sucesso no cronograma.`;
+            feedback.classList.remove('hidden');
+
+            setTimeout(() => {
+                closeCreateModal();
+            }, 2000);
+        }
     </script>
 </body>
 </html>

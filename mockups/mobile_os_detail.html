@@ -3,33 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes da O.S | Insolito</title>
+    <title>Detalhes da O.S | HotGest</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
-        const user = MockDB.requireLogin(['trabalhador', 'controlador']);
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } };
+        const user = MockDB.requireLogin(['trabalhador', 'admin_geral', 'admin_manutencao', 'controlador']);
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
     <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
 </head>
 <body class="text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors">
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
-        <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0">
-            <a href="mobile_app.html" class="p-2 -ml-2 text-slate-500 dark:text-slate-400 hover:text-slate-900"><i data-lucide="chevron-left" class="w-6 h-6"></i></a>
+        <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0 z-10">
+            <a href="javascript:history.back()" class="p-2 -ml-2 text-slate-500 dark:text-slate-400 hover:text-slate-900"><i data-lucide="chevron-left" class="w-6 h-6"></i></a>
             <h1 class="text-lg font-semibold ml-2" id="headerTitle">OS #0000</h1>
         </header>
 
         <main class="flex-1 p-6">
             <div class="mb-6">
-                <span id="priorityBadge" class="inline-block bg-red-100 dark:bg-rose-500/20 text-red-600 dark:text-rose-400 border border-red-200 dark:border-rose-500/40 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider mb-3">SLA CRITICO</span>
-                <h2 id="ticketTitle" class="text-2xl font-bold text-slate-900 dark:text-white leading-tight mb-2">Carregando chamado...</h2>
+                <div class="flex items-center gap-2 mb-3 flex-wrap">
+                    <span id="priorityBadge" class="inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border">SLA</span>
+                    <span id="statusBadge" class="inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border">Status</span>
+                    <span id="refacaoBadge" class="hidden inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border border-red-200 bg-red-100 text-red-700">Refacao</span>
+                </div>
+                <h2 id="ticketTitle" class="text-2xl font-bold text-slate-900 dark:text-white leading-tight mb-2">Carregando...</h2>
                 <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm mb-2">
                     <i data-lucide="map-pin" class="w-4 h-4"></i> <span id="ticketLocation"></span>
                 </div>
                 <p id="ticketDescription" class="text-sm text-slate-500 dark:text-slate-400"></p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mb-5">
+                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-slate-700">
+                    <div class="text-[10px] uppercase text-slate-500 mb-1">Espera</div>
+                    <div class="text-sm font-bold" id="timeToStartLabel">0 min</div>
+                </div>
+                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-slate-700">
+                    <div class="text-[10px] uppercase text-slate-500 mb-1">Execucao</div>
+                    <div class="text-sm font-bold" id="executionLabel">0 min</div>
+                </div>
+                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-slate-700">
+                    <div class="text-[10px] uppercase text-slate-500 mb-1">Revisao</div>
+                    <div class="text-sm font-bold" id="reviewLabel">0 min</div>
+                </div>
             </div>
 
             <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-5 mb-5 border border-gray-200 dark:border-slate-700 shadow-sm">
@@ -40,7 +59,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p id="timerDisplay" class="text-4xl font-mono font-light text-slate-900 dark:text-slate-200 tracking-widest">00:00</p>
-                        <p id="statusMsg" class="text-xs text-slate-500 mt-1 font-semibold text-red-500">Pronto para iniciar</p>
+                        <p id="statusMsg" class="text-xs text-slate-500 mt-1 font-semibold">Aguardando acao.</p>
                     </div>
                     <button id="toggleTimerBtn" class="bg-teal-600 p-4 rounded-full text-white shadow-lg shadow-teal-500/30">
                         <i id="timerIcon" data-lucide="play" class="w-6 h-6 ml-1"></i>
@@ -49,14 +68,29 @@
             </div>
 
             <div id="materialsPreview" class="hidden bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-xl p-4 mb-5">
-                <p class="text-xs font-semibold uppercase tracking-wide text-orange-700 dark:text-orange-300 mb-2">Materiais pendentes de baixa</p>
+                <p class="text-xs font-semibold uppercase tracking-wide text-orange-700 dark:text-orange-300 mb-2">Materiais informados</p>
                 <div id="materialsList" class="text-sm text-orange-900 dark:text-orange-100 space-y-1"></div>
             </div>
 
-            <div class="pt-2">
+            <div class="mb-5">
+                <h3 class="text-sm font-semibold mb-4 text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <i data-lucide="message-square" class="w-4 h-4 text-teal-500"></i> Chat da O.S.
+                </h3>
+                <div id="commentsList" class="space-y-3 mb-4"></div>
+                <div id="commentComposer" class="flex items-center gap-2">
+                    <input id="commentInput" type="text" placeholder="Registrar comentario operacional..." class="flex-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-full py-2.5 px-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:border-teal-500">
+                    <button id="sendCommentBtn" type="button" class="bg-teal-600 hover:bg-teal-500 text-white w-10 h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 shadow-md">
+                        <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-3">
                 <a id="resolveLink" href="#" class="block w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-bold py-4 rounded-xl text-center shadow-lg active:scale-95 transition-transform">
                     Marcar como Resolvido
                 </a>
+                <button id="reviewApproveBtn" class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg">Aprovar Revisao</button>
+                <button id="reviewRejectBtn" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl shadow-lg">Solicitar Refacao</button>
             </div>
         </main>
     </div>
@@ -72,70 +106,135 @@
             window.location.href = 'mobile_app.html';
         }
 
-        const db = MockDB.get();
-        const inventoryMap = new Map(db.inventory.map(item => [item.id, item]));
         const display = document.getElementById('timerDisplay');
         const btn = document.getElementById('toggleTimerBtn');
         const icon = document.getElementById('timerIcon');
         const statusMsg = document.getElementById('statusMsg');
         const statusPill = document.getElementById('statusPill');
         const resolveLink = document.getElementById('resolveLink');
+        const reviewApproveBtn = document.getElementById('reviewApproveBtn');
+        const reviewRejectBtn = document.getElementById('reviewRejectBtn');
 
-        function formatDuration(ms) {
+        function formatClock(ms) {
             const totalSeconds = Math.floor(ms / 1000);
             const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
             const seconds = String(totalSeconds % 60).padStart(2, '0');
             return `${minutes}:${seconds}`;
         }
 
+        function formatDuration(ms) {
+            if (!ms) return '0 min';
+            const totalMin = Math.floor(ms / 60000);
+            if (totalMin < 60) return `${totalMin} min`;
+            const hours = Math.floor(totalMin / 60);
+            const minutes = totalMin % 60;
+            return `${hours}h ${minutes}min`;
+        }
+
+        function currentCommentsHtml(ticket) {
+            const db = MockDB.get();
+            const comments = MockDB.getTicketComments(ticket.id);
+            if (!comments.length) {
+                return `<div class="text-sm text-slate-500">Nenhum comentario registrado ainda.</div>`;
+            }
+            return comments.map(comment => {
+                const author = db.users.find(entry => entry.id === comment.authorId);
+                const mine = author?.id === user.id;
+                return `
+                    <div class="flex gap-3 ${mine ? '' : 'flex-row-reverse'}">
+                        <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                            <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">${author ? author.name.substring(0, 2).toUpperCase() : 'SY'}</span>
+                        </div>
+                        <div class="${mine ? 'bg-teal-50 dark:bg-teal-500/10 border-teal-100 dark:border-teal-500/30 rounded-tl-none' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 rounded-tr-none'} border p-3 rounded-2xl w-full shadow-sm text-sm">
+                            <p class="text-slate-800 dark:text-slate-200 mb-1">${comment.content}</p>
+                            <span class="text-[10px] text-slate-400 uppercase">${author?.name || 'Sistema'} • ${new Date(comment.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function refreshState() {
             currentTicket = MockDB.getTicketById(ticketId);
             const clock = MockDB.getTicketClock(ticketId);
+            const durations = MockDB.getTicketDurations(ticketId) || {};
+            const db = MockDB.get();
+            const inventoryMap = new Map(db.inventory.map(item => [item.id, item]));
+            const isExecutor = currentTicket.assignedTo === user.id;
+            const isReviewer = currentTicket.reviewerId === user.id;
+            const canComment = ['admin_geral', 'admin_manutencao'].includes(user.role) || isExecutor || isReviewer;
+
             document.getElementById('headerTitle').textContent = `OS #${currentTicket.id}`;
             document.getElementById('ticketTitle').textContent = currentTicket.title;
             document.getElementById('ticketLocation').textContent = currentTicket.location;
             document.getElementById('ticketDescription').textContent = currentTicket.description || 'Sem observacoes adicionais.';
-            document.getElementById('priorityBadge').className = `inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider mb-3 border ${currentTicket.priority === 'critical' ? 'bg-red-100 dark:bg-rose-500/20 text-red-600 dark:text-rose-400 border-red-200 dark:border-rose-500/40' : 'bg-teal-100 dark:bg-teal-600/20 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-500/30'}`;
-            document.getElementById('priorityBadge').textContent = currentTicket.priority === 'critical' ? 'SLA CRITICO' : 'SLA NORMAL';
-            display.textContent = formatDuration(clock.elapsedMs);
+            document.getElementById('priorityBadge').className = `inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border ${currentTicket.priority === 'critical' ? 'bg-red-100 text-red-600 border-red-200' : 'bg-teal-100 text-teal-700 border-teal-200'}`;
+            document.getElementById('priorityBadge').textContent = currentTicket.priority === 'critical' ? 'SLA Critico' : 'SLA Normal';
+            document.getElementById('statusBadge').className = 'inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border border-slate-200 bg-slate-100 text-slate-700';
+            document.getElementById('statusBadge').textContent = currentTicket.status.replaceAll('_', ' ');
+            document.getElementById('refacaoBadge').classList.toggle('hidden', currentTicket.refacaoNumero <= 0);
+            document.getElementById('refacaoBadge').textContent = `Refacao #${currentTicket.refacaoNumero}`;
+
+            document.getElementById('timeToStartLabel').textContent = formatDuration(durations.timeToStartMs);
+            document.getElementById('executionLabel').textContent = formatDuration(durations.executionMs);
+            document.getElementById('reviewLabel').textContent = formatDuration(durations.reviewMs);
+            display.textContent = formatClock(clock.elapsedMs);
+            document.getElementById('commentsList').innerHTML = currentCommentsHtml(currentTicket);
 
             const isRunning = clock.isRunning;
             icon.setAttribute('data-lucide', isRunning ? 'square' : 'play');
             btn.classList.toggle('bg-rose-500', isRunning);
             btn.classList.toggle('bg-teal-600', !isRunning);
+            btn.disabled = !(isExecutor && ['designated', 'in_progress'].includes(currentTicket.status));
+            btn.classList.toggle('opacity-50', btn.disabled);
+            btn.classList.toggle('cursor-not-allowed', btn.disabled);
 
-            if (currentTicket.status === 'awaiting_inventory') {
-                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-300';
-                statusPill.textContent = 'Aguardando baixa';
-                statusMsg.className = 'text-xs mt-1 font-semibold text-orange-500';
-                statusMsg.textContent = 'Servico finalizado. Falta auditar material.';
+            const commentComposer = document.getElementById('commentComposer');
+            commentComposer.classList.toggle('hidden', !canComment);
+
+            reviewApproveBtn.classList.add('hidden');
+            reviewRejectBtn.classList.add('hidden');
+
+            if (currentTicket.status === 'designated') {
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-amber-100 text-amber-700';
+                statusPill.textContent = 'Designada';
+                statusMsg.textContent = isExecutor ? 'Inicie manualmente para comecar a execucao.' : 'Aguardando inicio do executor.';
+                resolveLink.textContent = 'Registrar materiais';
+                resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
+            } else if (currentTicket.status === 'in_progress') {
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-teal-100 text-teal-700';
+                statusPill.textContent = 'Em execucao';
+                statusMsg.textContent = 'Execucao em andamento.';
+                resolveLink.textContent = 'Marcar como Resolvido';
+                resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
+            } else if (currentTicket.status === 'awaiting_review') {
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-blue-100 text-blue-700';
+                statusPill.textContent = 'Aguardando revisao';
+                statusMsg.textContent = isReviewer ? 'Sua revisao esta pendente.' : 'Aguardando validacao do revisor.';
                 btn.disabled = true;
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
-                resolveLink.textContent = 'Baixa de Material';
+                resolveLink.textContent = 'Materiais utilizados';
                 resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
+                if (isReviewer) {
+                    reviewApproveBtn.classList.remove('hidden');
+                    reviewRejectBtn.classList.remove('hidden');
+                }
             } else if (currentTicket.status === 'completed') {
-                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300';
-                statusPill.textContent = 'Concluido';
-                statusMsg.className = 'text-xs mt-1 font-semibold text-emerald-500';
-                statusMsg.textContent = 'Chamado encerrado com estoque conciliado.';
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-emerald-100 text-emerald-700';
+                statusPill.textContent = 'Concluida';
+                statusMsg.textContent = currentTicket.inventoryApproved || !currentTicket.materialsUsed.length ? 'OS encerrada e conciliada.' : 'OS concluida. Estoque ainda pendente.';
                 btn.disabled = true;
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
                 resolveLink.textContent = 'Voltar para fila';
                 resolveLink.href = 'mobile_app.html';
-            } else if (isRunning) {
-                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-teal-100 dark:bg-teal-600/20 text-teal-700 dark:text-teal-300';
-                statusPill.textContent = 'Em execucao';
-                statusMsg.className = 'text-xs mt-1 font-semibold text-teal-500';
-                statusMsg.textContent = 'SLA rodando.';
-                resolveLink.textContent = 'Marcar como Resolvido';
-                resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
             } else {
-                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
-                statusPill.textContent = 'Pausado';
-                statusMsg.className = 'text-xs mt-1 font-semibold text-red-500';
-                statusMsg.textContent = currentTicket.startTime ? 'Execucao pausada.' : 'Pronto para iniciar';
-                resolveLink.textContent = 'Marcar como Resolvido';
-                resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 text-slate-600';
+                statusPill.textContent = 'Nova';
+                statusMsg.textContent = 'Aguardando designacao da gestao.';
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                resolveLink.textContent = 'Voltar para fila';
+                resolveLink.href = 'mobile_app.html';
             }
 
             const materialsPreview = document.getElementById('materialsPreview');
@@ -154,11 +253,31 @@
         }
 
         btn.addEventListener('click', () => {
-            if (btn.disabled) {
-                return;
-            }
-
             MockDB.toggleTicketTimer(ticketId);
+            refreshState();
+        });
+
+        document.getElementById('sendCommentBtn').addEventListener('click', () => {
+            const input = document.getElementById('commentInput');
+            if (!input.value.trim()) return;
+            const comment = MockDB.addTicketComment(ticketId, user.id, input.value.trim());
+            if (comment) {
+                input.value = '';
+                refreshState();
+            }
+        });
+
+        reviewApproveBtn.addEventListener('click', () => {
+            MockDB.startReview(ticketId, user.id);
+            MockDB.approveReview(ticketId, user.id, 'Revisao aprovada pelo revisor.');
+            refreshState();
+        });
+
+        reviewRejectBtn.addEventListener('click', () => {
+            const reason = prompt('Descreva o motivo da refacao:');
+            if (reason === null) return;
+            MockDB.startReview(ticketId, user.id);
+            MockDB.rejectReview(ticketId, user.id, reason.trim() || 'Refacao solicitada pelo revisor.');
             refreshState();
         });
 

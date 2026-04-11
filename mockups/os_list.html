@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quadro Kanban O.S | Insolito</title>
+    <title>Quadro Kanban O.S | HotGest</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
-    </script>
     <script src="js/mock_database.js"></script>
     <script>
-        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao', 'controlador']);
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } };
+        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao']);
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
     </script>
@@ -22,9 +20,7 @@
         <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9">
         </div>
-        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav">
-            <!-- Nav Injetada via JS dinâmico para não poluir -->
-        </nav>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
         <div class="p-4 border-t border-gray-200 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
@@ -40,153 +36,287 @@
             </div>
         </div>
     </aside>
-    
+
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8">
-            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100">Quadro Operacional (Kanban)</h1>
+            <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100">Quadro Operacional</h1>
             <div class="flex gap-4 items-center">
-                 <button onclick="window.location.href='dashboard.html'" class="text-xs bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-slate-300 transition">Voltar ao Dash</button>
-                 <button onclick="toggleTheme()" class="p-2 border rounded border-gray-200 dark:border-slate-600"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
+                <button onclick="window.location.href='dashboard.html'" class="text-xs bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-slate-300 transition">Voltar ao Dash</button>
+                <button onclick="toggleTheme()" class="p-2 border rounded border-gray-200 dark:border-slate-600"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8 flex flex-col">
-            <!-- Alert bar if actions are taken (e.g. notification sent) -->
-            <div id="actionAlert" class="hidden mb-4 p-3 bg-teal-100 border border-teal-200 text-teal-800 rounded dark:bg-teal-900/30 dark:border-teal-800 dark:text-teal-400 text-sm flex items-center justify-between">
-                <span id="actionAlertMsg">Mensagem enviada com sucesso!</span>
+        <div class="flex-1 overflow-y-auto p-8">
+            <div id="actionAlert" class="hidden mb-4 p-3 bg-teal-100 border border-teal-200 text-teal-800 rounded text-sm flex items-center justify-between">
+                <span id="actionAlertMsg">Atualizacao aplicada com sucesso.</span>
                 <button onclick="document.getElementById('actionAlert').classList.add('hidden')"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
-
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6" id="kanbanBoard">
-                <!-- Colunas Geradas via JS -->
-            </div>
+            <div class="grid grid-cols-1 xl:grid-cols-5 gap-6" id="kanbanBoard"></div>
         </div>
     </main>
 
-    <!-- Modal Enviar Mensagem -->
-    <div id="messageModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[400px] shadow-2xl border border-slate-200 dark:border-slate-700">
-            <h3 class="font-bold text-lg mb-4">Notificar Trabalhador</h3>
-            <p class="text-xs text-slate-500 mb-4" id="modalOSLabel"></p>
-            <select id="modalExecutorSelect" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
-            <textarea id="modalMsgContent" rows="3" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Adicione instruções extras..."></textarea>
-            <div class="flex gap-3 justify-end">
-                <button onclick="closeMsgModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 text-sm rounded hover:bg-slate-100 dark:hover:bg-slate-700">Cancelar</button>
-                <button onclick="sendMsg()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded text-sm shadow-md">Envia Via In-App Pinger</button>
+    <div id="assignModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-4">Designar Executor</h3>
+            <p class="text-xs text-slate-500 mb-4" id="assignOsLabel"></p>
+            <select id="executorSelect" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
+            <textarea id="assignMessage" rows="3" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Instrucoes para o executor..."></textarea>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeAssignModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded text-sm">Cancelar</button>
+                <button onclick="confirmAssign()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded text-sm">Designar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reviewModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-4">Designar Revisor</h3>
+            <p class="text-xs text-slate-500 mb-4" id="reviewOsLabel"></p>
+            <select id="reviewerSelect" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
+            <textarea id="reviewMessage" rows="3" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Orientacoes da revisao..."></textarea>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeReviewModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded text-sm">Cancelar</button>
+                <button onclick="confirmReviewAssign()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-sm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="rejectModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-4">Solicitar Refacao</h3>
+            <p class="text-xs text-slate-500 mb-4" id="rejectOsLabel"></p>
+            <textarea id="rejectReason" rows="4" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Descreva o motivo da refacao..."></textarea>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeRejectModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded text-sm">Cancelar</button>
+                <button onclick="confirmReject()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm">Solicitar</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentOSContext = null;
-        if(user) {
-            MockDB.populateUserProfile(user);
-            
-            // Build Nav
-            document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'os_list.html');
+        let currentAssignTicketId = null;
+        let currentReviewTicketId = null;
+        let currentRejectTicketId = null;
 
+        if (user) {
+            MockDB.populateUserProfile(user);
+            document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'os_list.html');
             renderKanban();
         }
 
         function formatTimeAgo(timestamp) {
-            if(!timestamp) return 'N/A';
-            const diffMin = Math.floor((new Date().getTime() - timestamp) / 60000);
-            return diffMin + ' min atrás';
+            if (!timestamp) return 'N/A';
+            const diffMin = Math.floor((Date.now() - timestamp) / 60000);
+            if (diffMin < 60) return `${diffMin} min atras`;
+            return `${Math.floor(diffMin / 60)}h atras`;
+        }
+
+        function formatDuration(ms) {
+            if (!ms) return '0 min';
+            const totalMin = Math.floor(ms / 60000);
+            if (totalMin < 60) return `${totalMin} min`;
+            const hours = Math.floor(totalMin / 60);
+            const minutes = totalMin % 60;
+            return `${hours}h ${minutes}min`;
+        }
+
+        function ticketBadge(ticket) {
+            if (ticket.refacaoNumero > 0) {
+                return `<span class="text-[10px] px-2 py-1 rounded bg-red-100 text-red-700 font-bold">Refacao #${ticket.refacaoNumero}</span>`;
+            }
+            if (ticket.priority === 'critical') {
+                return `<span class="text-[10px] px-2 py-1 rounded bg-red-100 text-red-700 font-bold">Critico</span>`;
+            }
+            return `<span class="text-[10px] px-2 py-1 rounded bg-teal-100 text-teal-700 font-bold">Normal</span>`;
+        }
+
+        function nameById(users, id) {
+            return users.find(user => user.id === id)?.name || 'Nao definido';
+        }
+
+        function renderCard(ticket, users) {
+            const durations = MockDB.getTicketDurations(ticket.id) || {};
+            const revisor = ticket.reviewerId ? nameById(users, ticket.reviewerId) : 'Nao designado';
+            const executor = ticket.assignedTo ? nameById(users, ticket.assignedTo) : 'Nao designado';
+            const refacaoLine = ticket.refacaoNumero > 0 ? `<p class="text-[10px] text-red-600 mt-2">${ticket.motivoRefacao || 'Refacao pendente de nova designacao.'}</p>` : '';
+
+            let actionHtml = '';
+            if (ticket.status === 'new') {
+                actionHtml = `<button onclick="openAssignModal(${ticket.id})" class="text-xs text-teal-600 font-bold">Designar executor</button>`;
+            } else if (ticket.status === 'designated') {
+                actionHtml = `
+                    <div class="space-y-2">
+                        <div class="text-[10px] text-slate-500">Tempo ate inicio: <strong>${formatDuration(durations.timeToStartMs)}</strong></div>
+                        ${!ticket.reviewerId ? `<button onclick="openReviewModal(${ticket.id})" class="text-xs text-slate-700 font-bold">Designar revisor</button>` : `<div class="text-[10px] text-slate-500">Revisor: <strong>${revisor}</strong></div>`}
+                    </div>
+                `;
+            } else if (ticket.status === 'in_progress') {
+                actionHtml = `
+                    <div class="space-y-2">
+                        <div class="text-[10px] text-slate-500">Em execucao ha ${formatTimeAgo(ticket.startTime)}</div>
+                        <div class="text-[10px] text-slate-500">Executor: <strong>${executor}</strong></div>
+                        <div class="text-[10px] text-slate-500">Revisor: <strong>${revisor}</strong></div>
+                    </div>
+                `;
+            } else if (ticket.status === 'awaiting_review') {
+                actionHtml = `
+                    <div class="space-y-2">
+                        <div class="text-[10px] text-slate-500">Tempo de execucao: <strong>${formatDuration(durations.executionMs)}</strong></div>
+                        <div class="flex gap-2">
+                            <button onclick="approveTicketReview(${ticket.id})" class="text-xs text-green-700 font-bold">Aprovar</button>
+                            <button onclick="openRejectModal(${ticket.id})" class="text-xs text-red-600 font-bold">Refacao</button>
+                        </div>
+                    </div>
+                `;
+            } else if (ticket.status === 'completed') {
+                actionHtml = `
+                    <div class="space-y-1">
+                        <div class="text-[10px] text-slate-500">Execucao: <strong>${formatDuration(durations.executionMs)}</strong></div>
+                        <div class="text-[10px] text-slate-500">Revisao: <strong>${formatDuration(durations.reviewMs)}</strong></div>
+                        <div class="text-[10px] text-slate-500">Estoque: <strong>${ticket.inventoryApproved || !ticket.materialsUsed.length ? 'Conciliado' : 'Pendente'}</strong></div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between items-center mb-2">
+                        ${ticketBadge(ticket)}
+                        <span class="text-[10px] font-mono text-slate-400">#OS-${ticket.id}</span>
+                    </div>
+                    <h4 class="font-semibold text-sm mb-1">${ticket.title}</h4>
+                    <p class="text-xs text-slate-500 mb-2">${ticket.location}</p>
+                    <p class="text-[10px] text-slate-400 mb-2">Executor: ${executor}</p>
+                    <p class="text-[10px] text-slate-400 mb-3">Revisor: ${revisor}</p>
+                    ${actionHtml}
+                    ${refacaoLine}
+                </div>
+            `;
+        }
+
+        function renderColumn(title, subtitle, tickets, users) {
+            const cards = tickets.length ? tickets.map(ticket => renderCard(ticket, users)).join('') : `<div class="text-sm text-slate-500 p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">Sem itens nesta coluna.</div>`;
+            return `
+                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col min-h-[70vh]">
+                    <div class="p-4 border-b border-gray-200 dark:border-slate-700">
+                        <h3 class="font-bold">${title}</h3>
+                        <p class="text-[11px] text-slate-500 mt-1">${subtitle}</p>
+                    </div>
+                    <div class="p-4 space-y-4 overflow-y-auto flex-1">${cards}</div>
+                </div>
+            `;
         }
 
         function renderKanban() {
-            const currentDb = MockDB.get();
-            const kb = document.getElementById('kanbanBoard');
-            const newTicketsHTML = currentDb.tickets.filter(t => t.status === 'new').map(ticket => `
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm ${ticket.priority === 'critical' ? 'border-l-4 border-red-500' : 'border border-slate-200 dark:border-slate-700'}">
-                    <span class="text-[10px] uppercase font-bold text-red-500 mb-1 block flex justify-between">
-                        <span>${ticket.priority === 'critical'?'CRÍTICO':'NORMAL'}</span>
-                        <span class="text-slate-400">Criado: ${formatTimeAgo(ticket.notifiedTime)}</span>
-                    </span>
-                    <h4 class="font-semibold text-sm mb-1">${ticket.title}</h4>
-                    <p class="text-xs text-slate-500 mb-3">${ticket.location}</p>
-                    <div class="border-t border-slate-100 dark:border-slate-700 pt-2 flex justify-between items-center mt-2">
-                        <span class="text-[10px] font-mono text-slate-400 p-1 bg-slate-100 dark:bg-slate-800 rounded">#OS-${ticket.id}</span>
-                        <button onclick="openMsgModal(${ticket.id})" class="text-xs text-teal-600 hover:underline flex items-center gap-1 font-bold"><i data-lucide="bell-ring" class="w-3 h-3"></i> Designar / Notificar</button>
-                    </div>
-                </div>
-            `).join('') || `<div class="text-sm text-slate-500 p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">Nenhuma O.S nova no momento.</div>`;
-
-            const inProgressTicketsHTML = currentDb.tickets.filter(t => t.status === 'in_progress').map(ticket => `
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-teal-500/30">
-                    <span class="text-[10px] uppercase font-bold text-yellow-600 dark:text-yellow-500 mb-1 block flex justify-between">
-                        <span>EM ANDAMENTO</span>
-                        <span class="text-slate-400">Iniciado: ${formatTimeAgo(ticket.startTime)}</span>
-                    </span>
-                    <h4 class="font-semibold text-sm mb-1">${ticket.title}</h4>
-                    <p class="text-xs text-slate-500 mb-3">${ticket.location}</p>
-                    <div class="flex items-center gap-2 border-t border-gray-100 dark:border-slate-700 pt-2 mt-2">
-                        <div class="bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-400 text-[10px] p-1 rounded font-semibold w-full block break-words">
-                            Operador Ocupado: <i data-lucide="user" class="w-3 h-3 inline"></i> ${currentDb.users.find(u=>u.id===ticket.assignedTo)?.name}
-                        </div>
-                    </div>
-                </div>
-            `).join('') || `<div class="text-sm text-slate-500 p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">Nenhuma O.S em execucao no app.</div>`;
-
-            const pendingClearHTML = currentDb.tickets
-                .filter(t => t.status === 'awaiting_inventory')
-                .map(ticket => `
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-orange-500/40">
-                        <span class="text-[10px] uppercase font-bold text-slate-500 mb-1 block flex justify-between">
-                            <span>CONCLUIDO (SISTEMA)</span>
-                            <span class="text-slate-400">Pendente Baixa Material</span>
-                        </span>
-                        <h4 class="font-semibold text-sm mb-1 line-through">${ticket.title}</h4>
-                        <p class="text-xs text-slate-500 mb-3">${ticket.location}</p>
-                        <button onclick="window.location.href='inventory_leak.html'" class="text-[10px] text-orange-600 hover:text-orange-700 font-bold bg-orange-100 dark:bg-orange-500/20 px-2 py-1 rounded inline-block w-full text-center border border-orange-200 dark:border-none shadow-sm"><i data-lucide="check-square" class="w-3 h-3 inline"></i> Autorizar Baixa no Almoxarifado</button>
-                    </div>
-                `).join('') || `<div class="text-sm text-slate-500 p-4">Nenhuma baixa pendente agora.</div>`;
-
-            kb.innerHTML = `
-                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col h-[calc(100vh-180px)]">
-                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold">O.S Novas</h3></div>
-                    <div class="p-4 space-y-4 overflow-y-auto flex-1">${newTicketsHTML}</div>
-                </div>
-                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col h-[calc(100vh-180px)]">
-                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold text-teal-600 dark:text-teal-400">Em Execução Pelo APP</h3></div>
-                    <div class="p-4 space-y-4 overflow-y-auto flex-1">${inProgressTicketsHTML}</div>
-                </div>
-                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col h-[calc(100vh-180px)]">
-                    <div class="p-4 border-b border-gray-200 dark:border-slate-700"><h3 class="font-bold text-orange-500">Pendendo Baixa de Material</h3></div>
-                    <div class="p-4 space-y-4 overflow-y-auto flex-1">${pendingClearHTML}</div>
-                </div>
-            `;
+            const db = MockDB.get();
+            const users = db.users;
+            const board = document.getElementById('kanbanBoard');
+            board.innerHTML = [
+                renderColumn('Novas O.S.', 'Aguardando triagem e designacao', db.tickets.filter(ticket => ticket.status === 'new'), users),
+                renderColumn('Designadas', 'Esperando inicio real da execucao', db.tickets.filter(ticket => ticket.status === 'designated'), users),
+                renderColumn('Em execucao', 'OS em atendimento pelo executor', db.tickets.filter(ticket => ticket.status === 'in_progress'), users),
+                renderColumn('Aguardando revisao', 'Prontas para validacao do revisor', db.tickets.filter(ticket => ticket.status === 'awaiting_review'), users),
+                renderColumn('Concluidas', 'Fechadas operacionalmente', db.tickets.filter(ticket => ticket.status === 'completed'), users)
+            ].join('');
             lucide.createIcons();
         }
 
-        function openMsgModal(ticketId) {
-            currentOSContext = MockDB.get().tickets.find(t=>t.id === ticketId);
+        function flashMessage(message) {
+            const alertNode = document.getElementById('actionAlert');
+            document.getElementById('actionAlertMsg').innerText = message;
+            alertNode.classList.remove('hidden');
+            setTimeout(() => alertNode.classList.add('hidden'), 4500);
+        }
+
+        function openAssignModal(ticketId) {
+            const ticket = MockDB.getTicketById(ticketId);
+            currentAssignTicketId = ticketId;
             const executors = MockDB.getExecutors();
-            document.getElementById('modalExecutorSelect').innerHTML = executors.map(executor => `<option value="${executor.id}">${executor.name}</option>`).join('');
-            document.getElementById('modalOSLabel').innerText = `Notificando Trabalhador sobre O.S #${currentOSContext.id} - ${currentOSContext.title}`;
-            document.getElementById('modalMsgContent').value = `Urgente: Assumir atendimento na ${currentOSContext.location}. O.S ${currentOSContext.id}`;
-            document.getElementById('messageModal').classList.remove('hidden');
+            document.getElementById('assignOsLabel').innerText = `OS #${ticket.id} - ${ticket.title}`;
+            document.getElementById('executorSelect').innerHTML = executors.map(executor => `<option value="${executor.id}">${executor.name}</option>`).join('');
+            document.getElementById('assignMessage').value = `Assumir atendimento em ${ticket.location}.`;
+            document.getElementById('assignModal').classList.remove('hidden');
         }
 
-        function closeMsgModal() {
-            document.getElementById('messageModal').classList.add('hidden');
-            currentOSContext = null;
+        function closeAssignModal() {
+            document.getElementById('assignModal').classList.add('hidden');
+            currentAssignTicketId = null;
         }
 
-        function sendMsg() {
-            const content = document.getElementById('modalMsgContent').value;
-            const executorId = Number(document.getElementById('modalExecutorSelect').value);
-            if(currentOSContext) {
-                MockDB.assignTicket(currentOSContext.id, executorId, user.id, content);
-            }
-            closeMsgModal();
+        function confirmAssign() {
+            const executorId = Number(document.getElementById('executorSelect').value);
+            const content = document.getElementById('assignMessage').value.trim();
+            MockDB.assignTicket(currentAssignTicketId, executorId, user.id, content);
+            closeAssignModal();
             renderKanban();
+            flashMessage('Executor designado com sucesso.');
+        }
 
-            // Exibir Alerta
-            const alert = document.getElementById('actionAlert');
-            document.getElementById('actionAlertMsg').innerText = `O.S e Notificação enviadas com sucesso para o App do Trabalhador!`;
-            alert.classList.remove('hidden');
-            setTimeout(() => alert.classList.add('hidden'), 4000);
+        function openReviewModal(ticketId) {
+            const ticket = MockDB.getTicketById(ticketId);
+            const reviewers = MockDB.getAvailableReviewers(ticketId);
+            currentReviewTicketId = ticketId;
+            document.getElementById('reviewOsLabel').innerText = `OS #${ticket.id} - ${ticket.title}`;
+            document.getElementById('reviewerSelect').innerHTML = reviewers.map(reviewer => `<option value="${reviewer.id}">${reviewer.name}</option>`).join('');
+            document.getElementById('reviewMessage').value = `Validar entrega e materiais da OS #${ticket.id}.`;
+            document.getElementById('reviewModal').classList.remove('hidden');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.add('hidden');
+            currentReviewTicketId = null;
+        }
+
+        function confirmReviewAssign() {
+            const reviewerId = Number(document.getElementById('reviewerSelect').value);
+            const content = document.getElementById('reviewMessage').value.trim();
+            const updated = MockDB.assignReviewer(currentReviewTicketId, reviewerId, user.id, content);
+            if (!updated) {
+                alert('Nao foi possivel designar este revisor.');
+                return;
+            }
+            closeReviewModal();
+            renderKanban();
+            flashMessage('Revisor designado com sucesso.');
+        }
+
+        function approveTicketReview(ticketId) {
+            const ticket = MockDB.getTicketById(ticketId);
+            if (!ticket?.reviewerId) {
+                alert('A OS ainda nao possui revisor designado.');
+                return;
+            }
+            MockDB.startReview(ticketId, ticket.reviewerId);
+            MockDB.approveReview(ticketId, ticket.reviewerId, 'Revisao aprovada pela gestao no quadro operacional.');
+            renderKanban();
+            flashMessage('OS aprovada e concluida.');
+        }
+
+        function openRejectModal(ticketId) {
+            const ticket = MockDB.getTicketById(ticketId);
+            currentRejectTicketId = ticketId;
+            document.getElementById('rejectOsLabel').innerText = `OS #${ticket.id} - ${ticket.title}`;
+            document.getElementById('rejectReason').value = '';
+            document.getElementById('rejectModal').classList.remove('hidden');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').classList.add('hidden');
+            currentRejectTicketId = null;
+        }
+
+        function confirmReject() {
+            const ticket = MockDB.getTicketById(currentRejectTicketId);
+            const reason = document.getElementById('rejectReason').value.trim();
+            if (!ticket?.reviewerId) {
+                alert('A OS ainda nao possui revisor designado.');
+                return;
+            }
+            MockDB.startReview(ticket.id, ticket.reviewerId);
+            MockDB.rejectReview(ticket.id, ticket.reviewerId, reason || 'Refacao solicitada pela gestao.');
+            closeRejectModal();
+            renderKanban();
+            flashMessage('OS retornou para nova designacao com marcador de refacao.');
         }
 
         lucide.createIcons();
