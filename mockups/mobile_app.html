@@ -17,6 +17,8 @@
         body { background-color: #0f172a; }
         :root:not(.dark) body { background-color: #f9fafb; }
         .app-container { width: 100%; max-width: 430px; height: 100vh; margin: 0 auto; position: relative; overflow-y: auto; overflow-x: hidden; }
+        #detailModal { transition: transform 0.3s ease-out; transform: translateY(100%); }
+        #detailModal.active { transform: translateY(0); }
     </style>
 </head>
 <body class="font-sans antialiased text-slate-800 dark:text-slate-200 transition-colors duration-200">
@@ -81,6 +83,64 @@
                 <span class="text-[10px] font-medium">Ativa</span>
             </a>
         </nav>
+
+        <!-- Detalhes da O.S. (Modal Slide-up) -->
+        <div id="detailModal" class="fixed inset-0 bg-white dark:bg-slate-900 z-[100] flex flex-col overflow-hidden">
+            <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0 z-10 shrink-0">
+                <button onclick="closeTicketDetail()" class="p-2 -ml-2 text-slate-500 dark:text-slate-400"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                <h1 class="text-lg font-semibold ml-2" id="modalHeaderTitle">OS #0000</h1>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                        <span id="mPriorityBadge" class="inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border">SLA</span>
+                        <span id="mStatusBadge" class="inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border">Status</span>
+                        <span id="mRefacaoBadge" class="hidden inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border border-red-200 bg-red-100 text-red-700">Refacao</span>
+                    </div>
+                    <h2 id="mTicketTitle" class="text-2xl font-bold text-slate-900 dark:text-white leading-tight mb-2">Carregando...</h2>
+                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm mb-2">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i> <span id="mTicketLocation"></span>
+                    </div>
+                    <p id="mTicketDescription" class="text-sm text-slate-500 dark:text-slate-400"></p>
+                </div>
+
+                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-5 mb-5 border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-semibold text-slate-500 uppercase">Cronometro de Execucao</h3>
+                        <span id="mStatusPill" class="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">Pausado</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p id="mTimerDisplay" class="text-4xl font-mono font-light text-slate-900 dark:text-slate-200 tracking-widest">00:00</p>
+                            <p id="mStatusMsg" class="text-xs text-slate-500 mt-1 font-semibold">Aguardando acao.</p>
+                        </div>
+                        <button id="mToggleTimerBtn" class="bg-teal-600 p-4 rounded-full text-white shadow-lg shadow-teal-500/30 active:scale-90 transition-transform">
+                            <i id="mTimerIcon" data-lucide="play" class="w-6 h-6 ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h3 class="text-sm font-semibold mb-4 text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                        <i data-lucide="message-square" class="w-4 h-4 text-teal-500"></i> Chat da O.S.
+                    </h3>
+                    <div id="mCommentsList" class="space-y-3 mb-4"></div>
+                    <div id="mCommentComposer" class="flex items-center gap-2">
+                        <input id="mCommentInput" type="text" placeholder="Escreva aqui..." class="flex-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-full py-2.5 px-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none">
+                        <button id="mSendCommentBtn" class="bg-teal-600 text-white w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-md">
+                            <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-3 pb-8">
+                    <a id="mResolveLink" href="#" class="block w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-bold py-4 rounded-xl text-center shadow-lg active:scale-95 transition-transform">
+                        Ir para Resolucao (Checkout)
+                    </a>
+                </div>
+            </main>
+        </div>
     </div>
 
     <script>
@@ -98,7 +158,7 @@
             document.getElementById('userInitials').innerText = user.name.substring(0, 2).toUpperCase();
 
             const executorTickets = db.tickets.filter(ticket => ticket.assignedTo === user.id && ['designated', 'in_progress', 'awaiting_review'].includes(ticket.status));
-            const reviewTickets = db.tickets.filter(ticket => ticket.reviewerId === user.id && ticket.status === 'awaiting_review');
+            const reviewTickets = db.tickets.filter(ticket => ticket.reviewerId === user.id && ['designated', 'in_progress', 'awaiting_review'].includes(ticket.status));
             const merged = [
                 ...executorTickets.map(ticket => ({ ticket, role: 'executor' })),
                 ...reviewTickets.filter(entry => !executorTickets.some(ticket => ticket.id === entry.id)).map(ticket => ({ ticket, role: 'reviewer' }))
@@ -113,7 +173,7 @@
                 taskList.innerHTML = `<div class="p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded text-center text-sm text-slate-500">Nenhum chamado ativo no momento.</div>`;
             } else {
                 taskList.innerHTML = merged.map(({ ticket, role }) => `
-                    <a href="mobile_os_detail.html?ticketId=${ticket.id}" class="block bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 active:scale-95 transition-transform shadow-sm mb-4">
+                    <div onclick="openTicketDetail(${ticket.id})" class="block bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 active:scale-95 transition-transform shadow-sm mb-4 cursor-pointer">
                         <div class="flex justify-between items-start mb-2">
                             <div>
                                 <span class="text-[10px] font-bold ${ticket.priority === 'critical' ? 'text-red-600 bg-red-100' : 'text-teal-600 bg-teal-100'} uppercase tracking-wide px-2 py-0.5 rounded mr-2">${ticket.priority === 'critical' ? 'Critico' : 'Normal'}</span>
@@ -123,11 +183,11 @@
                         </div>
                         <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">${ticket.title}</h3>
                         <p class="text-sm text-slate-500 dark:text-slate-400 mb-2"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> ${ticket.location}</p>
-                        <p class="text-[11px] text-slate-500 mb-3">${role === 'reviewer' ? 'Sua acao: revisar entrega e materiais' : 'Sua acao: executar a tarefa'}</p>
+                        <p class="text-[11px] text-slate-500 mb-3">${role === 'reviewer' ? 'Sua acao: revisar entrega e materiais' : 'Sua acao: iniciar execucao'}</p>
                         <div class="flex items-center text-teal-600 dark:text-teal-500 text-xs font-semibold uppercase tracking-wide">
                             Abrir O.S. <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
                         </div>
-                    </a>
+                    </div>
                 `).join('');
             }
 
@@ -143,6 +203,129 @@
                 document.getElementById('scheduleNavLink').href = `mobile_os_detail.html?ticketId=${nextTicket.id}`;
             }
         }
+
+        }
+
+        let modalTicketId = null;
+        let modalInterval = null;
+
+        function formatClock(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        }
+
+        function formatDuration(ms) {
+            if (!ms) return '0 min';
+            const totalMin = Math.floor(ms / 60000);
+            if (totalMin < 60) return `${totalMin} min`;
+            const hours = Math.floor(totalMin / 60);
+            const minutes = totalMin % 60;
+            return `${hours}h ${minutes}min`;
+        }
+
+        function currentCommentsHtml(ticket) {
+            const db = MockDB.get();
+            const comments = MockDB.getTicketComments(ticket.id);
+            if (!comments.length) return `<div class="text-sm text-slate-500">Nenhum comentario registrado ainda.</div>`;
+            return comments.map(comment => {
+                const author = db.users.find(entry => entry.id === comment.authorId);
+                const mine = author?.id === user.id;
+                return `
+                    <div class="flex gap-3 ${mine ? '' : 'flex-row-reverse'}">
+                        <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                            <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">${author ? author.name.substring(0, 2).toUpperCase() : 'SY'}</span>
+                        </div>
+                        <div class="${mine ? 'bg-teal-50 dark:bg-teal-500/10 border-teal-100 dark:border-teal-500/30 rounded-tl-none' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 rounded-tr-none'} border p-3 rounded-2xl w-full shadow-sm text-sm">
+                            <p class="text-slate-800 dark:text-slate-200 mb-1">${comment.content}</p>
+                            <span class="text-[10px] text-slate-400 uppercase">${author?.name || 'Sistema'} • ${new Date(comment.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openTicketDetail(id) {
+            modalTicketId = id;
+            document.getElementById('detailModal').classList.add('active');
+            refreshModalState();
+            modalInterval = setInterval(refreshModalState, 1000);
+        }
+
+        function closeTicketDetail() {
+            modalTicketId = null;
+            if (modalInterval) clearInterval(modalInterval);
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        function refreshModalState() {
+            if (!modalTicketId) return;
+            const ticket = MockDB.getTicketById(modalTicketId);
+            const clock = MockDB.getTicketClock(modalTicketId);
+            const durations = MockDB.getTicketDurations(modalTicketId) || {};
+            
+            document.getElementById('modalHeaderTitle').innerText = `OS #${ticket.id}`;
+            document.getElementById('mTicketTitle').innerText = ticket.title;
+            document.getElementById('mTicketLocation').innerText = ticket.location;
+            document.getElementById('mTicketDescription').innerText = ticket.description || 'Sem detalhes fornecidos.';
+            
+            document.getElementById('mPriorityBadge').className = `inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border ${ticket.priority === 'critical' ? 'bg-red-100 text-red-600 border-red-200' : 'bg-teal-100 text-teal-700 border-teal-200'}`;
+            document.getElementById('mPriorityBadge').innerText = ticket.priority === 'critical' ? 'Critico' : 'Normal';
+            document.getElementById('mStatusBadge').innerText = ticket.status.replaceAll('_', ' ');
+            document.getElementById('mRefacaoBadge').classList.toggle('hidden', ticket.refacaoNumero <= 0);
+            
+            document.getElementById('mTimerDisplay').innerText = formatClock(clock.elapsedMs);
+            document.getElementById('mCommentsList').innerHTML = currentCommentsHtml(ticket);
+
+            const btn = document.getElementById('mToggleTimerBtn');
+            const icon = document.getElementById('mTimerIcon');
+            const isRunning = clock.isRunning;
+            const isExecutor = ticket.assignedTo === user.id;
+
+            icon.setAttribute('data-lucide', isRunning ? 'square' : 'play');
+            btn.classList.toggle('bg-rose-500', isRunning);
+            btn.classList.toggle('bg-teal-600', !isRunning);
+            btn.disabled = !(isExecutor && ['designated', 'in_progress'].includes(ticket.status));
+            btn.classList.toggle('opacity-50', btn.disabled);
+
+            const mStatusPill = document.getElementById('mStatusPill');
+            const mStatusMsg = document.getElementById('mStatusMsg');
+            const mResolveLink = document.getElementById('mResolveLink');
+
+            if (ticket.status === 'designated') {
+                mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-amber-100 text-amber-700';
+                mStatusPill.innerText = 'Designada';
+                mStatusMsg.innerText = isExecutor ? 'Toque no Play para iniciar.' : 'Aguardando executor.';
+            } else if (ticket.status === 'in_progress') {
+                mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-teal-100 text-teal-700';
+                mStatusPill.innerText = 'Em execucao';
+                mStatusMsg.innerText = 'Execucao em curso...';
+            } else {
+                mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 text-slate-600';
+                mStatusPill.innerText = ticket.status.replace('_', ' ');
+                mStatusMsg.innerText = 'Status atual.';
+            }
+
+            mResolveLink.href = `mobile_checkout.html?ticketId=${ticket.id}`;
+            mResolveLink.classList.toggle('hidden', !isExecutor || ticket.status === 'completed');
+
+            lucide.createIcons();
+        }
+
+        document.getElementById('mToggleTimerBtn').addEventListener('click', () => {
+            if (!modalTicketId) return;
+            MockDB.toggleTicketTimer(modalTicketId);
+            refreshModalState();
+        });
+
+        document.getElementById('mSendCommentBtn').addEventListener('click', () => {
+            const input = document.getElementById('mCommentInput');
+            if (!modalTicketId || !input.value.trim()) return;
+            MockDB.addTicketComment(modalTicketId, user.id, input.value.trim());
+            input.value = '';
+            refreshModalState();
+        });
 
         lucide.createIcons();
     </script>

@@ -93,10 +93,148 @@
         </div>
     </div>
 
+    <!-- Modal de Detalhes da O.S. (Desktop) -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200 dark:border-slate-700">
+            <div class="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-start">
+                <div>
+                    <div class="flex items-center gap-3 mb-1">
+                        <span id="detailStatusBadge"></span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white" id="detailOsTitle">Titulo da O.S.</h2>
+                    </div>
+                    <p class="text-sm text-slate-500 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span id="detailOsLocation">Localizacao</span> · <span id="detailOsLabel">#OS-0000</span></p>
+                </div>
+                <button onclick="closeDetailModal()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-8 grid grid-cols-3 gap-8">
+                <!-- Coluna Principal: Info e Timeline -->
+                <div class="col-span-2 space-y-8">
+                    <section>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Descricao do Problema</h3>
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed" id="detailOsDescription">Sem detalhes adicionais.</p>
+                    </section>
+                    
+                    <section>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Linha do Tempo / Logs</h3>
+                        <div class="space-y-4 relative before:content-[''] before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100 dark:before:bg-slate-700" id="detailTimeline"></div>
+                    </section>
+                </div>
+                
+                <!-- Coluna Lateral: Dados e Acoes -->
+                <div class="space-y-6">
+                    <div class="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-5 border border-gray-100 dark:border-slate-700">
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Participantes</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"><i data-lucide="user" class="w-4 h-4"></i></div>
+                                <div>
+                                    <p class="text-[10px] text-slate-400 font-medium leading-none">Solicitante</p>
+                                    <p class="text-xs font-bold" id="detailCreator">Lara - Camareira</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400"><i data-lucide="hard-hat" class="w-4 h-4"></i></div>
+                                <div>
+                                    <p class="text-[10px] text-slate-400 font-medium leading-none">Executor</p>
+                                    <p class="text-xs font-bold" id="detailExecutor">Aguardando...</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400"><i data-lucide="shield-check" class="w-4 h-4"></i></div>
+                                <div>
+                                    <p class="text-[10px] text-slate-400 font-medium leading-none">Revisor</p>
+                                    <p class="text-xs font-bold" id="detailRevisor">Aguardando...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-5 border border-gray-100 dark:border-slate-700">
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Resumo Financeiro / Materiais</h3>
+                        <div id="detailMaterials" class="space-y-2">
+                             <p class="text-xs text-slate-500 italic">Nenhum material consumido.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentAssignTicketId = null;
         let currentReviewTicketId = null;
         let currentRejectTicketId = null;
+
+        function openTicketDetail(id) {
+            const ticket = MockDB.getTicketById(id);
+            if (!ticket) return;
+
+            const db = MockDB.get();
+            const users = db.users;
+
+            // Header e Badge
+            document.getElementById('detailOsLabel').innerText = `#OS-${ticket.id}`;
+            document.getElementById('detailOsTitle').innerText = ticket.title;
+            document.getElementById('detailOsLocation').innerText = ticket.location;
+            document.getElementById('detailOsDescription').innerText = ticket.description || 'Sem detalhes fornecidos no report.';
+            
+            const badgeEl = document.getElementById('detailStatusBadge');
+            if (ticket.status === 'completed') {
+                badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold uppercase';
+                badgeEl.innerText = 'Concluido';
+            } else if (ticket.status === 'awaiting_review') {
+                badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-yellow-100 text-yellow-700 font-bold uppercase';
+                badgeEl.innerText = 'Em Revisao';
+            } else {
+                badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-teal-100 text-teal-700 font-bold uppercase';
+                badgeEl.innerText = ticket.status.replace('_', ' ');
+            }
+
+            // Participantes
+            document.getElementById('detailCreator').innerText = nameById(users, ticket.createdBy);
+            document.getElementById('detailExecutor').innerText = ticket.assignedTo ? nameById(users, ticket.assignedTo) : 'Aguardando...';
+            document.getElementById('detailRevisor').innerText = ticket.reviewerId ? nameById(users, ticket.reviewerId) : 'Aguardando...';
+
+            // Timeline
+            const comments = MockDB.getTicketComments(id);
+            const timelineEl = document.getElementById('detailTimeline');
+            timelineEl.innerHTML = comments.map(c => `
+                <div class="flex gap-4 relative z-10">
+                    <div class="w-6 h-6 rounded-full bg-white dark:bg-slate-800 border-2 ${c.kind === 'system' ? 'border-gray-200' : 'border-teal-500'} flex items-center justify-center shrink-0">
+                        <div class="w-1.5 h-1.5 rounded-full ${c.kind === 'system' ? 'bg-gray-300' : 'bg-teal-500'}"></div>
+                    </div>
+                    <div class="pb-1">
+                        <p class="text-xs font-bold text-slate-800 dark:text-slate-100">${c.kind === 'system' ? 'Sistema' : nameById(users, c.authorId)}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">${c.content}</p>
+                        <p class="text-[10px] text-slate-400 mt-1">${new Date(c.time).toLocaleString()}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Materiais
+            const materialsEl = document.getElementById('detailMaterials');
+            if (ticket.materialsUsed && ticket.materialsUsed.length) {
+                materialsEl.innerHTML = ticket.materialsUsed.map(m => {
+                    const item = db.inventory.find(i => i.id === m.inventoryId);
+                    return `
+                        <div class="flex justify-between items-center text-xs p-2 bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded shadow-sm">
+                            <span class="text-slate-600 dark:text-slate-300">${item?.name || 'Material Desconhecido'}</span>
+                            <span class="font-bold">${m.quantity} ${item?.unit || 'un'}</span>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                materialsEl.innerHTML = `<p class="text-xs text-slate-500 italic text-center py-2">Sem consumo de material.</p>`;
+            }
+
+            document.getElementById('detailModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
 
         if (user) {
             MockDB.populateUserProfile(user);
@@ -179,16 +317,18 @@
             }
 
             return `
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
+                <div onclick="openTicketDetail(${ticket.id})" class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-teal-500/30 transition-all cursor-pointer group">
                     <div class="flex justify-between items-center mb-2">
                         ${ticketBadge(ticket)}
                         <span class="text-[10px] font-mono text-slate-400">#OS-${ticket.id}</span>
                     </div>
-                    <h4 class="font-semibold text-sm mb-1">${ticket.title}</h4>
+                    <h4 class="font-semibold text-sm mb-1 group-hover:text-teal-600 transition-colors">${ticket.title}</h4>
                     <p class="text-xs text-slate-500 mb-2">${ticket.location}</p>
-                    <p class="text-[10px] text-slate-400 mb-2">Executor: ${executor}</p>
-                    <p class="text-[10px] text-slate-400 mb-3">Revisor: ${revisor}</p>
-                    ${actionHtml}
+                    <p class="text-[10px] text-slate-400 mb-2 italic">Executor: ${executor}</p>
+                    
+                    <div onclick="event.stopPropagation()" class="pt-3 border-t border-gray-100 dark:border-slate-700/50 mt-3">
+                        ${actionHtml}
+                    </div>
                     ${refacaoLine}
                 </div>
             `;
