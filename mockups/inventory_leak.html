@@ -34,7 +34,8 @@
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
-    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col hidden md:flex">
+    <!-- Desktop sidebar -->
+    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex-col hidden md:flex">
         <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
         </div>
@@ -55,12 +56,39 @@
         </div>
     </aside>
 
+    <!-- Mobile slide-over sidebar -->
+    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden" onclick="closeMobileSidebar()"></div>
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-slate-700">
+            <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
+            <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+        </div>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
+        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="mobileUserInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="mobileUserNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="mobileUserRoleLabel">Role</p>
+                    </div>
+                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
+    </aside>
+
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-8">
-            <h1 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <i data-lucide="package-search" class="w-5 h-5"></i>
-                Auditoria de Almoxarifado
-            </h1>
+        <header class="h-16 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex justify-between items-center px-4 md:px-8">
+            <div class="flex items-center gap-3">
+                <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
+                <h1 class="text-lg md:text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                    <i data-lucide="package-search" class="w-5 h-5 hidden md:block"></i>
+                    Auditoria de Almoxarifado
+                </h1>
+            </div>
             <button onclick="toggleTheme()" class="p-2 border rounded border-gray-200 dark:border-slate-600 hidden md:block">
                 <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
                 <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
@@ -142,6 +170,33 @@
         if (user) {
             MockDB.populateUserProfile(user);
             document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'inventory_leak.html');
+
+            // Populate mobile sidebar
+            var mNav = document.getElementById('mobileSidebarNav');
+            if(mNav) mNav.innerHTML = document.getElementById('sidebarNav').innerHTML;
+            var mInit = document.getElementById('mobileUserInitials');
+            if(mInit) mInit.textContent = user.name.substring(0,2).toUpperCase();
+            var mLabel = document.getElementById('mobileUserNameLabel');
+            if(mLabel) mLabel.textContent = user.name;
+            var mRole = document.getElementById('mobileUserRoleLabel');
+            if(mRole) mRole.textContent = user.role.toUpperCase().replace('_', ' ');
+
+            // Intercept notification links (mock navigation for prototype)
+            document.querySelectorAll('#sidebarNav a, #mobileSidebarNav a').forEach(link => {
+                if (link.href.includes('messages.html')) {
+                    link.addEventListener('click', function(e) {
+                        if(typeof openNotifPanel === "function") {
+                           e.preventDefault();
+                           closeMobileSidebar();
+                           setTimeout(() => openNotifPanel(), 100);
+                        } else {
+                           e.preventDefault();
+                           window.location.href = "dashboard.html?openNotif=true";
+                        }
+                    });
+                }
+            });
+
             renderInventory();
             renderPendingApprovals();
         }
@@ -253,6 +308,25 @@
         }
 
         lucide.createIcons();
-    </script>
+    
+        // --- Mobile Sidebar ---
+        function openMobileSidebar() {
+            var el = document.getElementById('mobileSidebarOverlay');
+            if(el) el.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                var s = document.getElementById('mobileSidebar');
+                if(s) s.classList.remove('-translate-x-full');
+            });
+        }
+        function closeMobileSidebar() {
+            var s = document.getElementById('mobileSidebar');
+            if(s) s.classList.add('-translate-x-full');
+            setTimeout(() => {
+                var el = document.getElementById('mobileSidebarOverlay');
+                if(el) el.classList.add('hidden');
+            }, 300);
+        }
+
+</script>
 </body>
 </html>

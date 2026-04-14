@@ -186,11 +186,22 @@ function normalizeComment(comment) {
     return { kind: 'comment', time: Date.now(), ...comment };
 }
 
+const DB_VERSION = 2; // Bump to force localStorage reset when schema changes
+
 function normalizeDatabase(rawDb) {
     const seed = clone(initialDatabase);
     const db = rawDb || {};
+
+    // Check version — if mismatch, force full reset
+    if (db._version !== DB_VERSION) {
+        const fresh = seed;
+        fresh._version = DB_VERSION;
+        return fresh;
+    }
+
     return {
-        users: Array.isArray(db.users) && db.users.length ? db.users : seed.users,
+        _version: DB_VERSION,
+        users: seed.users, // Always use seed users to prevent stale logins
         messages: Array.isArray(db.messages) ? db.messages.map(normalizeMessage) : seed.messages.map(normalizeMessage),
         ticketComments: Array.isArray(db.ticketComments) ? db.ticketComments.map(normalizeComment) : seed.ticketComments.map(normalizeComment),
         inventory: Array.isArray(db.inventory) && db.inventory.length ? db.inventory.map(item => ({ unitCost: 0, area: 'Geral', ...item })) : seed.inventory,
