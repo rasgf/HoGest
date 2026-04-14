@@ -1,32 +1,67 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cronograma Preventivo | Insolito</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        50:  '#f0f7f4',
+                        100: '#d9ede2',
+                        200: '#b5dbc6',
+                        300: '#84c1a3',
+                        400: '#55a47e',
+                        500: '#358764',
+                        600: '#266c50',
+                        700: '#1f5741',
+                        800: '#1b4535',
+                        900: '#17392c',
+                        950: '#0c2019',
+                    },
+                    accent: {
+                        50:  '#fbfaf8',
+                        100: '#f5f2ee',
+                        200: '#ebe3db',
+                        300: '#ddcec0',
+                        400: '#cbb39e',
+                        500: '#bca085',
+                        600: '#af8c70',
+                        700: '#92705a',
+                        800: '#775e4e',
+                        900: '#604c41',
+                    },
+                },
+                boxShadow: {
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.04)',
+                    'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
+                }
+            }
+        }
+    };
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } }
-        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao', 'controlador']);
-        function toggleTheme() {
-            const doc = document.documentElement;
-            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; }
-            else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
-        }
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-    </script>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
+    
+    <!-- Background Gradient Blobs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-sky-200/50 dark:bg-sky-900/30 blur-3xl mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-200/50 dark:bg-indigo-900/30 blur-3xl mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    
     <!-- Desktop sidebar -->
-    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex-col hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
+    <aside class="w-64 relative z-10 bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex-col hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-slate-200/60 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
-        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+        <div class="p-4 border-t border-slate-200/60 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -43,14 +78,14 @@
     </aside>
 
     <!-- Mobile slide-over sidebar -->
-    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-slate-700">
+    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-slate-200/60 dark:border-slate-700">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
-        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+        <div class="p-4 border-t border-slate-200/60 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -66,26 +101,26 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-4 md:gap-0">
+    <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
+        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-slate-200/60 dark:border-slate-700 bg-white dark:bg-slate-800 flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-4 md:gap-0">
             <div class="flex items-center justify-between w-full md:w-auto gap-3">
                 <div class="flex items-center gap-3">
                     <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
-                    <h1 class="text-lg md:text-xl font-semibold flex items-center gap-2"><i data-lucide="calendar-check-2" class="w-5 h-5 text-teal-500 hidden md:block"></i> Preventivas</h1>
+                    <h1 class="text-lg md:text-xl font-semibold flex items-center gap-2"><i data-lucide="calendar-check-2" class="w-5 h-5 text-primary-500 hidden md:block"></i> Preventivas</h1>
                 </div>
-                <button onclick="toggleTheme()" class="p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500 md:hidden"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
+                <button onclick="toggleTheme()" class="p-2 border rounded-md border-slate-200/60 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500 md:hidden"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
             </div>
             <div class="flex w-full md:w-auto gap-3 items-center justify-between md:justify-end">
                 <span class="text-xs md:text-sm font-semibold text-slate-500 hidden sm:block">Próximos 30 dias</span>
-                <button onclick="openCreateModal()" class="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-lg shadow-sm transition">
+                <button onclick="openCreateModal()" class="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg shadow-[0_2px_20px_rgb(0,0,0,0.04)] transition">
                     <i data-lucide="plus" class="w-4 h-4"></i> Criar Preventiva
                 </button>
-                <button onclick="toggleTheme()" class="hidden md:block p-2 border rounded-md border-gray-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
+                <button onclick="toggleTheme()" class="hidden md:block p-2 border rounded-md border-slate-200/60 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
             </div>
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 space-y-6">
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/80 border border-blue-200 dark:border-slate-600 rounded-xl p-6 shadow-sm flex gap-4 items-start">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/80 border border-blue-200 dark:border-slate-600 rounded-2xl p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)] flex gap-4 items-start">
                 <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-slate-700 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-200 dark:border-slate-600">
                     <i data-lucide="brain" class="w-5 h-5"></i>
                 </div>
@@ -95,10 +130,10 @@
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-sm">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700 overflow-hidden shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left min-w-[600px]">
-                    <thead class="bg-gray-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider border-b border-gray-200 dark:border-slate-700">
+                    <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider border-b border-slate-200/60 dark:border-slate-700">
                         <tr>
                             <th class="px-6 py-4 font-semibold">Janela</th>
                             <th class="px-6 py-4 font-semibold">Categoria</th>
@@ -108,26 +143,26 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-slate-700/50 text-sm">
-                        <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
                             <td class="px-6 py-4"><span class="bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 px-2 py-1 rounded text-xs font-bold font-mono">HOJE</span></td>
                             <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">AVAC (Trimestral)</td>
                             <td class="px-6 py-4">Limpeza Cassetes e Filtros C-2 (Restaurante Principal)</td>
                             <td class="px-6 py-4 font-mono text-xs">Interno</td>
-                            <td class="px-6 py-4 text-right"><a href="mobile_os_detail.html?ticketId=1090" class="text-xs text-teal-600 dark:text-teal-400 font-bold hover:underline">Ver O.S no app</a></td>
+                            <td class="px-6 py-4 text-right"><a href="mobile_os_detail.html?ticketId=1090" class="text-xs text-primary-600 dark:text-primary-400 font-bold hover:underline">Ver O.S no app</a></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
                             <td class="px-6 py-4"><span class="bg-gray-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded text-xs font-bold font-mono">T-4 Dias</span></td>
                             <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">Seguranca Elevadores</td>
                             <td class="px-6 py-4">Afericao de freios 1o e 2o modulo (Ala Oeste)</td>
                             <td class="px-6 py-4 font-mono text-xs">Contrato Otis</td>
                             <td class="px-6 py-4 text-right"><a href="messages.html" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-bold">Notificar equipe</a></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
                             <td class="px-6 py-4"><span class="bg-gray-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded text-xs font-bold font-mono">T-7 Dias</span></td>
                             <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">Tratamento Fisico-Quimico</td>
                             <td class="px-6 py-4">Higienizacao de 2 caixas d'agua (Bloco Leste)</td>
                             <td class="px-6 py-4 font-mono text-xs text-red-500">R$ 4.500 (Terceiro)</td>
-                            <td class="px-6 py-4 text-right"><a href="dashboard_create_os.html" class="bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-400 px-3 py-1 rounded text-xs font-bold border border-teal-200 dark:border-teal-600/30">Designar responsavel</a></td>
+                            <td class="px-6 py-4 text-right"><a href="dashboard_create_os.html" class="bg-primary-50 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400 px-3 py-1 rounded text-xs font-bold border border-primary-200 dark:border-primary-600/30">Designar responsavel</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -137,7 +172,7 @@
     </main>
 
     <!-- Modal Criar Preventiva -->
-    <div id="createPreventiveModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div id="createPreventiveModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl w-full max-w-lg shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-white">Criar Preventiva</h3>
             <p class="text-sm text-slate-500 mb-6">Cadastre um novo item no cronograma de manutencao preventiva.</p>
@@ -145,12 +180,12 @@
             <div class="space-y-4">
                 <div>
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Descricao da Atividade</label>
-                    <input id="prevTitle" type="text" placeholder="Ex: Limpeza de filtros HVAC bloco A" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                    <input id="prevTitle" type="text" placeholder="Ex: Limpeza de filtros HVAC bloco A" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-primary-500 outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Categoria</label>
-                        <select id="prevCategory" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                        <select id="prevCategory" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-primary-500 outline-none">
                             <option value="AVAC">AVAC (Climatizacao)</option>
                             <option value="Hidraulica">Hidraulica</option>
                             <option value="Eletrica">Eletrica</option>
@@ -161,16 +196,16 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Janela (Dias a partir de hoje)</label>
-                        <input id="prevDays" type="number" min="0" max="365" value="30" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                        <input id="prevDays" type="number" min="0" max="365" value="30" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-primary-500 outline-none">
                     </div>
                 </div>
                 <div>
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Custo Previsto</label>
-                    <input id="prevCost" type="text" placeholder="Ex: R$ 2.500 (Interno) ou Contrato Terceiro" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                    <input id="prevCost" type="text" placeholder="Ex: R$ 2.500 (Interno) ou Contrato Terceiro" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-primary-500 outline-none">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 block">Local / Instalacao</label>
-                    <input id="prevLocation" type="text" placeholder="Ex: Torre Norte - Piso 5" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                    <input id="prevLocation" type="text" placeholder="Ex: Torre Norte - Piso 5" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-primary-500 outline-none">
                 </div>
             </div>
 
@@ -178,12 +213,13 @@
 
             <div class="flex justify-end gap-3 mt-6">
                 <button onclick="closeCreateModal()" class="px-5 py-2 border border-slate-300 dark:border-slate-600 text-sm rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition">Cancelar</button>
-                <button onclick="submitPreventive()" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-lg shadow-sm transition">Cadastrar no Cronograma</button>
+                <button onclick="submitPreventive()" class="px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg shadow-[0_2px_20px_rgb(0,0,0,0.04)] transition">Cadastrar no Cronograma</button>
             </div>
         </div>
     </div>
 
     <script>
+        const user = MockDB.requireLogin();
         if (user) {
             MockDB.populateUserProfile(user);
             document.getElementById('sidebarNav').innerHTML = MockDB.buildDesktopNav(user, 'preventive_schedule.html');
@@ -253,13 +289,13 @@
             // Inserir nova linha na tabela
             const tbody = document.querySelector('tbody');
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-gray-50 dark:hover:bg-slate-700/30 transition';
+            tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-700/30 transition';
             tr.innerHTML = `
-                <td class="px-6 py-4"><span class="bg-teal-100 dark:bg-teal-600/30 text-teal-700 dark:text-teal-400 px-2 py-1 rounded text-xs font-bold font-mono">${janela}</span></td>
+                <td class="px-6 py-4"><span class="bg-primary-100 dark:bg-primary-600/30 text-primary-700 dark:text-primary-400 px-2 py-1 rounded text-xs font-bold font-mono">${janela}</span></td>
                 <td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">${category}</td>
                 <td class="px-6 py-4">${title} <span class="text-slate-400 text-xs">(${location})</span></td>
                 <td class="px-6 py-4 font-mono text-xs">${cost}</td>
-                <td class="px-6 py-4 text-right"><a href="dashboard_create_os.html" class="bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-400 px-3 py-1 rounded text-xs font-bold border border-teal-200 dark:border-teal-600/30">Designar responsavel</a></td>
+                <td class="px-6 py-4 text-right"><a href="dashboard_create_os.html" class="bg-primary-50 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400 px-3 py-1 rounded text-xs font-bold border border-primary-200 dark:border-primary-600/30">Designar responsavel</a></td>
             `;
             tbody.prepend(tr);
             lucide.createIcons();

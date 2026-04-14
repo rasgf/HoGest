@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -8,24 +8,59 @@
     <link rel="manifest" href="manifest.json">
     <title>Detalhes da O.S | HotGest</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        50:  '#f0f7f4',
+                        100: '#d9ede2',
+                        200: '#b5dbc6',
+                        300: '#84c1a3',
+                        400: '#55a47e',
+                        500: '#358764',
+                        600: '#266c50',
+                        700: '#1f5741',
+                        800: '#1b4535',
+                        900: '#17392c',
+                        950: '#0c2019',
+                    },
+                    accent: {
+                        50:  '#fbfaf8',
+                        100: '#f5f2ee',
+                        200: '#ebe3db',
+                        300: '#ddcec0',
+                        400: '#cbb39e',
+                        500: '#bca085',
+                        600: '#af8c70',
+                        700: '#92705a',
+                        800: '#775e4e',
+                        900: '#604c41',
+                    },
+                },
+                boxShadow: {
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.04)',
+                    'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
+                }
+            }
+        }
+    };
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } };
-        const user = MockDB.requireLogin(['trabalhador', 'admin_geral', 'admin_manutencao', 'controlador']);
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-    </script>
     <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
 </head>
 <body class="text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors">
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
-        <header class="px-4 py-4 flex items-center border-b border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 sticky top-0 z-10">
+        <header class="px-4 py-4 flex items-center border-b border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 sticky top-0 z-10">
             <a href="javascript:history.back()" class="p-2 -ml-2 text-slate-500 dark:text-slate-400 hover:text-slate-900"><i data-lucide="chevron-left" class="w-6 h-6"></i></a>
             <h1 class="text-lg font-semibold ml-2" id="headerTitle">OS #0000</h1>
         </header>
 
-        <main class="flex-1 p-6">
+        <main class="flex-1 relative z-10 p-6">
             <div class="mb-6">
                 <div class="flex items-center gap-2 mb-3 flex-wrap">
                     <span id="priorityBadge" class="inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border">SLA</span>
@@ -40,21 +75,21 @@
             </div>
 
             <div class="grid grid-cols-3 gap-3 mb-5">
-                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-slate-700">
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-200/60 dark:border-slate-700">
                     <div class="text-[10px] uppercase text-slate-500 mb-1">Espera</div>
                     <div class="text-sm font-bold" id="timeToStartLabel">0 min</div>
                 </div>
-                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-slate-700">
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-200/60 dark:border-slate-700">
                     <div class="text-[10px] uppercase text-slate-500 mb-1">Execucao</div>
                     <div class="text-sm font-bold" id="executionLabel">0 min</div>
                 </div>
-                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-slate-700">
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-200/60 dark:border-slate-700">
                     <div class="text-[10px] uppercase text-slate-500 mb-1">Revisao</div>
                     <div class="text-sm font-bold" id="reviewLabel">0 min</div>
                 </div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-5 mb-5 border border-gray-200 dark:border-slate-700 shadow-sm">
+            <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-5 mb-5 border border-slate-200/60 dark:border-slate-700 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="text-xs font-semibold text-slate-500 uppercase">Cronometro de Execucao</h3>
                     <span id="statusPill" class="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">Pausado</span>
@@ -64,42 +99,43 @@
                         <p id="timerDisplay" class="text-4xl font-mono font-light text-slate-900 dark:text-slate-200 tracking-widest">00:00</p>
                         <p id="statusMsg" class="text-xs text-slate-500 mt-1 font-semibold">Aguardando acao.</p>
                     </div>
-                    <button id="toggleTimerBtn" class="bg-teal-600 p-4 rounded-full text-white shadow-lg shadow-teal-500/30">
+                    <button id="toggleTimerBtn" class="bg-primary-600 p-4 rounded-full text-white shadow-lg shadow-primary-500/30">
                         <i id="timerIcon" data-lucide="play" class="w-6 h-6 ml-1"></i>
                     </button>
                 </div>
             </div>
 
-            <div id="materialsPreview" class="hidden bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-xl p-4 mb-5">
+            <div id="materialsPreview" class="hidden bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-2xl p-4 mb-5">
                 <p class="text-xs font-semibold uppercase tracking-wide text-orange-700 dark:text-orange-300 mb-2">Materiais informados</p>
                 <div id="materialsList" class="text-sm text-orange-900 dark:text-orange-100 space-y-1"></div>
             </div>
 
             <div class="mb-5">
                 <h3 class="text-sm font-semibold mb-4 text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                    <i data-lucide="message-square" class="w-4 h-4 text-teal-500"></i> Chat da O.S.
+                    <i data-lucide="message-square" class="w-4 h-4 text-primary-500"></i> Chat da O.S.
                 </h3>
                 <div id="commentsList" class="space-y-3 mb-4"></div>
                 <div id="commentComposer" class="flex items-center gap-2">
-                    <input id="commentInput" type="text" placeholder="Registrar comentario operacional..." class="flex-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-full py-2.5 px-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:border-teal-500">
-                    <button id="sendCommentBtn" type="button" class="bg-teal-600 hover:bg-teal-500 text-white w-10 h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 shadow-md">
+                    <input id="commentInput" type="text" placeholder="Registrar comentario operacional..." class="flex-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-full py-2.5 px-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:border-primary-500">
+                    <button id="sendCommentBtn" type="button" class="bg-primary-600 hover:bg-primary-500 text-white w-10 h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 shadow-md">
                         <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
                     </button>
                 </div>
             </div>
 
             <div class="space-y-3">
-                <a id="resolveLink" href="#" class="block w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-bold py-4 rounded-xl text-center shadow-lg active:scale-95 transition-transform">
+                <a id="resolveLink" href="#" class="block w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-bold py-4 rounded-2xl text-center shadow-lg active:scale-95 transition-transform">
                     Marcar como Resolvido
                 </a>
-                <button id="reviewStartBtn" class="hidden w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg">Iniciar Revisao</button>
-                <button id="reviewApproveBtn" class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg">Aprovar Revisao</button>
-                <button id="reviewRejectBtn" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl shadow-lg">Solicitar Refacao</button>
+                <button id="reviewStartBtn" class="hidden w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg">Iniciar Revisao</button>
+                <button id="reviewApproveBtn" class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl shadow-lg">Aprovar Revisao</button>
+                <button id="reviewRejectBtn" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-2xl shadow-lg">Solicitar Refacao</button>
             </div>
         </main>
     </div>
 
     <script>
+        const user = MockDB.requireLogin();
         const params = new URLSearchParams(window.location.search);
         const ticketId = Number(params.get('ticketId'));
         let currentTicket = MockDB.getTicketById(ticketId);
@@ -150,7 +186,7 @@
                         <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
                             <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">${author ? author.name.substring(0, 2).toUpperCase() : 'SY'}</span>
                         </div>
-                        <div class="${mine ? 'bg-teal-50 dark:bg-teal-500/10 border-teal-100 dark:border-teal-500/30 rounded-tl-none' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 rounded-tr-none'} border p-3 rounded-2xl w-full shadow-sm text-sm">
+                        <div class="${mine ? 'bg-primary-50 dark:bg-primary-500/10 border-primary-100 dark:border-primary-500/30 rounded-tl-none' : 'bg-white dark:bg-slate-800 border-slate-200/60 dark:border-slate-700 rounded-tr-none'} border p-3 rounded-2xl w-full shadow-[0_2px_20px_rgb(0,0,0,0.04)] text-sm">
                             <p class="text-slate-800 dark:text-slate-200 mb-1">${comment.content}</p>
                             <span class="text-[10px] text-slate-400 uppercase">${author?.name || 'Sistema'} • ${new Date(comment.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
@@ -173,7 +209,7 @@
             document.getElementById('ticketTitle').textContent = currentTicket.title;
             document.getElementById('ticketLocation').textContent = currentTicket.location;
             document.getElementById('ticketDescription').textContent = currentTicket.description || 'Sem observacoes adicionais.';
-            document.getElementById('priorityBadge').className = `inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border ${currentTicket.priority === 'critical' ? 'bg-red-100 text-red-600 border-red-200' : 'bg-teal-100 text-teal-700 border-teal-200'}`;
+            document.getElementById('priorityBadge').className = `inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border ${currentTicket.priority === 'critical' ? 'bg-red-100 text-red-600 border-red-200' : 'bg-primary-100 text-primary-700 border-primary-200'}`;
             document.getElementById('priorityBadge').textContent = currentTicket.priority === 'critical' ? 'SLA Critico' : 'SLA Normal';
             document.getElementById('statusBadge').className = 'inline-block px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border border-slate-200 bg-slate-100 text-slate-700';
             document.getElementById('statusBadge').textContent = currentTicket.status.replaceAll('_', ' ');
@@ -189,7 +225,7 @@
             const isRunning = clock.isRunning;
             icon.setAttribute('data-lucide', isRunning ? 'square' : 'play');
             btn.classList.toggle('bg-rose-500', isRunning);
-            btn.classList.toggle('bg-teal-600', !isRunning);
+            btn.classList.toggle('bg-primary-600', !isRunning);
             btn.disabled = !(isExecutor && ['designated', 'in_progress'].includes(currentTicket.status));
             btn.classList.toggle('opacity-50', btn.disabled);
             btn.classList.toggle('cursor-not-allowed', btn.disabled);
@@ -208,7 +244,7 @@
                 resolveLink.textContent = 'Registrar materiais';
                 resolveLink.href = `mobile_checkout.html?ticketId=${currentTicket.id}`;
             } else if (currentTicket.status === 'in_progress') {
-                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-teal-100 text-teal-700';
+                statusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-primary-100 text-primary-700';
                 statusPill.textContent = 'Em execucao';
                 statusMsg.textContent = 'Execucao em andamento.';
                 resolveLink.textContent = 'Marcar como Resolvido';

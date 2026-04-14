@@ -1,27 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quadro Kanban O.S | HotGest</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        50:  '#f0f7f4',
+                        100: '#d9ede2',
+                        200: '#b5dbc6',
+                        300: '#84c1a3',
+                        400: '#55a47e',
+                        500: '#358764',
+                        600: '#266c50',
+                        700: '#1f5741',
+                        800: '#1b4535',
+                        900: '#17392c',
+                        950: '#0c2019',
+                    },
+                    accent: {
+                        50:  '#fbfaf8',
+                        100: '#f5f2ee',
+                        200: '#ebe3db',
+                        300: '#ddcec0',
+                        400: '#cbb39e',
+                        500: '#bca085',
+                        600: '#af8c70',
+                        700: '#92705a',
+                        800: '#775e4e',
+                        900: '#604c41',
+                    },
+                },
+                boxShadow: {
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.04)',
+                    'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
+                }
+            }
+        }
+    };
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } };
-        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao']);
-        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-    </script>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
-    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex-col hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
+    <aside class="w-64 relative z-10 bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex-col hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-slate-200/60 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
-        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+        <div class="p-4 border-t border-slate-200/60 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -38,14 +72,14 @@
     </aside>
 
     <!-- Mobile slide-over sidebar -->
-    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-slate-700">
+    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-slate-200/60 dark:border-slate-700">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
-        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+        <div class="p-4 border-t border-slate-200/60 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -61,20 +95,20 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
+    <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
+        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-slate-200/60 dark:border-slate-700 bg-white/80 dark:bg-slate-800/90 backdrop-blur-xl backdrop-saturate-150 flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
                 <h1 class="text-lg md:text-xl font-semibold text-slate-800 dark:text-slate-100">Quadro Operacional</h1>
             </div>
             <div class="flex gap-4 items-center w-full md:w-auto justify-between md:justify-end">
                 <button onclick="window.location.href='dashboard.html'" class="text-xs bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-slate-300 transition shrink-0">Voltar ao Dash</button>
-                <button onclick="toggleTheme()" class="p-2 border rounded border-gray-200 dark:border-slate-600 shrink-0"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
+                <button onclick="toggleTheme()" class="p-2 border rounded border-slate-200/60 dark:border-slate-600 shrink-0"><i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i><i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i></button>
             </div>
         </header>
 
         <div class="flex-1 overflow-y-auto p-8">
-            <div id="actionAlert" class="hidden mb-4 p-3 bg-teal-100 border border-teal-200 text-teal-800 rounded text-sm flex items-center justify-between">
+            <div id="actionAlert" class="hidden mb-4 p-3 bg-primary-100 border border-primary-200 text-primary-800 rounded text-sm flex items-center justify-between">
                 <span id="actionAlertMsg">Atualizacao aplicada com sucesso.</span>
                 <button onclick="document.getElementById('actionAlert').classList.add('hidden')"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
@@ -82,21 +116,21 @@
         </div>
     </main>
 
-    <div id="assignModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+    <div id="assignModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Designar Executor</h3>
             <p class="text-xs text-slate-500 mb-4" id="assignOsLabel"></p>
             <select id="executorSelect" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
             <textarea id="assignMessage" rows="3" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Instrucoes para o executor..."></textarea>
             <div class="flex justify-end gap-3">
                 <button onclick="closeAssignModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded text-sm">Cancelar</button>
-                <button onclick="confirmAssign()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded text-sm">Designar</button>
+                <button onclick="confirmAssign()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded text-sm">Designar</button>
             </div>
         </div>
     </div>
 
-    <div id="reviewModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+    <div id="reviewModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Designar Revisor</h3>
             <p class="text-xs text-slate-500 mb-4" id="reviewOsLabel"></p>
             <select id="reviewerSelect" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
@@ -108,8 +142,8 @@
         </div>
     </div>
 
-    <div id="rejectModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+    <div id="rejectModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Solicitar Refacao</h3>
             <p class="text-xs text-slate-500 mb-4" id="rejectOsLabel"></p>
             <textarea id="rejectReason" rows="4" class="w-full bg-slate-50 dark:bg-slate-900 text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Descreva o motivo da refacao..."></textarea>
@@ -121,7 +155,7 @@
     </div>
 
     <!-- Modal de Detalhes da O.S. (Desktop) -->
-    <div id="detailModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div id="detailModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50 p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200 dark:border-slate-700">
             <div class="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-start">
                 <div>
@@ -150,7 +184,7 @@
                 
                 <!-- Coluna Lateral: Dados e Acoes -->
                 <div class="space-y-6">
-                    <div class="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-5 border border-gray-100 dark:border-slate-700">
+                    <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-5 border border-gray-100 dark:border-slate-700">
                         <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Participantes</h3>
                         <div class="space-y-4">
                             <div class="flex items-center gap-3">
@@ -161,7 +195,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400"><i data-lucide="hard-hat" class="w-4 h-4"></i></div>
+                                <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400"><i data-lucide="hard-hat" class="w-4 h-4"></i></div>
                                 <div>
                                     <p class="text-[10px] text-slate-400 font-medium leading-none">Executor</p>
                                     <p class="text-xs font-bold" id="detailExecutor">Aguardando...</p>
@@ -177,7 +211,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-5 border border-gray-100 dark:border-slate-700">
+                    <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-5 border border-gray-100 dark:border-slate-700">
                         <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Resumo Financeiro / Materiais</h3>
                         <div id="detailMaterials" class="space-y-2">
                              <p class="text-xs text-slate-500 italic">Nenhum material consumido.</p>
@@ -189,6 +223,7 @@
     </div>
 
     <script>
+        const user = MockDB.requireLogin();
         let currentAssignTicketId = null;
         let currentReviewTicketId = null;
         let currentRejectTicketId = null;
@@ -225,7 +260,7 @@
                 badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-yellow-100 text-yellow-700 font-bold uppercase';
                 badgeEl.innerText = 'Em Revisao';
             } else {
-                badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-teal-100 text-teal-700 font-bold uppercase';
+                badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-primary-100 text-primary-700 font-bold uppercase';
                 badgeEl.innerText = formatStatusLabel(ticket.status);
             }
 
@@ -239,8 +274,8 @@
             const timelineEl = document.getElementById('detailTimeline');
             timelineEl.innerHTML = comments.map(c => `
                 <div class="flex gap-4 relative z-10">
-                    <div class="w-6 h-6 rounded-full bg-white dark:bg-slate-800 border-2 ${c.kind === 'system' ? 'border-gray-200' : 'border-teal-500'} flex items-center justify-center shrink-0">
-                        <div class="w-1.5 h-1.5 rounded-full ${c.kind === 'system' ? 'bg-gray-300' : 'bg-teal-500'}"></div>
+                    <div class="w-6 h-6 rounded-full bg-white dark:bg-slate-800 border-2 ${c.kind === 'system' ? 'border-slate-200/60' : 'border-primary-500'} flex items-center justify-center shrink-0">
+                        <div class="w-1.5 h-1.5 rounded-full ${c.kind === 'system' ? 'bg-gray-300' : 'bg-primary-500'}"></div>
                     </div>
                     <div class="pb-1">
                         <p class="text-xs font-bold text-slate-800 dark:text-slate-100">${c.kind === 'system' ? 'Sistema' : nameById(users, c.authorId)}</p>
@@ -256,7 +291,7 @@
                 materialsEl.innerHTML = ticket.materialsUsed.map(m => {
                     const item = db.inventory.find(i => i.id === m.inventoryId);
                     return `
-                        <div class="flex justify-between items-center text-xs p-2 bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded shadow-sm">
+                        <div class="flex justify-between items-center text-xs p-2 bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                             <span class="text-slate-600 dark:text-slate-300">${item?.name || 'Material Desconhecido'}</span>
                             <span class="font-bold">${m.quantity} ${item?.unit || 'un'}</span>
                         </div>
@@ -330,7 +365,7 @@
             if (ticket.priority === 'critical') {
                 return `<span class="text-[10px] px-2 py-1 rounded bg-red-100 text-red-700 font-bold">Critico</span>`;
             }
-            return `<span class="text-[10px] px-2 py-1 rounded bg-teal-100 text-teal-700 font-bold">Normal</span>`;
+            return `<span class="text-[10px] px-2 py-1 rounded bg-primary-100 text-primary-700 font-bold">Normal</span>`;
         }
 
         function nameById(users, id) {
@@ -345,7 +380,7 @@
 
             let actionHtml = '';
             if (ticket.status === 'new') {
-                actionHtml = `<button onclick="openAssignModal(${ticket.id})" class="text-xs text-teal-600 font-bold">Designar executor</button>`;
+                actionHtml = `<button onclick="openAssignModal(${ticket.id})" class="text-xs text-primary-600 font-bold">Designar executor</button>`;
             } else if (ticket.status === 'designated') {
                 actionHtml = `
                     <div class="space-y-2">
@@ -382,13 +417,13 @@
             }
 
             return `
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-teal-500/30 transition-all group">
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-primary-500/30 transition-all group">
                     <div onclick="openTicketDetail(${ticket.id})" class="cursor-pointer">
                     <div class="flex justify-between items-center mb-2">
                         ${ticketBadge(ticket)}
                         <span class="text-[10px] font-mono text-slate-400">#OS-${ticket.id}</span>
                     </div>
-                    <h4 class="font-semibold text-sm mb-1 group-hover:text-teal-600 transition-colors">${ticket.title}</h4>
+                    <h4 class="font-semibold text-sm mb-1 group-hover:text-primary-600 transition-colors">${ticket.title}</h4>
                     <p class="text-xs text-slate-500 mb-2">${ticket.location}</p>
                     <p class="text-[10px] text-slate-400 mb-2 italic">Executor: ${executor}</p>
                     </div>
@@ -404,8 +439,8 @@
         function renderColumn(title, subtitle, tickets, users) {
             const cards = tickets.length ? tickets.map(ticket => renderCard(ticket, users)).join('') : `<div class="text-sm text-slate-500 p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">Sem itens nesta coluna.</div>`;
             return `
-                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 flex flex-col min-h-[70vh]">
-                    <div class="p-4 border-b border-gray-200 dark:border-slate-700">
+                <div class="bg-gray-100 dark:bg-slate-800/50 rounded-2xl border border-slate-200/60 dark:border-slate-700 flex flex-col min-h-[70vh]">
+                    <div class="p-4 border-b border-slate-200/60 dark:border-slate-700">
                         <h3 class="font-bold">${title}</h3>
                         <p class="text-[11px] text-slate-500 mt-1">${subtitle}</p>
                     </div>

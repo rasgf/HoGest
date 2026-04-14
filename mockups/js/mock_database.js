@@ -326,7 +326,7 @@ window.MockDB = {
         return visibleItems.map(item => {
             const active = item.href === currentPage;
             const activeClass = active
-                ? 'bg-teal-50 dark:bg-teal-600/20 text-teal-700 dark:text-teal-400 font-medium border border-teal-200 dark:border-teal-500/30'
+                ? 'bg-primary-50 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400 font-medium border border-primary-200 dark:border-primary-500/30'
                 : 'hover:bg-gray-100 dark:hover:bg-slate-700/50 transition';
             return `<a href="${item.href}" class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeClass}"><i data-lucide="${item.icon}" class="w-5 h-5"></i> <span>${item.label}</span></a>`;
         }).join('');

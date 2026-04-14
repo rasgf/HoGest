@@ -1,31 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designar Executor | HotGest</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        50:  '#f0f7f4',
+                        100: '#d9ede2',
+                        200: '#b5dbc6',
+                        300: '#84c1a3',
+                        400: '#55a47e',
+                        500: '#358764',
+                        600: '#266c50',
+                        700: '#1f5741',
+                        800: '#1b4535',
+                        900: '#17392c',
+                        950: '#0c2019',
+                    },
+                    accent: {
+                        50:  '#fbfaf8',
+                        100: '#f5f2ee',
+                        200: '#ebe3db',
+                        300: '#ddcec0',
+                        400: '#cbb39e',
+                        500: '#bca085',
+                        600: '#af8c70',
+                        700: '#92705a',
+                        800: '#775e4e',
+                        900: '#604c41',
+                    },
+                },
+                boxShadow: {
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.04)',
+                    'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
+                }
+            }
+        }
+    };
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 900: '#0f172a', 800: '#1e293b' }, teal: { 600: '#0d9488' } } } } };
-        const user = MockDB.requireLogin(['admin_geral', 'admin_manutencao']);
-        function toggleTheme() {
-            const doc = document.documentElement;
-            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; }
-            else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
-        }
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-    </script>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex">
-    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex-col hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex">
+    <aside class="w-64 relative z-10 bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex-col hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-slate-200/60 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
-        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+        <div class="p-4 border-t border-slate-200/60 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -42,14 +72,14 @@
     </aside>
 
     <!-- Mobile slide-over sidebar -->
-    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-slate-700">
+    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-slate-200/60 dark:border-slate-700">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
-        <div class="p-4 border-t border-gray-200 dark:border-slate-700">
+        <div class="p-4 border-t border-slate-200/60 dark:border-slate-700">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -65,11 +95,11 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
+    <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
+        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-slate-200/60 dark:border-slate-700 bg-white/80 dark:bg-slate-800/90 backdrop-blur-xl backdrop-saturate-150 flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
-                <h1 class="text-lg md:text-xl font-semibold flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-teal-600 hidden md:block"></i> Nova O.S.</h1>
+                <h1 class="text-lg md:text-xl font-semibold flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-primary-600 hidden md:block"></i> Nova O.S.</h1>
             </div>
             <div class="flex gap-4 items-center w-full md:w-auto justify-end">
                 <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 shrink-0"><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i></button>
@@ -77,24 +107,24 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-8">
-            <section class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-sm">
+            <section class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                 <h2 class="font-bold text-lg mb-1">Nova O.S. com designacao imediata</h2>
                 <p class="text-sm text-slate-500 mb-6">A O.S. sai como <strong>designada</strong>. A execucao so comeca quando o executor iniciar manualmente.</p>
 
                 <form id="dispatcherForm" class="space-y-5">
                     <div>
                         <label for="titleInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Descricao do problema</label>
-                        <input id="titleInput" type="text" value="Vazamento Severo Chiller AC Central" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3">
+                        <input id="titleInput" type="text" value="Vazamento Severo Chiller AC Central" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="locationInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Localizacao</label>
-                            <input id="locationInput" type="text" value="Master Suite 05" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3">
+                            <input id="locationInput" type="text" value="Master Suite 05" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3">
                         </div>
                         <div>
                             <label for="priorityInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Urgencia</label>
-                            <select id="priorityInput" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3">
+                            <select id="priorityInput" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3">
                                 <option value="critical">Critico</option>
                                 <option value="normal">Normal</option>
                             </select>
@@ -118,29 +148,29 @@
 
                     <div>
                         <label for="descriptionInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Orientacao para o executor</label>
-                        <textarea id="descriptionInput" rows="4" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 resize-none">Hospede aguardando no corredor. Conter impacto imediato e validar AVAC.</textarea>
+                        <textarea id="descriptionInput" rows="4" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3 resize-none">Hospede aguardando no corredor. Conter impacto imediato e validar AVAC.</textarea>
                     </div>
 
                     <div>
                         <label for="executorSelect" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Executor responsavel</label>
-                        <select id="executorSelect" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3"></select>
+                        <select id="executorSelect" class="w-full bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-3"></select>
                     </div>
 
                     <p id="dispatcherFeedback" class="hidden text-sm rounded-lg px-4 py-3 border"></p>
 
                     <div class="flex gap-3">
-                        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-lg shadow-lg active:scale-95 transition-transform">Criar e designar</button>
+                        <button type="submit" class="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 rounded-lg shadow-lg active:scale-95 transition-transform">Criar e designar</button>
                         <a href="os_list.html" class="w-full text-center bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-3 rounded-lg">Abrir Kanban</a>
                     </div>
                 </form>
             </section>
 
             <section class="space-y-4">
-                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 shadow-sm">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <h3 class="font-bold text-base mb-3">Executores disponiveis</h3>
                     <div id="executorCards" class="space-y-3"></div>
                 </div>
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl border border-slate-700 p-6 shadow-xl text-slate-200">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-slate-700 p-6 shadow-xl text-slate-200">
                     <h3 class="font-bold text-base mb-2">Fluxo aplicado</h3>
                     <ul class="space-y-2 text-sm text-slate-300">
                         <li>1. A O.S. e criada com prioridade, complexidade e contexto.</li>
@@ -154,6 +184,7 @@
     </main>
 
     <script>
+        const user = MockDB.requireLogin();
         const executors = MockDB.getExecutors();
 
         if (user) {
@@ -191,13 +222,13 @@
         function renderExecutors() {
             document.getElementById('executorSelect').innerHTML = executors.map(executor => `<option value="${executor.id}">${executor.name}</option>`).join('');
             document.getElementById('executorCards').innerHTML = executors.map(executor => `
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40">
+                <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40">
                     <div class="flex items-center justify-between gap-3">
                         <div>
                             <p class="font-semibold text-slate-900 dark:text-white">${executor.name}</p>
                             <p class="text-xs text-slate-500">${executor.username}</p>
                         </div>
-                        <span class="text-[10px] uppercase tracking-wide bg-teal-100 text-teal-700 dark:bg-teal-600/20 dark:text-teal-300 px-2 py-1 rounded-full">Executor</span>
+                        <span class="text-[10px] uppercase tracking-wide bg-primary-100 text-primary-700 dark:bg-primary-600/20 dark:text-primary-300 px-2 py-1 rounded-full">Executor</span>
                     </div>
                 </div>
             `).join('');
@@ -220,7 +251,7 @@
             MockDB.assignTicket(ticket.id, executorId, user.id, `Nova O.S #${ticket.id} designada para ${executor.name}.`);
 
             const feedback = document.getElementById('dispatcherFeedback');
-            feedback.className = 'text-sm rounded-lg px-4 py-3 border border-teal-200 bg-teal-50 text-teal-700';
+            feedback.className = 'text-sm rounded-lg px-4 py-3 border border-primary-200 bg-primary-50 text-primary-700';
             feedback.textContent = `O.S #${ticket.id} enviada para ${executor.name} com status designada.`;
             feedback.classList.remove('hidden');
             setTimeout(() => {
