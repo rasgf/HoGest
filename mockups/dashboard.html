@@ -47,7 +47,7 @@
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex transition-colors duration-200">
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col hidden md:flex">
         <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
-            <img src="assets/insolito-logo.svg" alt="HotGest" class="h-9 cursor-pointer" onclick="window.location.href='dashboard.html'">
+            <img src="assets/insolito-logo.png" alt="HotGest" class="h-9 cursor-pointer" onclick="window.location.href='dashboard.html'">
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
         <div class="p-4 border-t border-gray-200 dark:border-slate-700">
@@ -330,6 +330,17 @@
             return users.find(user => user.id === id)?.name || 'Nao definido';
         }
 
+        function formatStatusLabel(status) {
+            const labels = {
+                new: 'Nova',
+                designated: 'Designada',
+                in_progress: 'Em Execucao',
+                awaiting_review: 'Aguardando Revisao',
+                completed: 'Concluida'
+            };
+            return labels[status] || 'Sem status';
+        }
+
         function openTicketDetail(id) {
             const ticket = MockDB.getTicketById(id);
             if (!ticket) return;
@@ -352,7 +363,7 @@
                 badgeEl.innerText = 'Em Revisao';
             } else {
                 badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-teal-100 text-teal-700 font-bold uppercase';
-                badgeEl.innerText = (ticket.status || '').replace('_', ' ');
+                badgeEl.innerText = formatStatusLabel(ticket.status);
             }
 
             // Participantes

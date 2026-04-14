@@ -24,7 +24,7 @@
 <body class="font-sans antialiased text-slate-800 dark:text-slate-200 transition-colors duration-200">
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl pb-20">
         <header class="px-6 pt-12 pb-4 flex justify-between items-center bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 sticky top-0 z-10">
-            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-8 cursor-pointer" onclick="MockDB.logout()">
+            <img src="assets/insolito-logo.png" alt="Insolito" class="h-8 cursor-pointer" onclick="MockDB.logout()">
             <div class="flex items-center gap-3">
                 <a href="messages.html" class="relative">
                     <i data-lucide="bell" class="w-5 h-5 text-slate-400"></i>
@@ -138,6 +138,9 @@
                     <a id="mResolveLink" href="#" class="block w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white font-bold py-4 rounded-xl text-center shadow-lg active:scale-95 transition-transform">
                         Ir para Resolucao (Checkout)
                     </a>
+                    <button id="mReviewStartBtn" class="hidden w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg">Iniciar Revisao</button>
+                    <button id="mReviewApproveBtn" class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg">Aprovar Revisao</button>
+                    <button id="mReviewRejectBtn" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl shadow-lg">Solicitar Refacao</button>
                 </div>
             </main>
         </div>
@@ -152,58 +155,80 @@
             return 'Concluida';
         }
 
-        if (user) {
+        function getQueueState() {
             const db = MockDB.get();
-            document.getElementById('greetingName').innerText = `Ola, ${user.name.split(' ')[0]}`;
-            document.getElementById('userInitials').innerText = user.name.substring(0, 2).toUpperCase();
-
-            const executorTickets = db.tickets.filter(ticket => ticket.assignedTo === user.id && ['designated', 'in_progress', 'awaiting_review'].includes(ticket.status));
-            const reviewTickets = db.tickets.filter(ticket => ticket.reviewerId === user.id && ['designated', 'in_progress', 'awaiting_review'].includes(ticket.status));
+            const activeStatuses = ['designated', 'in_progress', 'awaiting_review'];
+            const executorTickets = db.tickets.filter(ticket => ticket.assignedTo === user.id && activeStatuses.includes(ticket.status));
+            const reviewTickets = db.tickets.filter(ticket => ticket.reviewerId === user.id && activeStatuses.includes(ticket.status));
             const merged = [
                 ...executorTickets.map(ticket => ({ ticket, role: 'executor' })),
-                ...reviewTickets.filter(entry => !executorTickets.some(ticket => ticket.id === entry.id)).map(ticket => ({ ticket, role: 'reviewer' }))
+                ...reviewTickets
+                    .filter(ticket => !executorTickets.some(entry => entry.id === ticket.id))
+                    .map(ticket => ({ ticket, role: 'reviewer' }))
             ].sort((a, b) => (b.ticket.createdTime || 0) - (a.ticket.createdTime || 0));
 
-            document.getElementById('countDesignated').innerText = executorTickets.filter(ticket => ticket.status === 'designated').length;
-            document.getElementById('countInProgress').innerText = executorTickets.filter(ticket => ticket.status === 'in_progress').length;
-            document.getElementById('countReviews').innerText = reviewTickets.length;
+            return { db, executorTickets, reviewTickets, merged };
+        }
 
+        function renderTaskList(merged) {
             const taskList = document.getElementById('taskList');
             if (!merged.length) {
                 taskList.innerHTML = `<div class="p-4 border border-dashed border-slate-300 dark:border-slate-700 rounded text-center text-sm text-slate-500">Nenhum chamado ativo no momento.</div>`;
-            } else {
-                taskList.innerHTML = merged.map(({ ticket, role }) => `
-                    <div onclick="openTicketDetail(${ticket.id})" class="block bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 active:scale-95 transition-transform shadow-sm mb-4 cursor-pointer">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <span class="text-[10px] font-bold ${ticket.priority === 'critical' ? 'text-red-600 bg-red-100' : 'text-teal-600 bg-teal-100'} uppercase tracking-wide px-2 py-0.5 rounded mr-2">${ticket.priority === 'critical' ? 'Critico' : 'Normal'}</span>
-                                <span class="text-xs text-slate-500">#OS-${ticket.id}</span>
-                            </div>
-                            <span class="text-xs font-semibold text-gold font-mono">${badgeForStatus(ticket, role)}</span>
+                return;
+            }
+
+            taskList.innerHTML = merged.map(({ ticket, role }) => `
+                <div onclick="openTicketDetail(${ticket.id})" class="block bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 active:scale-95 transition-transform shadow-sm mb-4 cursor-pointer">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="text-[10px] font-bold ${ticket.priority === 'critical' ? 'text-red-600 bg-red-100' : 'text-teal-600 bg-teal-100'} uppercase tracking-wide px-2 py-0.5 rounded mr-2">${ticket.priority === 'critical' ? 'Critico' : 'Normal'}</span>
+                            <span class="text-xs text-slate-500">#OS-${ticket.id}</span>
                         </div>
-                        <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">${ticket.title}</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-2"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> ${ticket.location}</p>
-                        <p class="text-[11px] text-slate-500 mb-3">${role === 'reviewer' ? 'Sua acao: revisar entrega e materiais' : 'Sua acao: iniciar execucao'}</p>
-                        <div class="flex items-center text-teal-600 dark:text-teal-500 text-xs font-semibold uppercase tracking-wide">
-                            Abrir O.S. <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
-                        </div>
+                        <span class="text-xs font-semibold text-gold font-mono">${badgeForStatus(ticket, role)}</span>
                     </div>
-                `).join('');
-            }
-
-            const unread = MockDB.getUnreadCount(user.id);
-            if (unread > 0) {
-                document.getElementById('notifBadge').classList.remove('hidden');
-                document.getElementById('notifBadge').innerText = unread;
-                document.getElementById('navMsgBadge').classList.remove('hidden');
-            }
-
-            const nextTicket = merged[0]?.ticket;
-            if (nextTicket) {
-                document.getElementById('scheduleNavLink').href = `mobile_os_detail.html?ticketId=${nextTicket.id}`;
-            }
+                    <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">${ticket.title}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-2"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> ${ticket.location}</p>
+                    <p class="text-[11px] text-slate-500 mb-3">${role === 'reviewer' ? 'Sua acao: revisar entrega e materiais' : 'Sua acao: iniciar execucao'}</p>
+                    <div class="flex items-center text-teal-600 dark:text-teal-500 text-xs font-semibold uppercase tracking-wide">
+                        Abrir O.S. <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </div>
+                </div>
+            `).join('');
         }
 
+        function refreshQueue() {
+            if (!user) return;
+
+            const { executorTickets, reviewTickets, merged } = getQueueState();
+
+            document.getElementById('countDesignated').innerText = executorTickets.filter(ticket => ticket.status === 'designated').length;
+            document.getElementById('countInProgress').innerText = executorTickets.filter(ticket => ticket.status === 'in_progress').length;
+            document.getElementById('countReviews').innerText = reviewTickets.filter(ticket => ticket.status === 'awaiting_review').length;
+
+            renderTaskList(merged);
+
+            const unread = MockDB.getUnreadCount(user.id);
+            document.getElementById('notifBadge').classList.toggle('hidden', unread <= 0);
+            document.getElementById('navMsgBadge').classList.toggle('hidden', unread <= 0);
+            if (unread > 0) {
+                document.getElementById('notifBadge').innerText = unread;
+            }
+
+            document.getElementById('scheduleNavLink').href = merged[0]?.ticket
+                ? `mobile_os_detail.html?ticketId=${merged[0].ticket.id}`
+                : 'mobile_new_os.html';
+
+            lucide.createIcons();
+        }
+
+        if (user) {
+            document.getElementById('greetingName').innerText = `Ola, ${user.name.split(' ')[0]}`;
+            document.getElementById('userInitials').innerText = user.name.substring(0, 2).toUpperCase();
+            refreshQueue();
+            window.addEventListener('focus', refreshQueue);
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) refreshQueue();
+            });
         }
 
         let modalTicketId = null;
@@ -282,16 +307,24 @@
             const icon = document.getElementById('mTimerIcon');
             const isRunning = clock.isRunning;
             const isExecutor = ticket.assignedTo === user.id;
+            const isReviewer = ticket.reviewerId === user.id;
+            const reviewStartBtn = document.getElementById('mReviewStartBtn');
+            const reviewApproveBtn = document.getElementById('mReviewApproveBtn');
+            const reviewRejectBtn = document.getElementById('mReviewRejectBtn');
 
             icon.setAttribute('data-lucide', isRunning ? 'square' : 'play');
             btn.classList.toggle('bg-rose-500', isRunning);
             btn.classList.toggle('bg-teal-600', !isRunning);
             btn.disabled = !(isExecutor && ['designated', 'in_progress'].includes(ticket.status));
             btn.classList.toggle('opacity-50', btn.disabled);
+            btn.classList.toggle('cursor-not-allowed', btn.disabled);
 
             const mStatusPill = document.getElementById('mStatusPill');
             const mStatusMsg = document.getElementById('mStatusMsg');
             const mResolveLink = document.getElementById('mResolveLink');
+            reviewStartBtn.classList.add('hidden');
+            reviewApproveBtn.classList.add('hidden');
+            reviewRejectBtn.classList.add('hidden');
 
             if (ticket.status === 'designated') {
                 mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-amber-100 text-amber-700';
@@ -301,6 +334,24 @@
                 mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-teal-100 text-teal-700';
                 mStatusPill.innerText = 'Em execucao';
                 mStatusMsg.innerText = 'Execucao em curso...';
+            } else if (ticket.status === 'awaiting_review') {
+                mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-blue-100 text-blue-700';
+                mStatusPill.innerText = 'Aguardando revisao';
+                mStatusMsg.innerText = isReviewer
+                    ? (ticket.reviewState === 'in_review' ? 'Revisao em andamento.' : 'Sua revisao esta pendente.')
+                    : 'Status atual.';
+                if (isReviewer) {
+                    if (ticket.reviewState === 'in_review') {
+                        reviewApproveBtn.classList.remove('hidden');
+                        reviewRejectBtn.classList.remove('hidden');
+                    } else {
+                        reviewStartBtn.classList.remove('hidden');
+                    }
+                }
+            } else if (ticket.status === 'completed') {
+                mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-emerald-100 text-emerald-700';
+                mStatusPill.innerText = 'Concluida';
+                mStatusMsg.innerText = 'OS encerrada.';
             } else {
                 mStatusPill.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-slate-200 text-slate-600';
                 mStatusPill.innerText = ticket.status.replace('_', ' ');
@@ -308,7 +359,7 @@
             }
 
             mResolveLink.href = `mobile_checkout.html?ticketId=${ticket.id}`;
-            mResolveLink.classList.toggle('hidden', !isExecutor || ticket.status === 'completed');
+            mResolveLink.classList.toggle('hidden', !isExecutor || ['awaiting_review', 'completed'].includes(ticket.status));
 
             lucide.createIcons();
         }
@@ -324,6 +375,30 @@
             if (!modalTicketId || !input.value.trim()) return;
             MockDB.addTicketComment(modalTicketId, user.id, input.value.trim());
             input.value = '';
+            refreshModalState();
+        });
+
+        document.getElementById('mReviewStartBtn').addEventListener('click', () => {
+            if (!modalTicketId) return;
+            const started = MockDB.startReview(modalTicketId, user.id);
+            if (started) refreshModalState();
+        });
+
+        document.getElementById('mReviewApproveBtn').addEventListener('click', () => {
+            if (!modalTicketId) return;
+            MockDB.startReview(modalTicketId, user.id);
+            MockDB.approveReview(modalTicketId, user.id, 'Revisao aprovada pelo revisor.');
+            refreshQueue();
+            refreshModalState();
+        });
+
+        document.getElementById('mReviewRejectBtn').addEventListener('click', () => {
+            if (!modalTicketId) return;
+            const reason = prompt('Descreva o motivo da refacao:');
+            if (reason === null) return;
+            MockDB.startReview(modalTicketId, user.id);
+            MockDB.rejectReview(modalTicketId, user.id, reason.trim() || 'Refacao solicitada pelo revisor.');
+            refreshQueue();
             refreshModalState();
         });
 

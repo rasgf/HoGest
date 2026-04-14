@@ -41,7 +41,7 @@
             </a>
             <div class="ml-2">
                 <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Fechamento</p>
-                <h1 class="text-lg font-semibold text-slate-900 dark:text-white">Concluir Execução</h1>
+                <h1 class="text-lg font-semibold text-slate-900 dark:text-white">Concluir Execucao</h1>
             </div>
         </header>
 
@@ -49,7 +49,7 @@
             <div>
                 <div class="bg-teal-50 dark:bg-teal-500/10 border border-teal-200 dark:border-teal-500/20 p-4 rounded-2xl mb-5">
                     <p class="text-sm text-teal-800 dark:text-teal-200">
-                        Ao concluir, a O.S. segue para <strong>aguardando revisão</strong>. Se houver material utilizado, a auditoria de estoque ficará pendente para controlador ou administração.
+                        Ao concluir, a O.S. segue para <strong>aguardando revisao</strong>. Se houver material utilizado, a auditoria de estoque ficara pendente para controlador ou administracao.
                     </p>
                 </div>
 
@@ -77,7 +77,7 @@
             <div class="pt-4">
                 <p id="checkoutFeedback" class="hidden text-sm rounded-xl px-4 py-3 border mb-4"></p>
                 <button id="completeBtn" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-2xl text-center active:scale-95 transition-transform shadow-lg">
-                    Finalizar Execução
+                    Finalizar Execucao
                 </button>
             </div>
         </main>
@@ -85,27 +85,38 @@
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const ticketId = Number(params.get('ticketId'));
-        const ticket = MockDB.getTicketById(ticketId);
+        const rawTicketId = params.get('ticketId');
+        const ticketId = Number(rawTicketId);
+        let ticket = Number.isFinite(ticketId) ? MockDB.getTicketById(ticketId) : null;
 
-        if (!ticket) {
-            alert('O.S. não encontrada.');
+        function goToQueue() {
             window.location.href = 'mobile_app.html';
         }
 
-        if (ticket.assignedTo !== user.id) {
-            alert('Somente o executor designado pode concluir esta O.S.');
-            window.location.href = `mobile_os_detail.html?ticketId=${ticketId}`;
+        function goToDetail() {
+            window.location.href = Number.isFinite(ticketId) ? `mobile_os_detail.html?ticketId=${ticketId}` : 'mobile_app.html';
         }
 
-        document.getElementById('backLink').href = `mobile_os_detail.html?ticketId=${ticketId}`;
-        document.getElementById('ticketTitle').textContent = `#${ticket.id} - ${ticket.title}`;
-        document.getElementById('ticketLocation').textContent = ticket.location;
+        if (!Number.isFinite(ticketId) || !ticket) {
+            alert('O.S. nao encontrada.');
+            goToQueue();
+        }
+
+        if (ticket && ticket.assignedTo !== user.id) {
+            alert('Somente o executor designado pode concluir esta O.S.');
+            goToDetail();
+        }
+
+        if (ticket) {
+            document.getElementById('backLink').href = `mobile_os_detail.html?ticketId=${ticketId}`;
+            document.getElementById('ticketTitle').textContent = `#${ticket.id} - ${ticket.title}`;
+            document.getElementById('ticketLocation').textContent = ticket.location;
+        }
 
         const feedback = document.getElementById('checkoutFeedback');
         const optionsContainer = document.getElementById('inventoryOptions');
         const searchInput = document.getElementById('searchInput');
-        const suggestions = MockDB.getInventorySuggestionsForTicket(ticket);
+        const suggestions = ticket ? MockDB.getInventorySuggestionsForTicket(ticket) : [];
         const selected = {};
 
         function renderOptions(filter = '') {
@@ -148,16 +159,22 @@
                 }))
                 .filter(item => item.quantity > 0);
 
-            MockDB.completeTicket(ticketId, materialsUsed);
+            const completedTicket = MockDB.completeTicket(ticketId, materialsUsed);
+            if (!completedTicket) {
+                feedback.className = 'text-sm rounded-xl px-4 py-3 border mb-4 border-red-200 bg-red-50 text-red-700';
+                feedback.textContent = 'Nao foi possivel concluir a O.S. Confirme se voce ainda e o executor designado.';
+                feedback.classList.remove('hidden');
+                return;
+            }
 
             feedback.className = 'text-sm rounded-xl px-4 py-3 border mb-4 border-teal-200 bg-teal-50 text-teal-700';
             feedback.textContent = materialsUsed.length
-                ? 'Execução concluída. A O.S. está aguardando revisão e a baixa de material ficou pendente para auditoria.'
-                : 'Execução concluída. A O.S. está aguardando revisão.';
+                ? 'Execucao concluida. A O.S. esta aguardando revisao e a baixa de material ficou pendente para auditoria.'
+                : 'Execucao concluida. A O.S. esta aguardando revisao.';
             feedback.classList.remove('hidden');
 
             setTimeout(() => {
-                window.location.href = `mobile_os_detail.html?ticketId=${ticketId}`;
+                goToQueue();
             }, 900);
         });
 

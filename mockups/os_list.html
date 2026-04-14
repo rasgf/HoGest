@@ -18,7 +18,7 @@
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 hidden md:flex flex-col">
         <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
-            <img src="assets/insolito-logo.svg" alt="Insolito" class="h-9">
+            <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
         <div class="p-4 border-t border-gray-200 dark:border-slate-700">
@@ -166,6 +166,17 @@
         let currentReviewTicketId = null;
         let currentRejectTicketId = null;
 
+        function formatStatusLabel(status) {
+            const labels = {
+                new: 'Nova',
+                designated: 'Designada',
+                in_progress: 'Em Execucao',
+                awaiting_review: 'Aguardando Revisao',
+                completed: 'Concluida'
+            };
+            return labels[status] || 'Sem status';
+        }
+
         function openTicketDetail(id) {
             const ticket = MockDB.getTicketById(id);
             if (!ticket) return;
@@ -188,7 +199,7 @@
                 badgeEl.innerText = 'Em Revisao';
             } else {
                 badgeEl.className = 'text-[10px] px-2 py-0.5 rounded bg-teal-100 text-teal-700 font-bold uppercase';
-                badgeEl.innerText = ticket.status.replace('_', ' ');
+                badgeEl.innerText = formatStatusLabel(ticket.status);
             }
 
             // Participantes
@@ -317,7 +328,8 @@
             }
 
             return `
-                <div onclick="openTicketDetail(${ticket.id})" class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-teal-500/30 transition-all cursor-pointer group">
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-teal-500/30 transition-all group">
+                    <div onclick="openTicketDetail(${ticket.id})" class="cursor-pointer">
                     <div class="flex justify-between items-center mb-2">
                         ${ticketBadge(ticket)}
                         <span class="text-[10px] font-mono text-slate-400">#OS-${ticket.id}</span>
@@ -325,7 +337,8 @@
                     <h4 class="font-semibold text-sm mb-1 group-hover:text-teal-600 transition-colors">${ticket.title}</h4>
                     <p class="text-xs text-slate-500 mb-2">${ticket.location}</p>
                     <p class="text-[10px] text-slate-400 mb-2 italic">Executor: ${executor}</p>
-                    
+                    </div>
+
                     <div onclick="event.stopPropagation()" class="pt-3 border-t border-gray-100 dark:border-slate-700/50 mt-3">
                         ${actionHtml}
                     </div>
