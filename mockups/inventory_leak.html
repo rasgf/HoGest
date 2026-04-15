@@ -41,6 +41,24 @@
                     'glass': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2), inset 1px 0 0 0 rgba(255, 0, 0, 0.05), inset -1px 0 0 0 rgba(0, 0, 255, 0.05), 0 20px 40px 0 rgba(0, 0, 0, 0.1)',
                     'dark-glass': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 0 rgba(255, 0, 0, 0.1), inset -1px 0 0 0 rgba(0, 200, 255, 0.1), 0 20px 40px 0 rgba(0, 0, 0, 0.5)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
+                },
+                animation: {
+                    'blob': 'blob 14s infinite alternate',
+                    'blob-reverse': 'blob-reverse 18s infinite alternate',
+                },
+                keyframes: {
+                    blob: {
+                        '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                        '33%': { transform: 'translate(80px, -100px) scale(1.2)' },
+                        '66%': { transform: 'translate(-40px, 40px) scale(0.8)' },
+                        '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                    },
+                    'blob-reverse': {
+                        '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                        '33%': { transform: 'translate(-80px, 100px) scale(1.1)' },
+                        '66%': { transform: 'translate(40px, -40px) scale(0.9)' },
+                        '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                    }
                 }
             }
         }
@@ -58,21 +76,129 @@
     } else {
         document.documentElement.classList.remove('dark');
     }
+
+    // Dynamic Liquid Hover Effect
+    document.addEventListener('DOMContentLoaded', () => {
+        const attachLiquidGlow = () => {
+            document.querySelectorAll('.liquid-card').forEach(card => {
+                if(card.dataset.liquidInjected) return;
+                card.dataset.liquidInjected = "true";
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        };
+        attachLiquidGlow();
+        
+        // Re-attach periodically in case of dynamic DOM loads 
+        setInterval(attachLiquidGlow, 1000);
+    });
     </script>
+    <style>
+        .liquid-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .liquid-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 255, 255, 0.12), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .dark .liquid-card::before {
+            background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 255, 255, 0.06), transparent 40%);
+        }
+        .liquid-card:hover::before {
+            opacity: 1;
+        }
+        /* Ensure content sits above the pseudo glow */
+        .liquid-card > * {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
+
+    <!-- Apple Liquid Glass CSS Engine -->
+    <style>
+    .apple-liquid-glass {
+        position: relative;
+        /* Refractive map for Chrome/Firefox */
+        backdrop-filter: url(#liquid-glass-lens) blur(24px) saturate(150%);
+        /* Fallback for Safari/Webkit which struggles with url() filters */
+        -webkit-backdrop-filter: blur(24px) saturate(150%);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 100%);
+        border: 1px solid rgba(255,255,255,0.4);
+        border-top: 1px solid rgba(255, 255, 255, 0.8);
+        border-left: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), inset 1px 0 rgba(255,0,0,0.05), inset -1px 0 rgba(0,0,255,0.05), 0 24px 40px rgba(0,0,0,0.08);
+    }
+    html.dark .apple-liquid-glass {
+        background: linear-gradient(135deg, rgba(20, 20, 30, 0.5) 0%, rgba(20, 20, 30, 0.2) 100%);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        border-left: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: inset 0 1px 1px rgba(255,255,255,0.15), inset 1px 0 rgba(255,0,0,0.05), inset -1px 0 rgba(0,200,255,0.05), 0 24px 40px rgba(0,0,0,0.4);
+    }
+    /* Enhanced Noise Overlay mimicking macOS vibrancy & Lens Glare */
+    .apple-liquid-glass::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.12;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+        z-index: -1;
+    }
+    .apple-liquid-glass::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(120% 120% at 0% 0%, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 10;
+        opacity: 0.8;
+    }
+    html.dark .apple-liquid-glass::after {
+        background: radial-gradient(120% 120% at 0% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+    }
+    </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
+
+<!-- Apple Liquid Glass Refraction SVG Filter -->
+<svg class="pointer-events-none fixed z-[-1] opacity-0" style="display: none;" width="0" height="0">
+    <defs>
+        <filter id="liquid-glass-lens" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        </filter>
+    </defs>
+</svg>
+
     
-    <!-- Mesh Gradient Mesh (Enterprise) -->
-    <div class="fixed top-[-20%] left-[-10%] w-[70vw] h-[70vh] rounded-full bg-primary-200/40 dark:bg-primary-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
-    <div class="fixed top-[20%] right-[-10%] w-[40vw] h-[50vh] rounded-full bg-accent-200/50 dark:bg-accent-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <!-- Animated Mesh Gradient Mesh (Enterprise) -->
+    <div class="fixed top-[-20%] left-[-10%] w-[70vw] h-[70vh] rounded-full bg-primary-200/50 dark:bg-primary-900/40 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0 animate-blob"></div>
+    <div class="fixed top-[20%] right-[-10%] w-[40vw] h-[50vh] rounded-full bg-accent-200/30 dark:bg-accent-900/40 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0 animate-blob-reverse" style="animation-delay: 2s;"></div>
+    <div class="fixed bottom-[-20%] left-[20%] w-[50vw] h-[50vh] rounded-full bg-primary-300/30 dark:bg-primary-800/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0 animate-blob" style="animation-delay: 4s;"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     
     <!-- Desktop sidebar -->
-    <aside class="w-64 relative z-10 bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
+    <aside class="w-64 relative z-10 liquid-card apple-liquid-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
         <div class="h-16 flex items-center px-6 border-b border-white/60 dark:border-slate-700/80 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
         </div>
@@ -95,7 +221,7 @@
 
     <!-- Mobile slide-over sidebar -->
     <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full liquid-card apple-liquid-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
         <div class="h-16 flex items-center justify-between px-6 border-b border-white/60 dark:border-slate-700/80">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
@@ -118,7 +244,7 @@
     </aside>
 
     <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 border-b border-white/60 dark:border-slate-700/80 bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent flex justify-between items-center px-4 md:px-8">
+        <header class="h-16 border-b border-white/60 dark:border-slate-700/80 liquid-card apple-liquid-glass flex justify-between items-center px-4 md:px-8">
             <div class="flex items-center gap-3">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
                 <h1 class="text-lg md:text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
@@ -141,22 +267,22 @@
             </div>
 
             <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border-t border-l border-white/60 dark:border-slate-700/80 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="liquid-card apple-liquid-glass border-t border-l border-white/60 dark:border-slate-700/80 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Itens cadastrados</p>
                     <p id="inventoryCount" class="text-3xl font-bold text-slate-900 dark:text-white">0</p>
                 </div>
-                <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border border-amber-200 dark:border-amber-500/20 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="liquid-card apple-liquid-glass border border-amber-200 dark:border-amber-500/20 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Baixas pendentes</p>
                     <p id="pendingCount" class="text-3xl font-bold text-amber-600 dark:text-amber-400">0</p>
                 </div>
-                <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border-t border-l border-white/60 dark:border-slate-700/80 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="liquid-card apple-liquid-glass border-t border-l border-white/60 dark:border-slate-700/80 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Itens críticos</p>
                     <p id="criticalCount" class="text-3xl font-bold text-rose-600 dark:text-rose-400">0</p>
                 </div>
             </section>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <section class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
+                <section class="liquid-card apple-liquid-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
                     <div class="px-6 py-4 border-b border-white/60 dark:border-slate-700/80 flex justify-between items-center bg-slate-50 dark:bg-slate-900 backdrop-blur-xl/50">
                         <h3 class="font-semibold">Saldo de Materiais</h3>
                         <button onclick="openNewMaterialModal()" class="text-xs bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg">+ Novo Material</button>
@@ -172,7 +298,7 @@
                     </table>
                 </section>
 
-                <section class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent rounded-2xl border border-amber-200 dark:border-amber-500/20 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
+                <section class="liquid-card apple-liquid-glass rounded-2xl border border-amber-200 dark:border-amber-500/20 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
                     <div class="px-6 py-4 border-b border-amber-100 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10">
                         <h3 class="font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-2">
                             <i data-lucide="clipboard-list" class="w-4 h-4"></i>
@@ -186,7 +312,7 @@
     </main>
 
     <div id="newMaterialModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
-        <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-6 rounded-2xl w-[460px] shadow-2xl border border-slate-200 dark:border-slate-700">
+        <div class="liquid-card apple-liquid-glass p-6 rounded-2xl w-[460px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Novo Material</h3>
             <div class="grid grid-cols-2 gap-4">
                 <input id="materialName" placeholder="Nome do item" class="col-span-2 bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
