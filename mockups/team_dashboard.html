@@ -184,7 +184,7 @@
     </style>
     <script src="js/mock_database.js"></script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex transition-colors duration-200">
 
 
 
@@ -196,6 +196,54 @@
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
 
 
+    <!-- Desktop sidebar -->
+    <aside class="w-64 relative z-10 liquid-card apple-liquid-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-white/60 dark:border-slate-700/80">
+            <img src="assets/insolito-logo.png" alt="HotGest" class="h-9 cursor-pointer" onclick="window.location.href='dashboard.html'">
+        </div>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="userInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="userNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="userRoleLabel">Role</p>
+                    </div>
+                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile slide-over sidebar -->
+    <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full liquid-card apple-liquid-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full  md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-white/60 dark:border-slate-700/80">
+            <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
+            <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+        </div>
+        <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="mobileUserInitials">XX</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800 dark:text-slate-200" id="mobileUserNameLabel">Nome</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="mobileUserRoleLabel">Role</p>
+                    </div>
+                </div>
+                <i data-lucide="log-out" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
+    </aside>
+
+    
+<main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
     <!-- Header Tableau -->
     <header class="liquid-card apple-liquid-glass border-b border-white/60 dark:border-slate-700/80 p-4 shadow-sm flex items-center justify-between">
         <div>
@@ -203,11 +251,11 @@
         </div>
         <div class="flex gap-4 items-center text-slate-600">
             <button onclick="mockExport('csv')" class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded" title="Exportar CSV"><i data-lucide="copy" class="w-5 h-5"></i></button>
-            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="star" class="w-5 h-5"></i></button>
-            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="star" title="Favoritar" class="w-5 h-5"></i></button>
+            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="share-2" title="Compartilhar Link" class="w-5 h-5"></i></button>
             <button onclick="mockExport('pdf')" class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded" title="Exportar PDF"><i data-lucide="download" class="w-5 h-5"></i></button>
-            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="info" class="w-5 h-5"></i></button>
-            <a href="dashboard.html" class="ml-4 text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded font-bold">Voltar ao HotGest Geral</a>
+            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="info" title="Informações" class="w-5 h-5"></i></button>
+            
         </div>
     </header>
 
@@ -369,5 +417,6 @@
             }
         });
     </script>
+</main>
 </body>
 </html>
