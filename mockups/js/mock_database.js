@@ -314,6 +314,7 @@ window.MockDB = {
     buildDesktopNav: function(user, currentPage) {
         const items = [
             { href: 'dashboard.html', label: 'Dashboard Geral', icon: 'layout-dashboard', roles: ['admin_geral', 'admin_manutencao', 'controlador'] },
+            { href: 'team_dashboard.html', label: 'Desempenho da Equipe', icon: 'users', roles: ['admin_geral', 'admin_manutencao'] },,
             { href: 'os_list.html', label: 'Quadro Kanban', icon: 'list-todo', roles: ['admin_geral', 'admin_manutencao'] },
             { href: 'dashboard_create_os.html', label: 'Criar tarefa', icon: 'plus-circle', roles: ['admin_geral', 'admin_manutencao'] },
             { href: 'reception_report.html', label: 'Reportar Problema', icon: 'bell-ring', roles: ['admin_geral', 'admin_manutencao', 'controlador', 'trabalhador', 'recepcao', 'camareira'] },
