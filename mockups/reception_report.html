@@ -45,16 +45,23 @@
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
-        }
+        }        }
     };
+
+    // Dark Mode Global Logic
+    
+    // Initialize theme on load to prevent flash
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
     <script>
-        function toggleTheme() {
-            const doc = document.documentElement;
-            if (doc.classList.contains('dark')) { doc.classList.remove('dark'); localStorage.theme = 'light'; } 
+         
             else { doc.classList.add('dark'); localStorage.theme = 'dark'; }
         }
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
@@ -73,11 +80,11 @@
     
     
     <!-- Background Gradient Blobs -->
-    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-sky-200/50 dark:bg-sky-900/30 blur-3xl mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-200/50 dark:bg-indigo-900/30 blur-3xl mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-300/40 dark:bg-primary-900/40 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     
     <!-- Desktop sidebar (hidden on mobile) -->
-    <aside class="w-64 relative z-10 bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex-col hidden md:flex transition-colors duration-200">
+    <aside class="w-64 relative z-10 bg-white/40 dark:bg-slate-900/50 backdrop-blur-3xl backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-slate-200/60 dark:border-slate-700 flex-col hidden md:flex transition-colors duration-200">
         <div class="h-16 flex items-center px-6 border-b border-slate-200/60 dark:border-slate-700 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
@@ -100,7 +107,7 @@
 
     <!-- Mobile slide-over sidebar -->
     <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/80 dark:bg-slate-800/95 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/40 dark:bg-slate-900/50 backdrop-blur-3xl backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-slate-200/60 dark:border-slate-700 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
         <div class="h-16 flex items-center justify-between px-6 border-b border-slate-200/60 dark:border-slate-700">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
@@ -124,7 +131,7 @@
 
     <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
         <!-- Desktop header -->
-        <header class="h-16 border-b border-slate-200/60 dark:border-slate-700 bg-white/80 dark:bg-slate-800/90 backdrop-blur-xl backdrop-saturate-150 hidden md:flex justify-between items-center px-8 transition-colors duration-200">
+        <header class="h-16 border-b border-slate-200/60 dark:border-slate-700 bg-white/40 dark:bg-slate-900/40 backdrop-blur-3xl backdrop-saturate-[2.5] border-white/40 dark:border-white/10 hidden md:flex justify-between items-center px-8 transition-colors duration-200">
             <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i data-lucide="bell-ring" class="w-5 h-5 text-primary-600"></i> Reportar Problema</h1>
             <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400"><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i></button>
         </header>
