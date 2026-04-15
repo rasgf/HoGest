@@ -12,33 +12,33 @@
             extend: {
                 colors: {
                     primary: {
-                        50: '#fcf8f3',
-                        100: '#f8efe2',
-                        200: '#eddfc6',
-                        300: '#dfc5a0',
-                        400: '#ceaa79',
-                        500: '#c09259',
-                        600: '#b27b4b',
-                        700: '#945f40',
-                        800: '#774c37',
-                        900: '#603f2f',
-                        950: '#332017',
+                        50: '#f0fdfa',
+                        100: '#ccfbf1',
+                        200: '#99f6e4',
+                        300: '#5eead4',
+                        400: '#2dd4bf',
+                        500: '#14b8a6',
+                        600: '#0d9488',
+                        700: '#0f766e',
+                        800: '#115e59',
+                        900: '#134e4a',
+                        950: '#042f2e',
                     },
                     accent: {
-                        50: '#fdf7f3',
-                        100: '#faecd9',
-                        200: '#f5d6af',
-                        300: '#f0b87f',
-                        400: '#e99252',
-                        500: '#e37330',
-                        600: '#d55a24',
-                        700: '#b1421e',
-                        800: '#8d351d',
-                        900: '#712e1b',
+                        50: '#fdf8f6',
+                        100: '#f2e8e5',
+                        200: '#eaddd7',
+                        300: '#e0cec7',
+                        400: '#d2bab0',
+                        500: '#a37c6b',
+                        600: '#865f4d',
+                        700: '#694230',
+                        800: '#4c2513',
+                        900: '#2f0800',
                     },
                 },
                 boxShadow: {
-                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
+                    'glass': '0 16px 40px -4px rgba(0, 0, 0, 0.08)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -62,20 +62,21 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
 </head>
-<body class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
+<body class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans min-h-screen flex">
     
-    <!-- Spatial Background Aurora Blobs -->
-    <div class="fixed top-0 left-[-10%] w-[60%] h-[70%] rounded-full bg-gradient-to-br from-amber-300/40 via-orange-200/30 to-transparent dark:from-orange-800/40 dark:via-rose-900/30 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <!-- Mesh Gradient Mesh (Enterprise) -->
+    <div class="fixed top-[-20%] left-[-10%] w-[70vw] h-[70vh] rounded-full bg-primary-200/40 dark:bg-primary-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed top-[20%] right-[-10%] w-[40vw] h-[50vh] rounded-full bg-accent-200/50 dark:bg-accent-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     
     <!-- Desktop sidebar -->
-    <aside class="w-64 relative z-10 bg-white/20 dark:bg-neutral-900/40 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-white/50 dark:border-white/10 flex-col hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-white/50 dark:border-white/10 cursor-pointer" onclick="window.location.href='dashboard.html'">
+    <aside class="w-64 relative z-10 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-white/60 dark:border-slate-700/80 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
-        <div class="p-4 border-t border-white/50 dark:border-white/10">
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -93,13 +94,13 @@
 
     <!-- Mobile slide-over sidebar -->
     <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/20 dark:bg-neutral-900/40 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-white/50 dark:border-white/10 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-white/50 dark:border-white/10">
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-white/60 dark:border-slate-700/80">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
-        <div class="p-4 border-t border-white/50 dark:border-white/10">
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -116,7 +117,7 @@
     </aside>
 
     <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 border-b border-white/50 dark:border-white/10 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 flex justify-between items-center px-4 md:px-8">
+        <header class="h-16 border-b border-white/60 dark:border-slate-700/80 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass flex justify-between items-center px-4 md:px-8">
             <div class="flex items-center gap-3">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
                 <h1 class="text-lg md:text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
@@ -139,23 +140,23 @@
             </div>
 
             <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 border border-white/50 dark:border-white/10 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-t border-l border-white/60 dark:border-slate-700/80 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Itens cadastrados</p>
                     <p id="inventoryCount" class="text-3xl font-bold text-slate-900 dark:text-white">0</p>
                 </div>
-                <div class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 border border-amber-200 dark:border-amber-500/20 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border border-amber-200 dark:border-amber-500/20 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Baixas pendentes</p>
                     <p id="pendingCount" class="text-3xl font-bold text-amber-600 dark:text-amber-400">0</p>
                 </div>
-                <div class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 border border-white/50 dark:border-white/10 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-t border-l border-white/60 dark:border-slate-700/80 rounded-2xl p-5 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Itens críticos</p>
                     <p id="criticalCount" class="text-3xl font-bold text-rose-600 dark:text-rose-400">0</p>
                 </div>
             </section>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <section class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 rounded-2xl border border-white/50 dark:border-white/10 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-white/50 dark:border-white/10 flex justify-between items-center bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl/50">
+                <section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/60 dark:border-slate-700/80 flex justify-between items-center bg-slate-50 dark:bg-slate-900 backdrop-blur-xl/50">
                         <h3 class="font-semibold">Saldo de Materiais</h3>
                         <button onclick="openNewMaterialModal()" class="text-xs bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg">+ Novo Material</button>
                     </div>
@@ -170,7 +171,7 @@
                     </table>
                 </section>
 
-                <section class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 rounded-2xl border border-amber-200 dark:border-amber-500/20 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
+                <section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass rounded-2xl border border-amber-200 dark:border-amber-500/20 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
                     <div class="px-6 py-4 border-b border-amber-100 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10">
                         <h3 class="font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-2">
                             <i data-lucide="clipboard-list" class="w-4 h-4"></i>
@@ -184,15 +185,15 @@
     </main>
 
     <div id="newMaterialModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
-        <div class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-6 rounded-2xl w-[460px] shadow-2xl border border-slate-200 dark:border-slate-700">
+        <div class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass p-6 rounded-2xl w-[460px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Novo Material</h3>
             <div class="grid grid-cols-2 gap-4">
-                <input id="materialName" placeholder="Nome do item" class="col-span-2 bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
-                <input id="materialStock" placeholder="Estoque atual" class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
-                <input id="materialUnit" placeholder="Unidade" value="un" class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
-                <input id="materialMinStock" placeholder="Estoque minimo" class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
-                <input id="materialCost" placeholder="Custo unitario" class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
-                <input id="materialArea" placeholder="Area" value="Geral" class="col-span-2 bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialName" placeholder="Nome do item" class="col-span-2 bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialStock" placeholder="Estoque atual" class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialUnit" placeholder="Unidade" value="un" class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialMinStock" placeholder="Estoque minimo" class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialCost" placeholder="Custo unitario" class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
+                <input id="materialArea" placeholder="Area" value="Geral" class="col-span-2 bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-slate-300 dark:border-slate-600 rounded p-3 text-sm">
             </div>
             <div class="flex gap-3 justify-end mt-5">
                 <button onclick="closeNewMaterialModal()" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded text-sm">Cancelar</button>

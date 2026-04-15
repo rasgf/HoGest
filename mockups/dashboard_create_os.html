@@ -12,33 +12,33 @@
             extend: {
                 colors: {
                     primary: {
-                        50: '#fcf8f3',
-                        100: '#f8efe2',
-                        200: '#eddfc6',
-                        300: '#dfc5a0',
-                        400: '#ceaa79',
-                        500: '#c09259',
-                        600: '#b27b4b',
-                        700: '#945f40',
-                        800: '#774c37',
-                        900: '#603f2f',
-                        950: '#332017',
+                        50: '#f0fdfa',
+                        100: '#ccfbf1',
+                        200: '#99f6e4',
+                        300: '#5eead4',
+                        400: '#2dd4bf',
+                        500: '#14b8a6',
+                        600: '#0d9488',
+                        700: '#0f766e',
+                        800: '#115e59',
+                        900: '#134e4a',
+                        950: '#042f2e',
                     },
                     accent: {
-                        50: '#fdf7f3',
-                        100: '#faecd9',
-                        200: '#f5d6af',
-                        300: '#f0b87f',
-                        400: '#e99252',
-                        500: '#e37330',
-                        600: '#d55a24',
-                        700: '#b1421e',
-                        800: '#8d351d',
-                        900: '#712e1b',
+                        50: '#fdf8f6',
+                        100: '#f2e8e5',
+                        200: '#eaddd7',
+                        300: '#e0cec7',
+                        400: '#d2bab0',
+                        500: '#a37c6b',
+                        600: '#865f4d',
+                        700: '#694230',
+                        800: '#4c2513',
+                        900: '#2f0800',
                     },
                 },
                 boxShadow: {
-                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
+                    'glass': '0 16px 40px -4px rgba(0, 0, 0, 0.08)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -62,18 +62,19 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
 </head>
-<body class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex">
-    <!-- Spatial Background Aurora Blobs -->
-    <div class="fixed top-0 left-[-10%] w-[60%] h-[70%] rounded-full bg-gradient-to-br from-amber-300/40 via-orange-200/30 to-transparent dark:from-orange-800/40 dark:via-rose-900/30 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+<body class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex">
+    <!-- Mesh Gradient Mesh (Enterprise) -->
+    <div class="fixed top-[-20%] left-[-10%] w-[70vw] h-[70vh] rounded-full bg-primary-200/40 dark:bg-primary-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed top-[20%] right-[-10%] w-[40vw] h-[50vh] rounded-full bg-accent-200/50 dark:bg-accent-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
 
-    <aside class="w-64 relative z-10 bg-white/20 dark:bg-neutral-900/40 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-white/50 dark:border-white/10 flex-col hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-white/50 dark:border-white/10 cursor-pointer" onclick="window.location.href='dashboard.html'">
+    <aside class="w-64 relative z-10 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-white/60 dark:border-slate-700/80 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="sidebarNav"></nav>
-        <div class="p-4 border-t border-white/50 dark:border-white/10">
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -91,13 +92,13 @@
 
     <!-- Mobile slide-over sidebar -->
     <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/20 dark:bg-neutral-900/40 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-white/50 dark:border-white/10 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-white/50 dark:border-white/10">
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-white/60 dark:border-slate-700/80">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
-        <div class="p-4 border-t border-white/50 dark:border-white/10">
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -114,7 +115,7 @@
     </aside>
 
     <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
-        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-white/50 dark:border-white/10 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
+        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-white/60 dark:border-slate-700/80 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
                 <h1 class="text-lg md:text-xl font-semibold flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-primary-600 hidden md:block"></i> Nova O.S.</h1>
@@ -125,24 +126,24 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-8">
-            <section class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 rounded-2xl border border-white/50 dark:border-white/10 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+            <section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                 <h2 class="font-bold text-lg mb-1">Nova O.S. com designacao imediata</h2>
                 <p class="text-sm text-slate-500 mb-6">A O.S. sai como <strong>designada</strong>. A execucao so comeca quando o executor iniciar manualmente.</p>
 
                 <form id="dispatcherForm" class="space-y-5">
                     <div>
                         <label for="titleInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Descricao do problema</label>
-                        <input id="titleInput" type="text" value="Vazamento Severo Chiller AC Central" class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3">
+                        <input id="titleInput" type="text" value="Vazamento Severo Chiller AC Central" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="locationInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Localizacao</label>
-                            <input id="locationInput" type="text" value="Master Suite 05" class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3">
+                            <input id="locationInput" type="text" value="Master Suite 05" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3">
                         </div>
                         <div>
                             <label for="priorityInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Urgencia</label>
-                            <select id="priorityInput" class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3">
+                            <select id="priorityInput" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3">
                                 <option value="critical">Critico</option>
                                 <option value="normal">Normal</option>
                             </select>
@@ -166,12 +167,12 @@
 
                     <div>
                         <label for="descriptionInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Orientacao para o executor</label>
-                        <textarea id="descriptionInput" rows="4" class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3 resize-none">Hospede aguardando no corredor. Conter impacto imediato e validar AVAC.</textarea>
+                        <textarea id="descriptionInput" rows="4" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3 resize-none">Hospede aguardando no corredor. Conter impacto imediato e validar AVAC.</textarea>
                     </div>
 
                     <div>
                         <label for="executorSelect" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Executor responsavel</label>
-                        <select id="executorSelect" class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3"></select>
+                        <select id="executorSelect" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-lg p-3"></select>
                     </div>
 
                     <p id="dispatcherFeedback" class="hidden text-sm rounded-lg px-4 py-3 border"></p>
@@ -184,7 +185,7 @@
             </section>
 
             <section class="space-y-4">
-                <div class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 rounded-2xl border border-white/50 dark:border-white/10 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <h3 class="font-bold text-base mb-3">Executores disponiveis</h3>
                     <div id="executorCards" class="space-y-3"></div>
                 </div>
@@ -240,7 +241,7 @@
         function renderExecutors() {
             document.getElementById('executorSelect').innerHTML = executors.map(executor => `<option value="${executor.id}">${executor.name}</option>`).join('');
             document.getElementById('executorCards').innerHTML = executors.map(executor => `
-                <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl/40">
+                <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 backdrop-blur-xl/40">
                     <div class="flex items-center justify-between gap-3">
                         <div>
                             <p class="font-semibold text-slate-900 dark:text-white">${executor.name}</p>

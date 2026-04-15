@@ -15,33 +15,33 @@
             extend: {
                 colors: {
                     primary: {
-                        50: '#fcf8f3',
-                        100: '#f8efe2',
-                        200: '#eddfc6',
-                        300: '#dfc5a0',
-                        400: '#ceaa79',
-                        500: '#c09259',
-                        600: '#b27b4b',
-                        700: '#945f40',
-                        800: '#774c37',
-                        900: '#603f2f',
-                        950: '#332017',
+                        50: '#f0fdfa',
+                        100: '#ccfbf1',
+                        200: '#99f6e4',
+                        300: '#5eead4',
+                        400: '#2dd4bf',
+                        500: '#14b8a6',
+                        600: '#0d9488',
+                        700: '#0f766e',
+                        800: '#115e59',
+                        900: '#134e4a',
+                        950: '#042f2e',
                     },
                     accent: {
-                        50: '#fdf7f3',
-                        100: '#faecd9',
-                        200: '#f5d6af',
-                        300: '#f0b87f',
-                        400: '#e99252',
-                        500: '#e37330',
-                        600: '#d55a24',
-                        700: '#b1421e',
-                        800: '#8d351d',
-                        900: '#712e1b',
+                        50: '#fdf8f6',
+                        100: '#f2e8e5',
+                        200: '#eaddd7',
+                        300: '#e0cec7',
+                        400: '#d2bab0',
+                        500: '#a37c6b',
+                        600: '#865f4d',
+                        700: '#694230',
+                        800: '#4c2513',
+                        900: '#2f0800',
                     },
                 },
                 boxShadow: {
-                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
+                    'glass': '0 16px 40px -4px rgba(0, 0, 0, 0.08)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -80,23 +80,24 @@
         }
     </style>
 </head>
-<body class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex transition-colors duration-200">
+<body class="bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex transition-colors duration-200">
     
     
-    <!-- Spatial Background Aurora Blobs -->
-    <div class="fixed top-0 left-[-10%] w-[60%] h-[70%] rounded-full bg-gradient-to-br from-amber-300/40 via-orange-200/30 to-transparent dark:from-orange-800/40 dark:via-rose-900/30 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <!-- Mesh Gradient Mesh (Enterprise) -->
+    <div class="fixed top-[-20%] left-[-10%] w-[70vw] h-[70vh] rounded-full bg-primary-200/40 dark:bg-primary-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed top-[20%] right-[-10%] w-[40vw] h-[50vh] rounded-full bg-accent-200/50 dark:bg-accent-900/30 blur-[180px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     
     <!-- Desktop sidebar (hidden on mobile) -->
-    <aside class="w-64 relative z-10 bg-white/20 dark:bg-neutral-900/40 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-white/50 dark:border-white/10 flex-col hidden md:flex transition-colors duration-200">
-        <div class="h-16 flex items-center px-6 border-b border-white/50 dark:border-white/10 cursor-pointer" onclick="window.location.href='dashboard.html'">
+    <aside class="w-64 relative z-10 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex transition-colors duration-200">
+        <div class="h-16 flex items-center px-6 border-b border-white/60 dark:border-slate-700/80 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
         <nav id="sidebarNav" class="flex-1 py-6 px-4 space-y-2">
             <!-- Renderizado via JS -->
         </nav>
-        <div class="p-4 border-t border-white/50 dark:border-white/10">
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
             <div class="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition" onclick="MockDB.logout()">
                 <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
                     <span id="userInitials" class="text-xs font-bold text-slate-600 dark:text-slate-300"></span>
@@ -112,13 +113,13 @@
 
     <!-- Mobile slide-over sidebar -->
     <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/20 dark:bg-neutral-900/40 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 border-r border-white/50 dark:border-white/10 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-white/50 dark:border-white/10">
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-white/60 dark:border-slate-700/80">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
         </div>
         <nav class="flex-1 py-6 px-4 space-y-2" id="mobileSidebarNav"></nav>
-        <div class="p-4 border-t border-white/50 dark:border-white/10">
+        <div class="p-4 border-t border-white/60 dark:border-slate-700/80">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer" onclick="MockDB.logout()">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center border border-gray-300 dark:border-slate-600">
@@ -136,13 +137,13 @@
 
     <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
         <!-- Desktop header -->
-        <header class="h-16 border-b border-white/50 dark:border-white/10 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-[32px] backdrop-saturate-[2.5] border-white/40 dark:border-white/10 hidden md:flex justify-between items-center px-8 transition-colors duration-200">
+        <header class="h-16 border-b border-white/60 dark:border-slate-700/80 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass hidden md:flex justify-between items-center px-8 transition-colors duration-200">
             <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i data-lucide="bell-ring" class="w-5 h-5 text-primary-600"></i> Reportar Problema</h1>
             <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400"><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i></button>
         </header>
 
         <!-- Mobile header (visible only < md) -->
-        <header class="safe-top border-b border-white/50 dark:border-white/10 bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 flex md:hidden justify-between items-center px-4 py-3">
+        <header class="safe-top border-b border-white/60 dark:border-slate-700/80 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass flex md:hidden justify-between items-center px-4 py-3">
             <div class="flex items-center gap-2">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
                 <img src="assets/insolito-logo.png" alt="HotGest" class="h-8">
@@ -159,7 +160,7 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-4 md:p-8 flex items-start md:items-center justify-center safe-bottom">
-            <div class="w-full max-w-lg bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 rounded-2xl border border-white/50 dark:border-white/10 p-5 md:p-8 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+            <div class="w-full max-w-lg bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 p-5 md:p-8 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                 <div class="flex items-center gap-3 mb-1">
                     <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center shrink-0">
                         <i data-lucide="bell-ring" class="w-5 h-5 text-primary-600 dark:text-primary-400"></i>
@@ -174,7 +175,7 @@
                 <form id="reportForm" class="space-y-4">
                     <div>
                         <label for="locationType" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Área do Problema</label>
-                        <select id="locationType" class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-2xl p-3 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-slate-800 dark:text-slate-200 transition" onchange="toggleRoomInput()">
+                        <select id="locationType" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-2xl p-3 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-slate-800 dark:text-slate-200 transition" onchange="toggleRoomInput()">
                             <option value="">Selecione uma área...</option>
                             <option value="Recepção">Recepção / Lobby</option>
                             <option value="Piscina">Piscina / Área Externa</option>
@@ -195,12 +196,12 @@
 
                     <div>
                         <label for="titleInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">O que aconteceu?</label>
-                        <input id="titleInput" type="text" placeholder="Um breve resumo do problema" required class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-2xl p-3 text-slate-800 dark:text-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition">
+                        <input id="titleInput" type="text" placeholder="Um breve resumo do problema" required class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-2xl p-3 text-slate-800 dark:text-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition">
                     </div>
 
                     <div>
                         <label for="descInput" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Detalhes (Opcional)</label>
-                        <textarea id="descInput" rows="3" placeholder="Informações extras do hóspede, vazamento intenso, barulho..." class="w-full bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-2xl p-3 text-slate-800 dark:text-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none resize-none transition"></textarea>
+                        <textarea id="descInput" rows="3" placeholder="Informações extras do hóspede, vazamento intenso, barulho..." class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-2xl p-3 text-slate-800 dark:text-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none resize-none transition"></textarea>
                     </div>
 
                     <p id="formFeedback" class="hidden text-sm rounded-2xl px-4 py-3 border"></p>
