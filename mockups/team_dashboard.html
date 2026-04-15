@@ -182,6 +182,7 @@
         color: #e2e8f0 !important;
     }
     </style>
+    <script src="js/mock_database.js"></script>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
@@ -201,11 +202,11 @@
             <h1 class="text-xl font-bold flex items-center gap-2">Dash Manutenção 2 <span class="text-sm font-normal text-slate-500">por Luiz</span></h1>
         </div>
         <div class="flex gap-4 items-center text-slate-600">
-            <button class="hover:bg-gray-100 p-1.5 rounded"><i data-lucide="copy" class="w-5 h-5"></i></button>
-            <button class="hover:bg-gray-100 p-1.5 rounded"><i data-lucide="star" class="w-5 h-5"></i></button>
-            <button class="hover:bg-gray-100 p-1.5 rounded"><i data-lucide="share-2" class="w-5 h-5"></i></button>
-            <button class="hover:bg-gray-100 p-1.5 rounded"><i data-lucide="download" class="w-5 h-5"></i></button>
-            <button class="hover:bg-gray-100 p-1.5 rounded"><i data-lucide="info" class="w-5 h-5"></i></button>
+            <button onclick="mockExport('csv')" class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded" title="Exportar CSV"><i data-lucide="copy" class="w-5 h-5"></i></button>
+            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="star" class="w-5 h-5"></i></button>
+            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+            <button onclick="mockExport('pdf')" class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded" title="Exportar PDF"><i data-lucide="download" class="w-5 h-5"></i></button>
+            <button class="hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors p-1.5 rounded"><i data-lucide="info" class="w-5 h-5"></i></button>
             <a href="dashboard.html" class="ml-4 text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded font-bold">Voltar ao HotGest Geral</a>
         </div>
     </header>
