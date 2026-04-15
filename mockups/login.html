@@ -16,34 +16,34 @@
             extend: {
                 colors: {
                     primary: {
-                        50: '#f0fdfa',
-                        100: '#ccfbf1',
-                        200: '#99f6e4',
-                        300: '#5eead4',
-                        400: '#2dd4bf',
-                        500: '#14b8a6',
-                        600: '#0d9488',
-                        700: '#0f766e',
-                        800: '#115e59',
-                        900: '#134e4a',
-                        950: '#042f2e',
+                        50: '#f4f6f8',
+                        100: '#e4ebf0',
+                        200: '#c5d5df',
+                        300: '#9cb5c5',
+                        400: '#6c90a6',
+                        500: '#4f768e',
+                        600: '#3e5e74',
+                        700: '#334b5e',
+                        800: '#2d404f',
+                        900: '#212E3C',
+                        950: '#1a242d',
                     },
                     accent: {
-                        50: '#fdf8f6',
-                        100: '#f2e8e5',
-                        200: '#eaddd7',
-                        300: '#e0cec7',
-                        400: '#d2bab0',
-                        500: '#a37c6b',
-                        600: '#865f4d',
-                        700: '#694230',
-                        800: '#4c2513',
-                        900: '#2f0800',
+                        50: '#fbfaf8',
+                        100: '#f5f2ee',
+                        200: '#ebe3db',
+                        300: '#ddcec0',
+                        400: '#cbb39e',
+                        500: '#bca085',
+                        600: '#af8c70',
+                        700: '#92705a',
+                        800: '#775e4e',
+                        900: '#604c41',
                     },
                 },
                 boxShadow: {
-                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.12), inset 0 1px 2px 0 rgba(255, 255, 255, 0.8)',
-                    'dark-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 2px 0 rgba(255, 255, 255, 0.15)',
+                    'glass': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2), inset 1px 0 0 0 rgba(255, 0, 0, 0.05), inset -1px 0 0 0 rgba(0, 0, 255, 0.05), 0 20px 40px 0 rgba(0, 0, 0, 0.1)',
+                    'dark-glass': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 0 rgba(255, 0, 0, 0.1), inset -1px 0 0 0 rgba(0, 200, 255, 0.1), 0 20px 40px 0 rgba(0, 0, 0, 0.5)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -116,19 +116,19 @@
                 <h4 class="text-xs font-bold text-slate-500 uppercase mb-3 text-center">Credenciais para Apresentação</h4>
                 <p class="text-[10px] text-slate-400 text-center mb-3">Gestão</p>
                 <div class="grid grid-cols-3 gap-2 text-xs mb-3">
-                    <button type="button" onclick="fillAndSubmit('admin', '123')" class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Admin Geral</strong><br>admin / 123</button>
-                    <button type="button" onclick="fillAndSubmit('manutencao', '123')" class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Manutenção</strong><br>manutencao / 123</button>
-                    <button type="button" onclick="fillAndSubmit('controlador', '123')" class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-2 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 dark:hover:border-slate-600"><strong>Controlador</strong><br>controlador / 123</button>
+                    <button type="button" onclick="fillAndSubmit('admin', '123')" class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Admin Geral</strong><br>admin / 123</button>
+                    <button type="button" onclick="fillAndSubmit('manutencao', '123')" class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Manutenção</strong><br>manutencao / 123</button>
+                    <button type="button" onclick="fillAndSubmit('controlador', '123')" class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-2 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 dark:hover:border-slate-600"><strong>Controlador</strong><br>controlador / 123</button>
                 </div>
                 <p class="text-[10px] text-slate-400 text-center mb-3">Operação (Mobile)</p>
                 <div class="grid grid-cols-2 gap-2 text-xs mb-3">
-                    <button type="button" onclick="fillAndSubmit('executor_eletrica', '123')" class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Elétrica</strong><br>executor_eletrica / 123</button>
-                    <button type="button" onclick="fillAndSubmit('executor_hidraulica', '123')" class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Hidráulica</strong><br>executor_hidraulica / 123</button>
+                    <button type="button" onclick="fillAndSubmit('executor_eletrica', '123')" class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Elétrica</strong><br>executor_eletrica / 123</button>
+                    <button type="button" onclick="fillAndSubmit('executor_hidraulica', '123')" class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Hidráulica</strong><br>executor_hidraulica / 123</button>
                 </div>
                 <p class="text-[10px] text-slate-400 text-center mb-3">Reportar Problemas</p>
                 <div class="grid grid-cols-2 gap-2 text-xs">
-                    <button type="button" onclick="fillAndSubmit('recepcao', '123')" class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-2 rounded hover:bg-emerald-50 text-left border border-transparent hover:border-emerald-200 dark:hover:border-slate-600"><strong>Recepção</strong><br>recepcao / 123</button>
-                    <button type="button" onclick="fillAndSubmit('camareira', '123')" class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-2 rounded hover:bg-purple-50 text-left border border-transparent hover:border-purple-200 dark:hover:border-slate-600"><strong>Camareira</strong><br>camareira / 123</button>
+                    <button type="button" onclick="fillAndSubmit('recepcao', '123')" class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-2 rounded hover:bg-emerald-50 text-left border border-transparent hover:border-emerald-200 dark:hover:border-slate-600"><strong>Recepção</strong><br>recepcao / 123</button>
+                    <button type="button" onclick="fillAndSubmit('camareira', '123')" class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-2 rounded hover:bg-purple-50 text-left border border-transparent hover:border-purple-200 dark:hover:border-slate-600"><strong>Camareira</strong><br>camareira / 123</button>
                 </div>
             </div>
 

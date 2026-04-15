@@ -12,34 +12,34 @@
             extend: {
                 colors: {
                     primary: {
-                        50: '#f0fdfa',
-                        100: '#ccfbf1',
-                        200: '#99f6e4',
-                        300: '#5eead4',
-                        400: '#2dd4bf',
-                        500: '#14b8a6',
-                        600: '#0d9488',
-                        700: '#0f766e',
-                        800: '#115e59',
-                        900: '#134e4a',
-                        950: '#042f2e',
+                        50: '#f4f6f8',
+                        100: '#e4ebf0',
+                        200: '#c5d5df',
+                        300: '#9cb5c5',
+                        400: '#6c90a6',
+                        500: '#4f768e',
+                        600: '#3e5e74',
+                        700: '#334b5e',
+                        800: '#2d404f',
+                        900: '#212E3C',
+                        950: '#1a242d',
                     },
                     accent: {
-                        50: '#fdf8f6',
-                        100: '#f2e8e5',
-                        200: '#eaddd7',
-                        300: '#e0cec7',
-                        400: '#d2bab0',
-                        500: '#a37c6b',
-                        600: '#865f4d',
-                        700: '#694230',
-                        800: '#4c2513',
-                        900: '#2f0800',
+                        50: '#fbfaf8',
+                        100: '#f5f2ee',
+                        200: '#ebe3db',
+                        300: '#ddcec0',
+                        400: '#cbb39e',
+                        500: '#bca085',
+                        600: '#af8c70',
+                        700: '#92705a',
+                        800: '#775e4e',
+                        900: '#604c41',
                     },
                 },
                 boxShadow: {
-                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.12), inset 0 1px 2px 0 rgba(255, 255, 255, 0.8)',
-                    'dark-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 2px 0 rgba(255, 255, 255, 0.15)',
+                    'glass': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2), inset 1px 0 0 0 rgba(255, 0, 0, 0.05), inset -1px 0 0 0 rgba(0, 0, 255, 0.05), 0 20px 40px 0 rgba(0, 0, 0, 0.1)',
+                    'dark-glass': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 0 rgba(255, 0, 0, 0.1), inset -1px 0 0 0 rgba(0, 200, 255, 0.1), 0 20px 40px 0 rgba(0, 0, 0, 0.5)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -70,7 +70,7 @@
     <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
 
-    <aside class="w-64 relative z-10 bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
+    <aside class="w-64 relative z-10 bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
         <div class="h-16 flex items-center px-6 border-b border-white/60 dark:border-slate-700/80 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
@@ -93,7 +93,7 @@
 
     <!-- Mobile slide-over sidebar -->
     <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
         <div class="h-16 flex items-center justify-between px-6 border-b border-white/60 dark:border-slate-700/80">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
@@ -116,7 +116,7 @@
     </aside>
 
     <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
-        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-white/60 dark:border-slate-700/80 bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
+        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-white/60 dark:border-slate-700/80 bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
                 <h1 class="text-lg md:text-xl font-semibold text-slate-800 dark:text-slate-100">Quadro Operacional</h1>
@@ -137,7 +137,7 @@
     </main>
 
     <div id="assignModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
-        <div class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+        <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Designar Executor</h3>
             <p class="text-xs text-slate-500 mb-4" id="assignOsLabel"></p>
             <select id="executorSelect" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
@@ -150,7 +150,7 @@
     </div>
 
     <div id="reviewModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
-        <div class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+        <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Designar Revisor</h3>
             <p class="text-xs text-slate-500 mb-4" id="reviewOsLabel"></p>
             <select id="reviewerSelect" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4"></select>
@@ -163,7 +163,7 @@
     </div>
 
     <div id="rejectModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50">
-        <div class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
+        <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-6 rounded-2xl w-[420px] shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4">Solicitar Refacao</h3>
             <p class="text-xs text-slate-500 mb-4" id="rejectOsLabel"></p>
             <textarea id="rejectReason" rows="4" class="w-full bg-slate-50 dark:bg-slate-900 backdrop-blur-xl text-sm p-3 border border-slate-300 dark:border-slate-600 rounded mb-4" placeholder="Descreva o motivo da refacao..."></textarea>
@@ -176,7 +176,7 @@
 
     <!-- Modal de Detalhes da O.S. (Desktop) -->
     <div id="detailModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm backdrop-saturate-150 flex items-center justify-center z-50 p-4">
-        <div class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200 dark:border-slate-700">
+        <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200 dark:border-slate-700">
             <div class="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-start">
                 <div>
                     <div class="flex items-center gap-3 mb-1">
@@ -294,7 +294,7 @@
             const timelineEl = document.getElementById('detailTimeline');
             timelineEl.innerHTML = comments.map(c => `
                 <div class="flex gap-4 relative z-10">
-                    <div class="w-6 h-6 rounded-full bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass border-2 ${c.kind === 'system' ? 'border-slate-200/60' : 'border-primary-500'} flex items-center justify-center shrink-0">
+                    <div class="w-6 h-6 rounded-full bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border-2 ${c.kind === 'system' ? 'border-slate-200/60' : 'border-primary-500'} flex items-center justify-center shrink-0">
                         <div class="w-1.5 h-1.5 rounded-full ${c.kind === 'system' ? 'bg-gray-300' : 'bg-primary-500'}"></div>
                     </div>
                     <div class="pb-1">
@@ -311,7 +311,7 @@
                 materialsEl.innerHTML = ticket.materialsUsed.map(m => {
                     const item = db.inventory.find(i => i.id === m.inventoryId);
                     return `
-                        <div class="flex justify-between items-center text-xs p-2 bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass border border-gray-100 dark:border-slate-700 rounded shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                        <div class="flex justify-between items-center text-xs p-2 bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent border border-gray-100 dark:border-slate-700 rounded shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                             <span class="text-slate-600 dark:text-slate-300">${item?.name || 'Material Desconhecido'}</span>
                             <span class="font-bold">${m.quantity} ${item?.unit || 'un'}</span>
                         </div>
@@ -437,7 +437,7 @@
             }
 
             return `
-                <div class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass p-4 rounded-lg shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-primary-500/30 transition-all group">
+                <div class="bg-white/40 dark:bg-slate-900/50 backdrop-blur-[40px] backdrop-saturate-[180%] border border-white/40 border-t-white/80 border-l-white/80 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass bg-gradient-to-tr from-transparent via-white/10 to-white/5 dark:from-transparent dark:via-white/5 dark:to-transparent p-4 rounded-lg shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-primary-500/30 transition-all group">
                     <div onclick="openTicketDetail(${ticket.id})" class="cursor-pointer">
                     <div class="flex justify-between items-center mb-2">
                         ${ticketBadge(ticket)}
