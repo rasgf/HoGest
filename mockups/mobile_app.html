@@ -42,7 +42,8 @@
                     },
                 },
                 boxShadow: {
-                    'glass': '0 16px 40px -4px rgba(0, 0, 0, 0.08)',
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.12), inset 0 1px 2px 0 rgba(255, 255, 255, 0.8)',
+                    'dark-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 2px 0 rgba(255, 255, 255, 0.15)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -185,7 +186,7 @@
                     </h3>
                     <div id="mCommentsList" class="space-y-3 mb-4"></div>
                     <div id="mCommentComposer" class="flex items-center gap-2">
-                        <input id="mCommentInput" type="text" placeholder="Escreva aqui..." class="flex-1 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border border-gray-300 dark:border-slate-700 rounded-full py-2.5 px-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none">
+                        <input id="mCommentInput" type="text" placeholder="Escreva aqui..." class="flex-1 bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass border border-gray-300 dark:border-slate-700 rounded-full py-2.5 px-4 text-sm text-slate-800 dark:text-slate-200 focus:outline-none">
                         <button id="mSendCommentBtn" class="bg-primary-600 text-white w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-md">
                             <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
                         </button>

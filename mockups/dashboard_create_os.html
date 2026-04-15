@@ -38,7 +38,8 @@
                     },
                 },
                 boxShadow: {
-                    'glass': '0 16px 40px -4px rgba(0, 0, 0, 0.08)',
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.12), inset 0 1px 2px 0 rgba(255, 255, 255, 0.8)',
+                    'dark-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 2px 0 rgba(255, 255, 255, 0.15)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -69,7 +70,7 @@
     <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
 
-    <aside class="w-64 relative z-10 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
+    <aside class="w-64 relative z-10 bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass border-r border-white/60 dark:border-slate-700/80 flex-col hidden md:flex">
         <div class="h-16 flex items-center px-6 border-b border-white/60 dark:border-slate-700/80 cursor-pointer" onclick="window.location.href='dashboard.html'">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-9">
         </div>
@@ -92,7 +93,7 @@
 
     <!-- Mobile slide-over sidebar -->
     <div id="mobileSidebarOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm backdrop-saturate-150 z-40 md:hidden" onclick="closeMobileSidebar()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
+    <aside id="mobileSidebar" class="fixed top-0 left-0 w-72 h-full bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass border-r border-white/60 dark:border-slate-700/80 flex flex-col z-50 -translate-x-full transition-transform duration-300 ease-out md:hidden">
         <div class="h-16 flex items-center justify-between px-6 border-b border-white/60 dark:border-slate-700/80">
             <img src="assets/insolito-logo.png" alt="HotGest" class="h-9">
             <button onclick="closeMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
@@ -115,7 +116,7 @@
     </aside>
 
     <main class="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
-        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-white/60 dark:border-slate-700/80 bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
+        <header class="h-auto md:h-16 py-3 md:py-0 border-b border-white/60 dark:border-slate-700/80 bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-3 md:gap-0">
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <button onclick="openMobileSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg md:hidden"><i data-lucide="menu" class="w-5 h-5 text-slate-500"></i></button>
                 <h1 class="text-lg md:text-xl font-semibold flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-primary-600 hidden md:block"></i> Nova O.S.</h1>
@@ -126,7 +127,7 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-8">
-            <section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+            <section class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                 <h2 class="font-bold text-lg mb-1">Nova O.S. com designacao imediata</h2>
                 <p class="text-sm text-slate-500 mb-6">A O.S. sai como <strong>designada</strong>. A execucao so comeca quando o executor iniciar manualmente.</p>
 
@@ -185,7 +186,7 @@
             </section>
 
             <section class="space-y-4">
-                <div class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-[32px] backdrop-saturate-[150%] border-t border-l border-white/60 dark:border-slate-700/80 shadow-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
+                <div class="bg-white/30 dark:bg-slate-900/40 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/40 border-t-white/90 border-l-white/90 dark:border-white/10 dark:border-t-white/30 shadow-glass dark:shadow-dark-glass rounded-2xl border-t border-l border-white/60 dark:border-slate-700/80 p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
                     <h3 class="font-bold text-base mb-3">Executores disponiveis</h3>
                     <div id="executorCards" class="space-y-3"></div>
                 </div>
