@@ -416,7 +416,30 @@
                 }
             }
         });
-    </script>
+    
+        // Initialize MockDB and NavBar
+        const user = MockDB.requireLogin();
+        if (user) {
+            MockDB.populateUserProfile(user);
+            const sidebar = document.getElementById('sidebarNav');
+            if (sidebar) sidebar.innerHTML = MockDB.buildDesktopNav(user, 'team_dashboard.html');
+
+            const mobileSidebar = document.getElementById('mobileSidebarNav');
+            if (mobileSidebar) mobileSidebar.innerHTML = MockDB.buildDesktopNav(user, 'team_dashboard.html');
+            
+            const mobInitials = document.getElementById('mobileUserInitials');
+            if (mobInitials) mobInitials.textContent = user.name.substring(0,2).toUpperCase();
+            
+            const mobName = document.getElementById('mobileUserNameLabel');
+            if (mobName) mobName.textContent = user.name;
+            
+            const mobRole = document.getElementById('mobileUserRoleLabel');
+            if (mobRole) mobRole.textContent = user.role.toUpperCase().replace('_', ' ');
+            
+            lucide.createIcons();
+        }
+
+</script>
 </main>
 </body>
 </html>
