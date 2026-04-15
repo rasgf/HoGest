@@ -67,8 +67,12 @@
     <script src="js/mock_database.js"></script>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex items-center justify-center p-4">
+    <!-- Background Gradient Blobs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-300/40 dark:bg-primary-900/40 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+
     
-    <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700 overflow-hidden">
+    <div class="bg-white/60 dark:bg-slate-800/60 backdrop-blur-3xl backdrop-saturate-[2.5] border border-white/40 dark:border-white/10 shadow-[0_8px_32px_rgb(0,0,0,0.08)] w-full max-w-md rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700 overflow-hidden">
         <div class="p-8 pb-6 border-b border-gray-100 dark:border-slate-700 text-center">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-12 mx-auto mb-2">
             <p class="text-slate-500 dark:text-slate-400 text-sm">Sistema Integrado de Estancamento Operacional</p>

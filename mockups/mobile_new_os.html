@@ -71,6 +71,10 @@
     <style>body{background-color:#0f172a;} :root:not(.dark) body{background-color:#f9fafb;} .app-container{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;overflow-y:auto;}</style>
 </head>
 <body class="text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors">
+    <!-- Background Gradient Blobs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-300/40 dark:bg-primary-900/40 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+
     <div class="app-container bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
         <header class="px-4 py-4 flex items-center border-b border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 sticky top-0 z-10 w-full transition-colors">
             <a href="mobile_app.html" class="p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:hover:text-white"><i data-lucide="arrow-left" class="w-6 h-6"></i></a>
