@@ -16,33 +16,33 @@
             extend: {
                 colors: {
                     primary: {
-                        50:  '#f0f7f4',
-                        100: '#d9ede2',
-                        200: '#b5dbc6',
-                        300: '#84c1a3',
-                        400: '#55a47e',
-                        500: '#358764',
-                        600: '#266c50',
-                        700: '#1f5741',
-                        800: '#1b4535',
-                        900: '#17392c',
-                        950: '#0c2019',
+                        50: '#fcf8f3',
+                        100: '#f8efe2',
+                        200: '#eddfc6',
+                        300: '#dfc5a0',
+                        400: '#ceaa79',
+                        500: '#c09259',
+                        600: '#b27b4b',
+                        700: '#945f40',
+                        800: '#774c37',
+                        900: '#603f2f',
+                        950: '#332017',
                     },
                     accent: {
-                        50:  '#fbfaf8',
-                        100: '#f5f2ee',
-                        200: '#ebe3db',
-                        300: '#ddcec0',
-                        400: '#cbb39e',
-                        500: '#bca085',
-                        600: '#af8c70',
-                        700: '#92705a',
-                        800: '#775e4e',
-                        900: '#604c41',
+                        50: '#fdf7f3',
+                        100: '#faecd9',
+                        200: '#f5d6af',
+                        300: '#f0b87f',
+                        400: '#e99252',
+                        500: '#e37330',
+                        600: '#d55a24',
+                        700: '#b1421e',
+                        800: '#8d351d',
+                        900: '#712e1b',
                     },
                 },
                 boxShadow: {
-                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.04)',
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -66,13 +66,14 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/mock_database.js"></script>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex items-center justify-center p-4">
-    <!-- Background Gradient Blobs -->
-    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-300/40 dark:bg-primary-900/40 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+<body class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl text-slate-800 dark:text-slate-200 font-sans min-h-screen flex items-center justify-center p-4">
+    <!-- Spatial Background Aurora Blobs -->
+    <div class="fixed top-0 left-[-10%] w-[60%] h-[70%] rounded-full bg-gradient-to-br from-amber-300/40 via-orange-200/30 to-transparent dark:from-orange-800/40 dark:via-rose-900/30 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
 
     
-    <div class="bg-white/60 dark:bg-slate-800/60 backdrop-blur-3xl backdrop-saturate-[2.5] border border-white/40 dark:border-white/10 shadow-[0_8px_32px_rgb(0,0,0,0.08)] w-full max-w-md rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700 overflow-hidden">
+    <div class="bg-white/30 dark:bg-neutral-800/20 backdrop-blur-[32px] backdrop-saturate-[2.5] border border-white/50 dark:border-white/10 shadow-[0_8px_32px_rgb(0,0,0,0.08)] w-full max-w-md rounded-2xl shadow-xl border border-white/50 dark:border-white/10 overflow-hidden">
         <div class="p-8 pb-6 border-b border-gray-100 dark:border-slate-700 text-center">
             <img src="assets/insolito-logo.png" alt="Insolito" class="h-12 mx-auto mb-2">
             <p class="text-slate-500 dark:text-slate-400 text-sm">Sistema Integrado de Estancamento Operacional</p>
@@ -86,7 +87,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i data-lucide="user" class="w-5 h-5 text-slate-400 text-slate-400"></i>
                         </div>
-                        <input type="text" id="username" class="bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 text-slate-900 dark:text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-3" placeholder="Ex: admin, controlador, executor_avac..." required>
+                        <input type="text" id="username" class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-600 text-slate-900 dark:text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-3" placeholder="Ex: admin, controlador, executor_avac..." required>
                     </div>
                 </div>
 
@@ -96,7 +97,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i data-lucide="lock" class="w-5 h-5 text-slate-400 text-slate-400"></i>
                         </div>
-                        <input type="password" id="password" class="bg-slate-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 text-slate-900 dark:text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-3" placeholder="••••••••" required>
+                        <input type="password" id="password" class="bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl border border-gray-300 dark:border-slate-600 text-slate-900 dark:text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-3" placeholder="••••••••" required>
                     </div>
                 </div>
 
@@ -113,19 +114,19 @@
                 <h4 class="text-xs font-bold text-slate-500 uppercase mb-3 text-center">Credenciais para Apresentação</h4>
                 <p class="text-[10px] text-slate-400 text-center mb-3">Gestão</p>
                 <div class="grid grid-cols-3 gap-2 text-xs mb-3">
-                    <button type="button" onclick="fillAndSubmit('admin', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Admin Geral</strong><br>admin / 123</button>
-                    <button type="button" onclick="fillAndSubmit('manutencao', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Manutenção</strong><br>manutencao / 123</button>
-                    <button type="button" onclick="fillAndSubmit('controlador', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 dark:hover:border-slate-600"><strong>Controlador</strong><br>controlador / 123</button>
+                    <button type="button" onclick="fillAndSubmit('admin', '123')" class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Admin Geral</strong><br>admin / 123</button>
+                    <button type="button" onclick="fillAndSubmit('manutencao', '123')" class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-2 rounded hover:bg-primary-50 text-left border border-transparent hover:border-primary-200 dark:hover:border-slate-600"><strong>Manutenção</strong><br>manutencao / 123</button>
+                    <button type="button" onclick="fillAndSubmit('controlador', '123')" class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-2 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 dark:hover:border-slate-600"><strong>Controlador</strong><br>controlador / 123</button>
                 </div>
                 <p class="text-[10px] text-slate-400 text-center mb-3">Operação (Mobile)</p>
                 <div class="grid grid-cols-2 gap-2 text-xs mb-3">
-                    <button type="button" onclick="fillAndSubmit('executor_eletrica', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Elétrica</strong><br>executor_eletrica / 123</button>
-                    <button type="button" onclick="fillAndSubmit('executor_hidraulica', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Hidráulica</strong><br>executor_hidraulica / 123</button>
+                    <button type="button" onclick="fillAndSubmit('executor_eletrica', '123')" class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Elétrica</strong><br>executor_eletrica / 123</button>
+                    <button type="button" onclick="fillAndSubmit('executor_hidraulica', '123')" class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-2 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 dark:hover:border-slate-600"><strong>Executor Hidráulica</strong><br>executor_hidraulica / 123</button>
                 </div>
                 <p class="text-[10px] text-slate-400 text-center mb-3">Reportar Problemas</p>
                 <div class="grid grid-cols-2 gap-2 text-xs">
-                    <button type="button" onclick="fillAndSubmit('recepcao', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-emerald-50 text-left border border-transparent hover:border-emerald-200 dark:hover:border-slate-600"><strong>Recepção</strong><br>recepcao / 123</button>
-                    <button type="button" onclick="fillAndSubmit('camareira', '123')" class="bg-white dark:bg-slate-800 p-2 rounded hover:bg-purple-50 text-left border border-transparent hover:border-purple-200 dark:hover:border-slate-600"><strong>Camareira</strong><br>camareira / 123</button>
+                    <button type="button" onclick="fillAndSubmit('recepcao', '123')" class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-2 rounded hover:bg-emerald-50 text-left border border-transparent hover:border-emerald-200 dark:hover:border-slate-600"><strong>Recepção</strong><br>recepcao / 123</button>
+                    <button type="button" onclick="fillAndSubmit('camareira', '123')" class="bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 p-2 rounded hover:bg-purple-50 text-left border border-transparent hover:border-purple-200 dark:hover:border-slate-600"><strong>Camareira</strong><br>camareira / 123</button>
                 </div>
             </div>
 

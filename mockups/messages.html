@@ -12,33 +12,33 @@
             extend: {
                 colors: {
                     primary: {
-                        50:  '#f0f7f4',
-                        100: '#d9ede2',
-                        200: '#b5dbc6',
-                        300: '#84c1a3',
-                        400: '#55a47e',
-                        500: '#358764',
-                        600: '#266c50',
-                        700: '#1f5741',
-                        800: '#1b4535',
-                        900: '#17392c',
-                        950: '#0c2019',
+                        50: '#fcf8f3',
+                        100: '#f8efe2',
+                        200: '#eddfc6',
+                        300: '#dfc5a0',
+                        400: '#ceaa79',
+                        500: '#c09259',
+                        600: '#b27b4b',
+                        700: '#945f40',
+                        800: '#774c37',
+                        900: '#603f2f',
+                        950: '#332017',
                     },
                     accent: {
-                        50:  '#fbfaf8',
-                        100: '#f5f2ee',
-                        200: '#ebe3db',
-                        300: '#ddcec0',
-                        400: '#cbb39e',
-                        500: '#bca085',
-                        600: '#af8c70',
-                        700: '#92705a',
-                        800: '#775e4e',
-                        900: '#604c41',
+                        50: '#fdf7f3',
+                        100: '#faecd9',
+                        200: '#f5d6af',
+                        300: '#f0b87f',
+                        400: '#e99252',
+                        500: '#e37330',
+                        600: '#d55a24',
+                        700: '#b1421e',
+                        800: '#8d351d',
+                        900: '#712e1b',
                     },
                 },
                 boxShadow: {
-                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.04)',
+                    'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
                     'soft':  '0 2px 20px rgba(0, 0, 0, 0.03)',
                 }
             }
@@ -63,12 +63,13 @@
     <script src="js/mock_database.js"></script>
 </head>
 <body class="bg-gray-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen">
-    <!-- Background Gradient Blobs -->
-    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-300/40 dark:bg-primary-900/40 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <!-- Spatial Background Aurora Blobs -->
+    <div class="fixed top-0 left-[-10%] w-[60%] h-[70%] rounded-full bg-gradient-to-br from-amber-300/40 via-orange-200/30 to-transparent dark:from-orange-800/40 dark:via-rose-900/30 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[60%] rounded-full bg-gradient-to-tl from-rose-300/30 via-yellow-200/20 to-transparent dark:from-amber-900/40 dark:via-orange-900/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent-300/40 dark:bg-accent-800/20 blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0"></div>
 
-    <div class="w-full max-w-4xl min-h-screen mx-auto bg-white dark:bg-slate-800 md:my-8 md:rounded-2xl md:shadow-2xl border border-slate-200/60 dark:border-slate-700 overflow-hidden">
-        <header class="p-4 border-b border-slate-200/60 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 sticky top-0 z-10">
+    <div class="w-full max-w-4xl min-h-screen mx-auto bg-white/50 dark:bg-neutral-800/30 backdrop-blur-[24px] border border-white/40 dark:border-white/10 md:my-8 md:rounded-2xl md:shadow-2xl border border-white/50 dark:border-white/10 overflow-hidden">
+        <header class="p-4 border-b border-white/50 dark:border-white/10 flex justify-between items-center bg-slate-50/50 dark:bg-neutral-900/50 backdrop-blur-xl/50 sticky top-0 z-10">
             <div class="flex items-center gap-3">
                 <button onclick="MockDB.routeUser(user)" class="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-full"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
                 <div>
